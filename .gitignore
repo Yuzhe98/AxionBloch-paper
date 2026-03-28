@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Python virtual environments (just in case)
+.venv/
+env/
+venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# # Figures and other output files
+# *.png
+# *.pdf
+# *.svg
+# *.jpg
+
+# Ignore Logs, temporary files and data
+*.log
+*.out
+*.err
+*.npy
+*.npz
+*.pkl
+*.h5
+*.hdf5
+*.csv
+*.tsv
+*.log
+*.tmp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
+*.img
+docker-compose.override.yml
+
+# Ignore dotenv or config files (optional)
+.env
