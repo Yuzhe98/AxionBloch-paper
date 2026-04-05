@@ -27,7 +27,7 @@ HP_timeStamp_s = HP_data["timeStamp_s"][:size]  # timeStamp_s.shape (5050,)
 HP_B_vec = HP_data["B_vec"][0][:size]  # data["B_vec"].shape : tuple((1, 5050, 3)) [len=3]
 HP_M = HP_data["trjry"][0][:size]  # data["trjry"].shape : tuple((1, 5051, 3)) [len=3]
 
-linewidth = 3
+linewidth = 2
 
 plt.rc("font", size=10)  # font size for all figures
 # plt.rcParams['font.family'] = 'serif'
@@ -51,9 +51,9 @@ gs = gridspec.GridSpec(
 )  # create grid for multiple figures
 # #############################################################################
 # fix the margins
-left = 0.248
+left = 0.183
 bottom = 0.238
-right = 0.917
+right = 0.948
 top = 0.971
 wspace = 0.2
 hspace = 0.14
@@ -85,9 +85,9 @@ HP_M_ax = fig.add_subplot(gs[0, 0])
 HP_M_ax.plot(
     HP_timeStamp_s,
     HP_M[:, 2],
-    label="$M_{z}$",
+    label="$M_z / M_\\mathrm{eqb}$",
     color=high_contrast_extended[-1],
-    linewidth = linewidth ,
+    linewidth=linewidth,
 )
 # HP_M_ax.plot(
 #     HP_timeStamp_s,
@@ -109,11 +109,17 @@ decay_envelope = HP_init_M *  np.exp(-HP_timeStamp_s / HP_T1)
 HP_M_ax.plot(
     HP_timeStamp_s[: len(HP_timeStamp_s) // 1],
     decay_envelope[: len(HP_timeStamp_s) // 1],
-    label="$e^{-t/T_1}$",
+    label="$\sim e^{-t/T_1}$",
     linestyle="dotted",
     color=high_contrast_extended[-6],
     linewidth=linewidth,
 )
+HP_M_ax.axhline(
+    y=1, color=high_contrast_extended[-2], linestyle="dashed", linewidth=linewidth
+)
+# HP_M_ax.axvline(
+#     x=HP_T1, color=high_contrast_extended[-3], linestyle="dashed", linewidth=linewidth
+# )
 # HP_M_ax.text(
 #     3.5,
 #     0.0016,
@@ -125,14 +131,15 @@ HP_M_ax.plot(
 # )
 
 HP_M_ax.set_xlabel("Time (s)")
-HP_M_ax.set_ylabel("$M_z / M_\\mathrm{eqb}$")
-
+HP_M_ax.set_ylabel("Magnetization")
 # HP_pulse_ax.set_ylim(-7, 7)
-HP_M_ax.set_ylim(bottom=0)
+# HP_M_ax.set_ylim(bottom=0)
+HP_M_ax.set_ylim(bottom=0.1, top=4e5)
 # M_ax.set_xlim(right= 5)
-
+HP_M_ax.set_yscale("log")
 # HP_pulse_ax.set_xticklabels([])  # hide x-axis tick labels for the upper plot
 
+HP_M_ax.set_yticks([1, 1e2, 1e4])
 # HP_pulse_ax.legend(
 #     loc="upper left",
 #     bbox_to_anchor=(1.0, 1.0),
