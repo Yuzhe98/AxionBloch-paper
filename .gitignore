@@ -41,5 +41,8 @@ Thumbs.db
 *.img
 docker-compose.override.yml
 
-# Ignore dotenv or config files (optional)
+# Ignore env or config files (optional)
 .env
+
+# ignore pkl
+*.pkl
