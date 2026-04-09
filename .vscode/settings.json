@@ -5,5 +5,22 @@
         "matplotlib",
         "numpy",
         "scipy"
+    ],
+    "latex-workshop.latex.outDir": "%DIR%/build",
+    "latex-workshop.latex.autoBuild.run": "never",
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.clean.fileTypes": [
+        // "*.aux",
+        // "*.bbl",
+        // "*.bcf",
+        // "*.blg",
+        // "*.fdb_latexmk",
+        // "*.fls",
+        // "*.loc",
+        // "*.out",
+        // "*.run.xml",
+        // "*.soc",
+        // "*.synctex.gz",
+        // "*.toc"
     ]
 }

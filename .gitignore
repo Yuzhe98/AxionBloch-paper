@@ -46,3 +46,8 @@ docker-compose.override.yml
 
 # ignore pkl
 *.pkl
+
+# ignore build and dist directories
+build/
+tex/build/
+dist/
