@@ -182,8 +182,6 @@ nofootinbib,
 In this section, we describe the the main components of \axionbloch{}. We start with the units, physical quantities, and constants (\cref{sec:units_quantities_constants}). Then, we continue with the physics and the algorithm for the numeric simulation (\cref{sec:algorithm}), after which the calibration for the simulation follows (\cref{sec:calibration}). In the end, we provide an example of simulation of axion-induced signals (\cref{sec:simulation}). 
 
 
-\label{sec:capabilities}
-
 \subsection{Units, Physical Quantities, and Constants}
 
 
@@ -345,7 +343,7 @@ To achieve better sensitivity to the axion field, hyperpolarization is applied i
 \begin{figure*}
     \centering
     % \includegraphics[width=\linewidth]{figures/free_decay.pdf}
-    % \includegraphics{figures/SpinEcho_and_CW.pdf}
+    \fbox{\includegraphics[scale=0.95]{figures/flow_chart_v0.3.pdf}}
     \caption{The flow chart of \axionbloch{}. 
     }
     \label{fig:flow_chart}
@@ -359,19 +357,6 @@ This section provides representative examples demonstrating the use of \texttt{a
 
 [Describe setup, parameters, and key results.]
 
-% \begin{figure*}
-%     \centering
-%     \includegraphics[width=0.3\linewidth]{figures/10Hz-1ppm.png}
-%     \includegraphics[width=0.3\linewidth]{figures/10Hz-1ppm.png}
-%     \includegraphics[width=0.3\linewidth]{figures/10Hz-1ppm.png}
-%     \includegraphics[width=0.3\linewidth]{figures/10Hz-1ppm.png}
-%     \includegraphics[width=0.3\linewidth]{figures/10Hz-1ppm.png}
-%     \includegraphics[width=0.3\linewidth]{figures/10Hz-1ppm.png}
-%     \caption{ 
-%     }
-%     \label{fig:}
-% \end{figure*}
-[code of simulation]
 
 \begin{figure}
     \centering
@@ -401,18 +386,10 @@ In this example, the ALP field is modeled as a component of the galactic dark ma
 
 [Describe signal characteristics such as frequency and coherence time.]
 
-\subsubsection{Earth-bound axionlike dark matter}
+% \subsubsection{Earth-bound axionlike dark matter}
 
-[to be written]
+% [should this be written?]
 
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=\linewidth]{figures/CW.pdf}
-%     \includegraphics[width=\linewidth]{figures/CW.pdf}
-%     \caption{Examples of NMR signals induced by the Earth-bound axion dark matter halo. (a) We assume the sample to be thermally polarized by the bias field. (b) The sample is hyperpolarized to a polarization of $\SI{50}{\%}$. 
-%     }
-%     \label{fig:EarthAxionHalo}
-% \end{figure}
 
 %-----------------------
 \section{Development}
