@@ -128,7 +128,7 @@ nofootinbib,
 \affiliation{Department of Physics, University of California, Berkeley, CA 94720-7300, United States of America}
 
 \author{Hendrik Bekker}
-\email{hbekker@uni-mainz.de}
+% \email{hbekker@uni-mainz.de}
 \affiliation{Johannes Gutenberg-Universit{\"a}t Mainz, 55128 Mainz, Germany}
 % \affiliation{Helmholtz-Institut, GSI Helmholtzzentrum f{\"u}r Schwerionenforschung, 55128 Mainz, Germany}
 \affiliation{Helmholtz Institute Mainz, 55099 Mainz, Germany}
@@ -148,7 +148,7 @@ nofootinbib,
 % \affiliation{GSI Helmholtzzentrum für Schwerionenforschung GmbH, 64291 Darmstadt, Germany}
 
 
-\collaboration{CASPEr Collaboration}
+% \collaboration{CASPEr Collaboration}
 
 \begin{abstract}
 % The hypothetic interaction between axionlike particles and nuclear spins can induce magnetic signals. 
@@ -162,17 +162,33 @@ nofootinbib,
 
 \section{Introduction}
 
-% [AI generated. to be modified]
-% The axion was originally proposed as a consequence of the Peccei--Quinn mechanism to resolve the strong $CP$ problem in quantum chromodynamics. Beyond this original motivation, axions and axionlike particles (ALPs) have emerged as well-motivated candidates for dark matter. In many extensions of the Standard Model, ALPs arise as pseudo-Nambu--Goldstone bosons associated with spontaneously broken global symmetries, and can naturally possess very small masses and weak couplings to ordinary matter.
+The axion was originally proposed as a consequence of the Peccei--Quinn mechanism to resolve the strong $CP$\footnote{Here $C$ denotes charge conjugation and $P$ denotes parity.} problem in quantum chromodynamics\,\cite{PecceiQuinn1977_ConstraintsCP_PRD,Weinberg1978_NewLightBoson,PecceiQuinn1977_CPConservation_PRL,Wilczek1978_ProblemStrongPAndT}. 
+Later, more general axionlike particles (ALPs) were proposed in various extensions of the Standard Model as pseudo-Nambu--Goldstone bosons associated with spontaneously broken global symmetries\,\cite{svrcek2006axions,Kim1987_LightPseudoscalars,JaeckelRingwald2010_ALPReview,Arvanitaki2010_StringAxiverse}. 
+Concerning the cosmological implications, axions and ALPs are also well-motivated dark matter candidates\,\cite{Preskill1983_invisible_axion,Abbott1983_CosmologicalBoundAxion,Marsh2016_AxionCosmology}.
+In this paper, we refer to axions and ALPs as ``axions'' for simplicity. 
 
-% If ALPs constitute (a fraction of) dark matter, they can be described as a classical field oscillating coherently at a frequency set by their mass. In this picture, the local dark matter density determines the amplitude of the field. A variety of astrophysical and cosmological scenarios predict different spatial and temporal structures of the ALP field. The simplest and most commonly considered model is the galactic dark matter halo of the Milky Way, in which the ALP field forms a virialized distribution with a characteristic velocity dispersion. In addition, more structured configurations may arise, including gravitationally bound halos around the Earth or the Sun, cold streams originating from disrupted subhalos, and gravitationally focused dark matter distributions due to the influence of massive bodies.
+Axions may possess couplings to ordinary Standard Model particles\,\cite{Graham2013_Newobservables}, including fermions and gauge bosons. 
+Crucially, axion field gradients ($\mathbf{\nabla}a$) may couple to fermionic spins (half-integer spins) through a pseudoscalar interaction. The Hamiltonian for this interaction can be expressed as:
+\begin{equation}
+    H_{\mathrm{int}} = g_\mathrm{aNN} \mathbf{\nabla}a \cdot \mathbf{S}\,,
+\end{equation}
+where $g_\mathrm{aNN}$ is the axion-spin coupling strength, and $\mathbf{S}$ is the spin operator. 
+The axion field gradient can be regarded as a pseudomagnetic field that mimics the behavior of a real magnetic field, where the Hamiltonian can be written as:
+\begin{equation}
+    H = -\hbar \gamma \mathbf{B} \cdot \mathbf{S} \,,
+\end{equation} 
+where $\gamma$ is the gyromagnetic ratio of the spin, and $\mathbf{B}$ is the magnetic field. 
+The pseudomagnetic field induces spin dynamics, providing a pathway for detection in precision measurement experiments such as nuclear magnetic resonance (NMR) and comagnetometer-based searches\,\cite{ouellet2019first,du2018search,ALPHA2023,aja2022canfranc,CAPP2024,brouwer2022projected,alesini2023future,zhong2018results,garcia2024searchaxiondarkmatter,quiskamp2024near,rettaroli2024search,Gramolin2021_Ferromagnetic,gavilan2024searching,bloch2105nasduck,wu2019search,abel2023search,karanth2023first,lee2023laboratory,capozzi2023new, CASPErProposal2014, kimball2018overview, wang2018application, wu2019search, aybas2021_SolidStateNMR, CASPEr_ZULF_2019,Walter2025_CASPErG}. 
+% In this picture, the local dark matter density determines the amplitude of the field. A variety of astrophysical and cosmological scenarios predict different spatial and temporal structures of the ALP field. The simplest and most commonly considered model is the galactic dark matter halo of the Milky Way, in which the ALP field forms a virialized distribution with a characteristic velocity dispersion. In addition, more structured configurations may arise, including gravitationally bound halos around the Earth or the Sun, cold streams originating from disrupted subhalos, and gravitationally focused dark matter distributions due to the influence of massive bodies. 
+There have been dedicated studies on the axion-induced spin dynamics\,\cite{Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning}\YZ{are there more such studies?}, providing axion signal signatures and experimental sensitivity to axion fields. 
+However, to our knowledge, there have not been studies taking advantage of numerical methods to verify the derived axion signal signatures. 
+On the other hand, as more axion models and experiments are being proposed, such as cosmic axion background\,\cite{Dror2021_CosmicAxionBackground,Nitta2023_ADMX_CosmicAxionBackground} and fine-grained axion\,\cite{OHare2025_Finegrained} \YZ{more new ideas of axion search?}, a tool is needed to systematically simulate the axion-induced spin dynamics under various physical conditions and axion field configurations.
 
-% Through their coupling to nuclear or electronic spins, ALPs can give rise to an effective oscillating interaction that mimics the behavior of a weak pseudomagnetic field. This effective field can induce spin precession and related dynamics, providing a pathway for detection in precision measurement experiments such as nuclear magnetic resonance (NMR) and comagnetometer-based searches.
+In this work, we present \texttt{axionbloch}, an open-source Python package designed to simulate spin dynamics induced by axion fields. 
+The package provides a flexible framework for modeling axion fields and experimental configurations. 
+% , including Milky Way galactic halo signals, localized halos, streams, and gravitational focusing effects. 
+By numerically solving the relevant spin evolution equations, \texttt{axionbloch} enables the prediction and analysis of experimentally observable signals.
 
-% In this work, we present \texttt{axionbloch}, a Python package designed to simulate spin dynamics induced by axion fields. The package provides a flexible framework for modeling a wide range of ALP field configurations, including galactic halo signals, localized halos, streams, and gravitational focusing effects. By numerically solving the relevant spin evolution equations, \texttt{axionbloch} enables the prediction and analysis of experimentally observable signals under realistic conditions.
-
-
-% For more details, we refer the reader to our online documentation \YZ{where?}. 
 
 %-----------------------
 \section{Capabilities}
@@ -265,17 +281,31 @@ The optimal choice of $\Delta t$ balances simulation stability and computational
 \subsubsection{Implementation}
 \label{sec:implementation}
 
-The \axionbloch{} package is organized in a modular way to separate experimental configuration, axion field modeling, and numerical simulation. 
+The \axionbloch{} package is organized in a modular way to separate experimental configuration, axion field modeling, and numerical simulation, allowing for flexible configuration of simulations and axion field models.
+A diagram of the architecture of \axionbloch{} is shown in \cref{fig:architecture}. 
+\begin{figure*}[ht]
+    \centering
+    \fbox{\includegraphics[scale=0.95]{figures/diagram_v0.4.pdf}}
+    \caption{Architecture of \axionbloch{}. Each \texttt{Simulation} instance imports parameters from \texttt{Magnet}, \texttt{Sample}, and \texttt{MagField} instances. For axion simulations, axion-model objects are required both for \texttt{Simulation} to configure the simulation and for \texttt{MagField} to generate the pseudomagnetic field. \texttt{Simulations} manages one or multiple \texttt{Simulation} instances. Numerical integration is performed via the \texttt{blochSimulation} API, which provides Python access to the underlying C++ implementation. \YZ{should we have the chart in this box?} 
+    }
+    \label{fig:architecture}
+\end{figure*}
 
-On the Python side, classes such as \texttt{Sample}, \texttt{Magnet}, and \texttt{MagField} encapsulate the relevant experimental parameters, including sample relaxation times, magnetic fields strength and homogeneity. 
-The axion fields are described by dedicated classes, such as \texttt{MilkyWayAxionHalo}, which carry the properties of the axion fields and could generate the pseudomagnetic field acting on the spins. 
+On the Python side, classes \texttt{Sample}, \texttt{Magnet}, and \texttt{MagField} encapsulate the relevant experimental parameters, including sample relaxation times, magnetic fields strength and homogeneity. 
+The axion field models are implemented by dedicated classes, such as \texttt{MilkyWayAxionHalo}, which carry the properties of the axion fields. Together with the method \texttt{MagField.setAxionFields()}, the pseudomagnetic fields can be generated. 
 Different axion models can be incorporated as separate classes without modifying the simulation framework. 
 Simulation is handled within the \texttt{axionbloch.SimuTools} module. 
 In particular, the classes \texttt{Simulation} and \texttt{Simulations} manage the interaction between experimental configurations and axion field models, organizing the parameters and execution of single or multiple simulation runs. 
 
-The time evolution of the Bloch equations is implemented in a dedicated C++ library, \texttt{blochSimulation}. 
-This library provides functions for numerical integration using the RK4 method, more efficient compared to a pure Python implementation. 
-This C++ backend is interfaced with Python using \texttt{pybind11}, enabling integration between high-level Python workflow management and low-level efficient numerical computation. 
+The RK4 algorithm for solving the Bloch equations is implemented in a dedicated C++ library. 
+% This library is more efficient compared to a pure Python implementation. 
+The application programming interface (API) for this library is \texttt{blochSimulation}. 
+This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling integration between high-level Python workflow management and low-level efficient numerical computation. 
+
+% The solver of the Bloch equations is implemented in the C++ library \texttt{blochSimulation}. Python bindings for this library are generated using \texttt{pybind11}, which exposes the underlying C++ routines through a Python API.
+% This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling integration between high-level Python workflow management and low-level efficient numerical computation.
+
+
 
 \subsection{Calibration}
 \label{sec:calibration}
@@ -284,8 +314,9 @@ This C++ backend is interfaced with Python using \texttt{pybind11}, enabling int
 Accurate calibration is essential to ensure that the simulated signals reliably reflect the underlying physical system and can be meaningfully compared with experimental observables. 
 In particular, calibration establishes the correspondence between the NMR signal and model parameters, including magnetic fields, nuclear spin gyromagnetic ratio $\gamma$ and relaxation times ($T_1$, $T_2$ and $T_2^*$). 
 It also allows one to verify the correctness and stability of the numerical implementation. 
-In this section, we describe benchmarks against known analytical or experimental results. These ensure that the simulations produce quantitatively accurate results\cite{Abragam1961_NuclearMagnetism}.
-For the benchmark examples in the section, we use an ethanol sample, and an axial bias field $\mathbf{B_{0}} = B_0 \mathbf{\hat{e}}_z$. Except for the example in \cref{sec:hyperpol}, the sample is initially thermally polarized and in equilibrium state. 
+In this section, we describe benchmarks against known analytical or experimental results. These ensure that the simulations produce quantitatively accurate results\,\cite{Abragam1961_NuclearMagnetism}.
+For the benchmark examples in the section, we use an ethanol sample, and an axial bias field $\mathbf{B_{0}} = B_0 \mathbf{\hat{e}}_z$. 
+% Except for the example in \cref{sec:hyperpol}, the sample is initially thermally polarized and in equilibrium state. 
 
 \subsubsection{Pulsed-NMR: Free Decay and Spin Echo}
 \label{sec:pNMR}
@@ -323,7 +354,6 @@ To achieve better sensitivity to the axion field, hyperpolarization is applied i
 
 \begin{figure}
     \centering
-    % \includegraphics[width=\linewidth]{figures/free_decay.pdf}
     \includegraphics{figures/hyperpolarized.pdf}
     \caption{
     Simulated $T_1$ relaxation of a hyperpolarized sample in a static bias field. The axial magnetization $M_z$ is normalized by the equilibrium magnetization $M_0$. 
@@ -335,28 +365,28 @@ To achieve better sensitivity to the axion field, hyperpolarization is applied i
 \subsection{Axion Simulation}
 \label{sec:simulation}
 
-[theory....]
-\cite{Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning}
+% \subsubsection{Pseudomagnetic Field from Axion-Spin Coupling}
 
-[workflow]
+% Axionlike particles, when present as part of the dark matter field, couple to nuclear spins through a pseudoscalar interaction. If axions constitute the local dark matter, they form a classical oscillating field with frequency $\omega_a = m_a c^2 / \hbar$, where $m_a$ is the axion mass. This field couples to nuclear spins via the interaction Hamiltonian
+% \begin{equation}
+% H_{\text{int}} = g_{a\gamma} \mathbf{S} \cdot \mathbf{a}(t)\,,
+% \end{equation}
+% where $g_{a\gamma}$ is the axion-nucleon coupling constant, $\mathbf{S}$ is the spin operator, and $\mathbf{a}(t)$ is the oscillating axion field. 
 
-\begin{figure*}
-    \centering
-    % \includegraphics[width=\linewidth]{figures/free_decay.pdf}
-    \fbox{\includegraphics[scale=0.95]{figures/flow_chart_v0.3.pdf}}
-    \caption{The flow chart of \axionbloch{}. 
-    }
-    \label{fig:flow_chart}
-\end{figure*}
+% In the context of precision measurements, this interaction manifests as an effective time-dependent pseudomagnetic field that acts on the spin ensemble. For virialized dark matter in the galactic halo, the axion field exhibits both a coherent oscillation at $\omega_a$ and a broadening due to the velocity dispersion of the dark matter halo. This results in a pseudomagnetic field $\mathbf{B}_{\text{axion}}(t)$ with characteristic linewidth $\Delta \omega \sim v_{\text{vir}} \omega_a$, where $v_{\text{vir}}$ is the virial velocity of the halo. The effective magnetic moment precessing around this field generates observable magnetization changes in the spin ensemble, which form the basis for axion detection in spin haloscope experiments.
 
-
-We start with examples of axion-induced NMR signals
-
-This section provides representative examples demonstrating the use of \texttt{axionbloch} for simulating spin dynamics under various physical conditions and axionlike-particle (ALP) field configurations. The following cases illustrate typical workflows and serve as starting points for more advanced studies.
+% \,\cite{Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning}
+Similar to the calibration examples, we simulate the axion-induced NMR signals by solving the Bloch equations with the axion-induced pseudomagnetic field as part of the effective magnetic field. We present an example of a commonly considered model -- -- axion constituting the Milky Way galactic dark matter halo\,\cite{Evans2019_SHMRefined,Gramolin2022Feb_SpectralSignatures}, implemented in the class \texttt{MilkyWayAxionHalo}. In this model, the axion field is treated as an oscillating field with a frequency determined by the axion mass, and a linewidth determined by the velocity dispersion of the virialized dark matter halo. 
 
 
-[Describe setup, parameters, and key results.]
 
+\begin{figure}
+\center
+\fbox{\includegraphics[scale=0.7,clip]{figures/axion_example.pdf}}
+% \vspace{0.1in}
+\caption{Example code of axion simulation.}
+\label{code:axion_example}
+\end{figure}
 
 \begin{figure}
     \centering
@@ -375,16 +405,16 @@ This section provides representative examples demonstrating the use of \texttt{a
     \label{fig:MilkyWayAxionHalo_2col}
 \end{figure*}
 
-\subsubsection{Galactic dark matter}
+% \subsubsection{Galactic dark matter}
 
-In this example, the ALP field is modeled as a component of the galactic dark matter halo. The simulation includes
-\begin{itemize}
-    \item definition of ALP mass and local dark matter density,
-    \item generation of a coherent oscillating field with a velocity-distributed linewidth,
-    \item coupling to the spin system as an effective pseudomagnetic field.
-\end{itemize}
+% In this example, the ALP field is modeled as a component of the galactic dark matter halo. The simulation includes
+% \begin{itemize}
+%     \item definition of ALP mass and local dark matter density,
+%     \item generation of a coherent oscillating field with a velocity-distributed linewidth,
+%     \item coupling to the spin system as an effective pseudomagnetic field.
+% \end{itemize}
 
-[Describe signal characteristics such as frequency and coherence time.]
+% [Describe signal characteristics such as frequency and coherence time.]
 
 % \subsubsection{Earth-bound axionlike dark matter}
 
@@ -407,16 +437,15 @@ The test suite covers core functionalities such as:
     \item initialization and manipulation of classes; 
     \item numerical solution of the Bloch equations;
     \item magnetic fields and relaxations;
-    \item handling of each axion field configurations.
+    \item handling of each axion field configurations. 
 \end{itemize}
 Tests can be executed locally. In the future, we may add tools for online testing considering the demand of testing. Regular execution of the test suite ensures that new changes do not introduce regressions, maintaining the stability and correctness of the package.
 
 % documentation
-Comprehensive documentation for \texttt{axionbloch} is available on
-Read the Docs.\footnote{\url{http://axionbloch.readthedocs.io}} It is built using \texttt{Sphinx}\footnote{\url{http://www.sphinx-doc.org}} and provides detailed explanations of the \texttt{axionbloch} API, along with instructions for installation, configuration, and usage.
+Documentation for \texttt{axionbloch} is available on Read the Docs.\footnote{\url{http://axionbloch.readthedocs.io}} It is built using \texttt{Sphinx}\footnote{\url{http://www.sphinx-doc.org}} and provides detailed explanations of the \texttt{axionbloch} API, along with instructions for installation, configuration, and usage.
 
 % Future
-As we are having numerous new axion field models emerging\cite{}\YZ{cite?}, we are planning to include them, so that \axionbloch{} can be a tool for updating our knowledge of spin haloscope sensitivity. 
+As we are having numerous new axion field models and experiments emerging\,\cite{}\YZ{cite?}, we are planning to extend the functionality, so that \axionbloch{} can be a tool for updating our knowledge of the induced spin dynamics. 
 \YZ{should \axionbloch{} consider electron-spin haloscopes as well in the future? }
 
 %-----------------------
