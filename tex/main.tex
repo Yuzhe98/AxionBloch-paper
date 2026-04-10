@@ -184,18 +184,18 @@ There have been dedicated studies on the axion-induced spin dynamics\,\cite{Dror
 However, to our knowledge, there have not been studies taking advantage of numerical methods to verify the derived axion signal signatures. 
 On the other hand, as more axion models and experiments are being proposed, such as cosmic axion background\,\cite{Dror2021_CosmicAxionBackground,Nitta2023_ADMX_CosmicAxionBackground} and fine-grained axion\,\cite{OHare2025_Finegrained} \YZ{more new ideas of axion search?}, a tool is needed to systematically simulate the axion-induced spin dynamics under various physical conditions and axion field configurations.
 
-In this work, we present \texttt{axionbloch}, an open-source Python package designed to simulate spin dynamics induced by axion fields. 
+In this work, we present \texttt{axionbloch}, an open-source package designed to simulate spin dynamics induced by axion fields. 
+The interface is implemented in Python, a programming language known for its simplicity and readability, while the underlying numerical integration is implemented in C++ for efficiency. 
 The package provides a flexible framework for modeling axion fields and experimental configurations. 
 % , including Milky Way galactic halo signals, localized halos, streams, and gravitational focusing effects. 
 By numerically solving the relevant spin evolution equations, \texttt{axionbloch} enables the prediction and analysis of experimentally observable signals.
-
 
 %-----------------------
 \section{Capabilities}
 \label{sec:capabilities}
 %-----------------------
 
-In this section, we describe the the main components of \axionbloch{}. We start with the units, physical quantities, and constants (\cref{sec:units_quantities_constants}). Then, we continue with the physics and the algorithm for the numeric simulation (\cref{sec:algorithm}), after which the calibration for the simulation follows (\cref{sec:calibration}). In the end, we provide an example of simulation of axion-induced signals (\cref{sec:simulation}). 
+In this section, we describe the main components of \axionbloch{}. We start with the units, physical quantities, and constants (\cref{sec:units_quantities_constants}). Then, we continue with the physics and the algorithm for the numerical simulation (\cref{sec:algorithm}), after which the calibration for the simulation follows (\cref{sec:calibration}). In the end, we provide an example simulation of axion-induced signals (\cref{sec:simulation}). 
 
 
 \subsection{Units, Physical Quantities, and Constants}
@@ -227,8 +227,8 @@ Considering the physical problem we are dealing with, common atomic-physics- and
 
 
 % For the physical 
-The \texttt{axionbloch.enphylope} sub-package provides support for physical quantities with units via the python library \texttt{pint}. 
-A custom class, \texttt{PhysicalQuantity}, is implemented based on \texttt{pint.UnitRegistry}, allowing units to be attached to numerical values. It supports arithmetic operations on the quantities while preserving unit consistency, ensuring physically meaningful results throughout all computations. In addition, quantities can be converted between compatible units using the \texttt{.to()} method, enabling flexible representation of simulation parameters and results. Interactions with scalar values and \texttt{numpy} arrays are also possible.
+The \texttt{axionbloch.enphylope} sub-package provides support for physical quantities with units via the python library \texttt{pint}.\footnote{\url{https://pint.readthedocs.io/}} 
+A custom class, \texttt{PhysicalQuantity}, is implemented based on \texttt{pint.UnitRegistry}, allowing units to be attached to numerical values. It supports arithmetic operations on the quantities while preserving unit consistency, ensuring physically meaningful results throughout all computations. In addition, quantities can be converted between compatible units using the \texttt{PhysicalQuantity.to()} method, enabling flexible representation of simulation parameters and results. Interactions with scalar values and \texttt{NumPy}\footnote{\url{https://numpy.org/}}\,\cite{Harris2020_NumPy} arrays are also possible.
 
 
 In \texttt{axionbloch.constants}, we defined not only fundamental physical constants such as speed of light and Planck constant, but also commonly-used constants in axion and NMR research, like gyromagnetic ratios. The constants are instances of \texttt{PhysicalQuantity}, therefore all operations on physical quantities are supported for the constants. 
@@ -255,7 +255,7 @@ The transverse relaxation time, characterized by time constant $T_2^*$, includes
 
 \subsubsection{Numerical Integration}
 \label{sec:numericalintegration}
-To derive the time evolution of the magnetization, the Bloch equations is solved numerically using the fourth-order Runge--Kutta (RK4) method. Given a time step $\Delta t$, effective magnetic field, and initial magnetization $\mathbf{M}_0$, the magnetization at the $n+1$-th step can be found via
+To derive the time evolution of the magnetization, the Bloch equations is solved numerically using the fourth-order Runge--Kutta (RK4) method. Given a time step $\Delta t$, effective magnetic field, and initial magnetization $\mathbf{M}_0$, the magnetization at the $(n+1)$-th step can be found via
 \begin{equation}
 \mathbf{M}^{n+1}
 =
@@ -269,9 +269,9 @@ To derive the time evolution of the magnetization, the Bloch equations is solved
 Here 
 \begin{align}
 \mathbf{k}_1 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n}\,, \\
-\mathbf{k}_2 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \frac{\Delta t}{2}\mathbf{k}_1}\,, \\
-\mathbf{k}_3 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \frac{\Delta t}{2}\mathbf{k}_2}\,, \\
-\mathbf{k}_4 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \Delta t\,\mathbf{k}_3}\,,
+\mathbf{k}_2 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \frac{1}{2}\mathbf{k}_1\Delta t}\,, \\
+\mathbf{k}_3 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \frac{1}{2}\mathbf{k}_2\Delta t}\,, \\
+\mathbf{k}_4 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \mathbf{k}_3\Delta t}\,,
 \end{align}
 where $d\mathbf{M}/dt$ can be found using the Bloch equations [Eqs.\,(\ref{eq:bloch_x}--\ref{eq:bloch_z})]. 
 This fourth-order method yields a local truncation error of $\mathcal{O}(\Delta t^5)$, while the accumulated error over $N = 1/\Delta t$ steps is of order $\mathcal{O}(\Delta t^4)$. 
@@ -281,7 +281,7 @@ The optimal choice of $\Delta t$ balances simulation stability and computational
 \subsubsection{Implementation}
 \label{sec:implementation}
 
-The \axionbloch{} package is organized in a modular way to separate experimental configuration, axion field modeling, and numerical simulation, allowing for flexible configuration of simulations and axion field models.
+Using object-oriented programming, we implement the algorithm in a modular way to separate experimental configuration, axion field modeling, and numerical simulation, allowing for flexible configuration of simulations and axion field models. 
 A diagram of the architecture of \axionbloch{} is shown in \cref{fig:architecture}. 
 \begin{figure*}[ht]
     \centering
@@ -301,10 +301,6 @@ The RK4 algorithm for solving the Bloch equations is implemented in a dedicated 
 % This library is more efficient compared to a pure Python implementation. 
 The application programming interface (API) for this library is \texttt{blochSimulation}. 
 This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling integration between high-level Python workflow management and low-level efficient numerical computation. 
-
-% The solver of the Bloch equations is implemented in the C++ library \texttt{blochSimulation}. Python bindings for this library are generated using \texttt{pybind11}, which exposes the underlying C++ routines through a Python API.
-% This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling integration between high-level Python workflow management and low-level efficient numerical computation.
-
 
 
 \subsection{Calibration}
@@ -326,7 +322,7 @@ In the pulsed-NMR calibration, we apply one $\SI{90}{\degree}$ pulse and one $\S
     \item be tipped by $\SI{90}{\degree}$ to the x-y plane by the $\SI{90}{\degree}$ pulse;
     \item free decay with relaxation time $T_2^*$ in the absence of pulses;
     \item refocus (echo) after $\SI{180}{\degree}$ pulses; 
-    \item show decaying amplitude of echos with relaxation time $T_2$.
+    \item show decaying amplitude of echoes with relaxation time $T_2$.
 \end{itemize}
 We can observe the behaviors above in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a). \YZ{should we add quantitative analysis of the calibration?}
 With this benchmark, we calibrate the magnetic pulses, Larmor precession, and transverse relaxations. 
@@ -335,7 +331,7 @@ With this benchmark, we calibrate the magnetic pulses, Larmor precession, and tr
     \centering
     % \includegraphics[width=\linewidth]{figures/free_decay.pdf}
     \includegraphics{figures/SpinEcho_and_CW.pdf}
-    \caption{Simulated magnetic fields in x and y direction (upper row) and induced NMR signals (lower low). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^*}$ is the magnitude of the excitation. 
+    \caption{Simulated magnetic fields in x and y directions (upper row) and induced NMR signals (lower row). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^*}$ is the magnitude of the excitation. 
     }
     \label{fig:calibration_T2_T2star}
 \end{figure*}
@@ -344,13 +340,13 @@ With this benchmark, we calibrate the magnetic pulses, Larmor precession, and tr
 \subsubsection{Continuous-Wave NMR}
 \label{sec:CW_NMR}
 In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is applied. When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$. \YZ{we have cited NMR textbooks but should we cite them here again?}
-One such example is illustrated in \cref{fig:calibration_T2_T2star}(b). 
+One such example is illustrated in \cref{fig:calibration_T2_T2star}\,(b). 
 With this benchmark, we calibrate the Larmor precession and $T_2^*$ relaxation once again. 
 
 \subsubsection{Hyperpolarized sample}
 \label{sec:hyperpol}
 
-To achieve better sensitivity to the axion field, hyperpolarization is applied in spin haloscopes. Compared to typical thermal polarization at room temperature, hyperpolarization techniques can boost the polarization by orders of magnitude to the order of unity. The \axionbloch{} package handles the polarization by the \texttt{Sample} class. In \cref{fig:calibration_T1_HP} we use a \SI{1}{\%}-polarization ethanol sample as an example demonstrating how we calibrate the evolution of hyperpolarization due to the $T_1$ relaxation. At first ($t\ll T_1$), the polarization exponentially decays with time constant $T_1$, until it reaches equilibrium after many $T_1$. With such benchmarks, we also calibrate the longitudinal $T_1$ relaxation. 
+To achieve better sensitivity to the axion field, hyperpolarization is applied in experiments. Compared to typical thermal polarization at room temperature, hyperpolarization techniques can boost the polarization by orders of magnitude to the order of unity. The \axionbloch{} package handles the polarization by the \texttt{Sample} class. In \cref{fig:calibration_T1_HP} we use a \SI{1}{\%}-polarization ethanol sample as an example demonstrating how we calibrate the evolution of hyperpolarization due to the $T_1$ relaxation. At first ($t\ll T_1$), the polarization exponentially decays with time constant $T_1$, until it reaches equilibrium after many $T_1$. With such benchmarks, we also calibrate the longitudinal $T_1$ relaxation. 
 
 \begin{figure}
     \centering
@@ -365,26 +361,27 @@ To achieve better sensitivity to the axion field, hyperpolarization is applied i
 \subsection{Axion Simulation}
 \label{sec:simulation}
 
-% \subsubsection{Pseudomagnetic Field from Axion-Spin Coupling}
-
-% Axionlike particles, when present as part of the dark matter field, couple to nuclear spins through a pseudoscalar interaction. If axions constitute the local dark matter, they form a classical oscillating field with frequency $\omega_a = m_a c^2 / \hbar$, where $m_a$ is the axion mass. This field couples to nuclear spins via the interaction Hamiltonian
-% \begin{equation}
-% H_{\text{int}} = g_{a\gamma} \mathbf{S} \cdot \mathbf{a}(t)\,,
-% \end{equation}
-% where $g_{a\gamma}$ is the axion-nucleon coupling constant, $\mathbf{S}$ is the spin operator, and $\mathbf{a}(t)$ is the oscillating axion field. 
-
-% In the context of precision measurements, this interaction manifests as an effective time-dependent pseudomagnetic field that acts on the spin ensemble. For virialized dark matter in the galactic halo, the axion field exhibits both a coherent oscillation at $\omega_a$ and a broadening due to the velocity dispersion of the dark matter halo. This results in a pseudomagnetic field $\mathbf{B}_{\text{axion}}(t)$ with characteristic linewidth $\Delta \omega \sim v_{\text{vir}} \omega_a$, where $v_{\text{vir}}$ is the virial velocity of the halo. The effective magnetic moment precessing around this field generates observable magnetization changes in the spin ensemble, which form the basis for axion detection in spin haloscope experiments.
-
-% \,\cite{Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning}
-Similar to the calibration examples, we simulate the axion-induced NMR signals by solving the Bloch equations with the axion-induced pseudomagnetic field as part of the effective magnetic field. We present an example of a commonly considered model -- -- axion constituting the Milky Way galactic dark matter halo\,\cite{Evans2019_SHMRefined,Gramolin2022Feb_SpectralSignatures}, implemented in the class \texttt{MilkyWayAxionHalo}. In this model, the axion field is treated as an oscillating field with a frequency determined by the axion mass, and a linewidth determined by the velocity dispersion of the virialized dark matter halo. 
-
-
+Similar to the calibration examples, we simulate the axion-induced NMR signals by solving the Bloch equations with the axion-induced pseudomagnetic field as part of the effective magnetic field. 
+We present an example of a commonly considered model -- axion constituting the Milky Way galactic dark matter halo\,\cite{Evans2019_SHMRefined,Gramolin2022Feb_SpectralSignatures}, implemented in the class \texttt{MilkyWayAxionHalo}. 
+In this model, the axion field is treated as an oscillating field with a frequency determined by the axion mass, and a linewidth (characterizing the stochasticity) determined by the velocity dispersion of the virialized dark matter halo. 
+The sample is chosen to be \ch{^{129}Xe}, polarized to $\SI{50}{\%}$ initially, and the bias field is applied along the z direction. 
+The details of the simulation configuration can be found in the code example in \cref{code:axion_example}. 
+We refer readers to \cref{fig:architecture} which illustrates the relationship between the objects in the code example. 
+The simulated pseudomagnetic fields and the amplitude of the induced transverse magnetization are shown in \cref{fig:MilkyWayAxionHalo}\YZ{Would you prefer \cref{fig:MilkyWayAxionHalo_2col}?}, in which we can find the signal increasing with time at the beginning of the simulation due to axion field gradient, and then decaying due to the $T_1$ relaxation. 
+The efficiency of the simulation is limited by the numerical integration of the Bloch equations. 
+The total number of integration steps can be found by:\YZ{should here be a :?}
+\begin{align}
+    N &= \texttt{Simulation.rate} \times \texttt{Simulation.duration} \nonumber\\
+    &\quad \times \texttt{MagField.numFields} \times \texttt{Magnet.numPt}\,,
+\end{align}
+where \texttt{Simulation.rate} is the sampling rate of the simulation, \texttt{Simulation.duration} is the duration of the simulation, \texttt{MagField.numFields} is the number of random pseudomagnetic fields generated to account for the stochasticity of the axion field, and \texttt{Magnet.numPt} is the number of bias fields sampled to account for the inhomogeneity of the bias field.
+For the example in \cref{code:axion_example}, the total number of integration steps is \SI{4.064e9}{}, and the time consumed is \SI{10}{\sec} on a personal computer (CPU: Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} Ultra 7 155H; Base speed: 1.40 GHz). Such moderate time consumption allows users to freely explore different parameter regimes with many simulations. 
 
 \begin{figure}
 \center
 \fbox{\includegraphics[scale=0.7,clip]{figures/axion_example.pdf}}
 % \vspace{0.1in}
-\caption{Example code of axion simulation.}
+\caption{Example code of an axion simulation.}
 \label{code:axion_example}
 \end{figure}
 
@@ -405,20 +402,11 @@ Similar to the calibration examples, we simulate the axion-induced NMR signals b
     \label{fig:MilkyWayAxionHalo_2col}
 \end{figure*}
 
-% \subsubsection{Galactic dark matter}
 
-% In this example, the ALP field is modeled as a component of the galactic dark matter halo. The simulation includes
-% \begin{itemize}
-%     \item definition of ALP mass and local dark matter density,
-%     \item generation of a coherent oscillating field with a velocity-distributed linewidth,
-%     \item coupling to the spin system as an effective pseudomagnetic field.
-% \end{itemize}
-
-% [Describe signal characteristics such as frequency and coherence time.]
 
 % \subsubsection{Earth-bound axionlike dark matter}
 
-% [should this be written?]
+% [should this example be mentioned?]
 
 
 %-----------------------
@@ -442,30 +430,41 @@ The test suite covers core functionalities such as:
 Tests can be executed locally. In the future, we may add tools for online testing considering the demand of testing. Regular execution of the test suite ensures that new changes do not introduce regressions, maintaining the stability and correctness of the package.
 
 % documentation
-Documentation for \texttt{axionbloch} is available on Read the Docs.\footnote{\url{http://axionbloch.readthedocs.io}} It is built using \texttt{Sphinx}\footnote{\url{http://www.sphinx-doc.org}} and provides detailed explanations of the \texttt{axionbloch} API, along with instructions for installation, configuration, and usage.
+Documentation for \texttt{axionbloch} is available on Read the Docs.\footnote{\url{http://axionbloch.readthedocs.io}} It is built using \texttt{Sphinx}\footnote{\url{http://www.sphinx-doc.org}} and provides detailed explanations of the API, along with instructions for installation, configuration, and usage.
 
 % Future
-As we are having numerous new axion field models and experiments emerging\,\cite{}\YZ{cite?}, we are planning to extend the functionality, so that \axionbloch{} can be a tool for updating our knowledge of the induced spin dynamics. 
-\YZ{should \axionbloch{} consider electron-spin haloscopes as well in the future? }
+As we are having numerous new axion field models and experiments emerging, we are planning to extend the functionality, so that \axionbloch{} can be a tool for updating our knowledge of the induced spin dynamics. 
 
 %-----------------------
 \section{Conclusions}
 \label{sec:conclusions}
 %-----------------------
 
-% We have presented \texttt{axionbloch}, a Python package designed to simulate spin dynamics induced by axionlike-particle (ALP) fields under a variety of physical scenarios. The package provides a flexible framework for modeling different ALP configurations, including galactic and Earth-bound halos, streams, and gravitationally focused fields, and supports both pulsed and continuous-wave NMR simulations.
+We have presented \texttt{axionbloch}, a package providing a framework to simulate spin dynamics induced by axion fields under a variety of physical scenarios. 
+The package adopts SI units so that the inputs and outputs are comparable to experimental parameters and observables. 
+Numerical integration of the Bloch equations is performed using a fourth-order Runge--Kutta method in the rotating frame, enabling stable and efficient simulation. 
+Comprehensive calibrations have been done to ensure the accuracy of the simulations. 
+An example simulation of axion-induced signals from a local virialized axion dark matter halo is presented for demonstration of package's capabilities.
 
-% \texttt{axionbloch} leverages SI units and a robust quantity-handling system to ensure consistent and reliable computations. Numerical integration of the Bloch equations is performed using a fourth-order Runge--Kutta method in the rotating frame, enabling accurate simulation of ALP-induced spin-precession signals. Comprehensive calibration routines and example workflows demonstrate the capabilities of the package and provide reference points for experimental studies.
-
-% By providing an open-source, well-documented, and tested tool, \texttt{axionbloch} aims to facilitate the study of ALP-induced effects in precision spin experiments and to serve as a platform for further method development and community contributions.
-
-
+By providing an open-source, well-documented, and tested tool, \texttt{axionbloch} aims to facilitate the study of axion-induced spin dynamics in precision measurement experiments and to serve as a platform for further method development and incorporation of new axion models.
 
 
 \begin{acknowledgments}
-The authors acknowledge helpful discussions with [add Alex Sushkov here if he is not one of the authors]. 
-We are grateful to the communities supporting the open-source software and tools: \texttt{git}, \texttt{NumPy}, \texttt{SciPy}, \texttt{matplotlib}, \texttt{Pint}, \texttt{pybind11}, \texttt{IPython},  \texttt{pytest}, Sphinx, GitHub and Read the Docs. 
-% 
+
+The authors acknowledge helpful discussions with [names]. 
+We are grateful to the communities supporting the open-source software and tools: \texttt{git}, \texttt{NumPy}, 
+\texttt{SciPy}\footnote{\url{https://docs.scipy.org/}}\,\cite{Virtanen2020_SciPy}, 
+\texttt{matplotlib}\footnote{\url{https://matplotlib.org/}}, 
+\texttt{Pint}, 
+\texttt{pybind11}, 
+\texttt{IPython}\footnote{\url{https://ipython.org/}}\,\cite{Perez2007_IPython}, 
+\texttt{Jupyter}\footnote{\url{https://jupyter.org/}}\,\cite{Granger2021_Jupyter}, 
+\texttt{pytest}, 
+\texttt{Sphinx}, 
+GitHub\footnote{\url{https://github.com/}} 
+and 
+Read the Docs\footnote{\url{https://about.readthedocs.com/}}. 
+
 This work was supported in part by the Cluster of Excellence ``Precision Physics, Fundamental Interactions, and Structure of Matter'' (PRISMA+ EXC 2118/1) funded by the German Research Foundation (DFG) within the German Excellence Strategy (Project ID 39083149) and COST Action COSMIC WISPers CA21106, supported by COST (European Cooperation in Science and Technology), and also by the U.S. National Science Foundation under grant PHYS-2110388. 
 \YZ{Check acknowledgments! }
 \end{acknowledgments}
