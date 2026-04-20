@@ -119,23 +119,26 @@ preamble = r"""
 
 code = """\
 Define a quantity from scalar and unit
->>> from axionbloch.enphylope import PhysicalQuantity
->>> B = PhysicalQuantity(1.0, "Gauss")
->>> B.to("tesla")
-<0.0001 tesla>
+>>> from astropy import units as u
+>>> B = 1.0 * u.gauss
+>>> B
+<Quantity 1. G>
+>>> B.si
+<Quantity 0.0001 T>
 
-Import a constant and use it with scalars
+Import constants and use them with scalars
 >>> from axionbloch.constants import gamma_p
 >>> import numpy as np
+find the 90 degree pulse duration
 >>> t90 = np.pi / 2 / (gamma_p * B)
->>> t90.to("microsecond")
-<58.71648792722992 microsecond>
+>>> t90.to(u.microsecond)  
+<Quantity 58.71648793 us>
 
 Operation on an array of quantities with numpy
 >>> tStamps = np.array([0, 1 / 3, 1]) * t90
->>> phases = (gamma_p * B * tStamps).to("")
+>>> phases = gamma_p * B * tStamps * u.radian
 >>> np.sin(phases)
-<[0.0 0.49999999999999983 1.0] dimensionless>
+<Quantity [0. , 0.5, 1. ]>
 """
 # code = """\
 # Define a quantity from scalars and units:Define a quantity from scalars and units:Define a quantity from scalars and units:"""
@@ -153,5 +156,5 @@ formatter = LatexFormatter(
 latex_code = highlight(code, PythonConsoleLexer(), formatter)
 
 
-with open("figures/code_quantities.tex", "w") as f:
+with open("scripts-and-data/code_quantities.tex", "w") as f:
     f.write(preamble + latex_code + ending)

@@ -123,15 +123,13 @@ The axion field gradient can be regarded as a pseudomagnetic field that mimics t
 \end{equation} 
 where $\gamma$ is the gyromagnetic ratio of the spin, and $\mathbf{B}$ is the magnetic field. 
 The pseudomagnetic field induces spin dynamics, providing a pathway for detection in precision measurement experiments such as nuclear magnetic resonance (NMR) and comagnetometer-based searches\,\cite{ouellet2019first,du2018search,ALPHA2023,aja2022canfranc,CAPP2024,brouwer2022projected,alesini2023future,zhong2018results,garcia2024searchaxiondarkmatter,Quiskamp2024_ORGAN,rettaroli2024search,Gramolin2021_Ferromagnetic,gavilan2024searching,bloch2105nasduck,wu2019search,abel2023search,karanth2023first,lee2023laboratory,capozzi2023new, CASPErProposal2014, kimball2018overview, wang2018application, wu2019search, aybas2021_SolidStateNMR, CASPEr_ZULF_2019,Walter2025_CASPErG}. 
-% In this picture, the local dark matter density determines the amplitude of the field. A variety of astrophysical and cosmological scenarios predict different spatial and temporal structures of the ALP field. The simplest and most commonly considered model is the galactic dark matter halo of the Milky Way, in which the ALP field forms a virialized distribution with a characteristic velocity dispersion. In addition, more structured configurations may arise, including gravitationally bound halos around the Earth or the Sun, cold streams originating from disrupted subhalos, and gravitationally focused dark matter distributions due to the influence of massive bodies. 
-There have been dedicated studies of the axion-induced spin dynamics\,\cite{Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning, Aybas_2021_Quantum_sensitivity}, providing axion signal signatures and experimental sensitivity to axion fields. 
+There have been dedicated studies of the axion-induced spin dynamics\,\cite{Aybas_2021_Quantum_sensitivity, Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning}, providing axion signal signatures and experimental sensitivity to axion fields. 
 However, to our knowledge, there have not been studies taking advantage of numerical methods to verify the derived axion signal signatures. 
 On the other hand, as more axion models and experiments are being proposed, such as cosmic axion background\,\cite{Dror2021_CosmicAxionBackground,Nitta2023_ADMX_CosmicAxionBackground}, fine-grained axion\,\cite{OHare2025_Finegrained}, and quadratically coupled axion\,\cite{GanXucheng2026_quadraticPTA, huang2026earthmatterenhancedaxion}, a tool is needed to systematically simulate the axion-induced spin dynamics under various physical conditions and axion field configurations.
 
 In this work, we present \axionbloch{}, an open-source package designed to simulate spin dynamics induced by axion fields. 
 The interface is implemented in Python, a programming language known for its simplicity and readability, while the underlying numerical integration is implemented in C++ for efficiency. 
 The package provides a flexible framework for modeling axion fields and experimental configurations. 
-% , including Milky Way galactic halo signals, localized halos, streams, and gravitational focusing effects. 
 By numerically solving the relevant spin evolution equations, \axionbloch{} enables the prediction and analysis of experimentally observable signals.
 
 %-----------------------
@@ -147,38 +145,23 @@ In this section, we describe the main components of \axionbloch{}. We start with
 
 \label{sec:units_quantities_constants}
 
+We take advantage of the packages \texttt{astropy}\footnote{\url{https://astropy.org/}}\,\cite{Astropy2013} to deal with units and physical quantities. 
+Using \texttt{astropy.units}, we can create physical quantities by attaching units to Python scalars or \texttt{NumPy}\footnote{\url{https://numpy.org/}}\,\cite{Harris2020_NumPy} arrays. 
+Quantities can be converted between dimensionally equivalent units using the \texttt{to()} method.
+In \texttt{astropy}, unit definitions are included in both the International System of Units (SI) and the Centimeter-Gram-Second (CGS) systems. 
+Values in SI or CGS units can be found in the quantity's properties \texttt{.si} and \texttt{.cgs}.
+A code example can be found in \cref{code:quantities}. 
 
-\subsubsection{Units}
-\label{sec:units}
-
-
-We adopt the International System of Units (SI) for inputs and outputs in the package. All physical inputs, internal computations, and outputs are consistently expressed in SI base and derived units. 
-% This consistent use of SI units ensures compatibility with experimental parameters and avoids ambiguity in the magnitude of simulation results.
-Considering the physical problem we are dealing with, common atomic-physics- and astrophysics-specific units are included. 
-The details of implementation in the package are introduced in the following sections. 
-
-\subsubsection{Physical Quantities and Constants}
-\label{sec:quantities}
+In \texttt{axionbloch.constants}, we defined a few commonly-used constants in axion and NMR research, like gyromagnetic ratios. 
+The constants are instances of \texttt{astropy.units.Quantity}; therefore, all operations on physical quantities are supported for the constants. 
 
 \begin{figure}
 \center
 \fbox{\includegraphics[scale=0.8,clip]{figures/code_quantities.pdf}}
 % \vspace{0.1in}
-\caption{Examples of operations of physical quantities using \texttt{axionbloch.enphylope} and \texttt{axionbloch.enphylope}.\YZ{Gauss->gauss}}
+\caption{Examples of operations of physical quantities using \texttt{astropy.units} and \texttt{axionbloch.constants}. }
 \label{code:quantities}
 \end{figure}
-
-
-% For the physical 
-The \texttt{axionbloch.enphylope} sub-package provides support for physical quantities with units via the python library \texttt{Pint}.\footnote{\url{https://pint.readthedocs.io/}} 
-A custom class, \texttt{PhysicalQuantity}, is implemented based on \texttt{pint.UnitRegistry}, allowing units to be attached to numerical values. 
-This class supports arithmetic operations on the quantities while preserving unit consistency. 
-In addition, quantities can be converted between compatible units using the \texttt{PhysicalQuantity.to()} method, enabling flexible representation of simulation parameters and results. 
-Interactions with scalar values and \texttt{NumPy}\footnote{\url{https://numpy.org/}}\,\cite{Harris2020_NumPy} arrays are also possible. 
-A code example can be found in \cref{code:quantities}. 
-
-In \texttt{axionbloch.constants}, we defined not only fundamental physical constants such as speed of light and the Planck constant, but also commonly-used constants in axion and NMR research, like gyromagnetic ratios. 
-The constants are instances of \texttt{PhysicalQuantity}; therefore, all operations on physical quantities are supported for the constants. 
 
 \subsection{Algorithm}
 \label{sec:algorithm}
