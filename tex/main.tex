@@ -308,7 +308,7 @@ In this model, the axion field is treated as an oscillating field with a frequen
 The sample is chosen to be \ch{^{129}Xe}, polarized to $\SI{50}{\%}$ initially, and the bias field is applied along the z direction. 
 The details of the simulation configuration can be found in the code example in \cref{code:axion_example}. 
 We refer readers to \cref{fig:architecture} which illustrates the relationship between the objects in the code example. 
-The simulated pseudomagnetic fields and the amplitude of the induced transverse magnetization are shown in \cref{fig:MilkyWayAxionHalo}\YZ{Would you prefer \cref{fig:MilkyWayAxionHalo_2col}?}, in which we can find the signal increasing with time at the beginning of the simulation due to axion field gradient, and then decaying due to the $T_1$ relaxation. 
+The simulated pseudomagnetic fields and the amplitude of the induced transverse magnetization are shown in \cref{fig:MilkyWayAxionHalo}, in which we can find the signal increasing with time at the beginning of the simulation due to axion field gradient, and then decaying due to the $T_1$ relaxation. 
 The efficiency of the simulation is limited by time consumption for the numerical integration of the Bloch equations. 
 The total number of integration steps can be found by
 \begin{align}
@@ -327,21 +327,21 @@ Such moderate runtime allows users to explore different parameter regimes with m
 \label{code:axion_example}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
-    \caption{Simulation of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization induced ($M_{xy}$). To account for the stochasticity, we generated 1000 pseudomagnetic fields. The solid lines indicate the mean of these 1000 $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate $\pm \sigma$ (standard deviation) range. The sample for the simulations was assumed to be polarized to $\SI{50}{\%}$ initially. 
-    }
-    \label{fig:MilkyWayAxionHalo}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
+%     \caption{Simulation of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization induced ($M_{xy}$). To account for the stochasticity, we generated 1000 pseudomagnetic fields. The solid lines indicate the mean of these 1000 $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate $\pm \sigma$ (standard deviation) range. The sample for the simulations was assumed to be polarized to $\SI{50}{\%}$ initially. 
+%     }
+%     \label{fig:MilkyWayAxionHalo}
+% \end{figure}
 
 \begin{figure*}
     \centering
     \includegraphics[width=0.49\linewidth]{figures/MilkyWayAxionHalo-1.pdf}
     \includegraphics[width=0.49\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
-    \caption{\YZ{Should we include two figures?} Simulations of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization induced ($M_{xy}$). Left: one single simulation. Right: 1000 simulations to account for the stochasticity. The solid lines indicate the value (left column) or mean value (right column) of $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate $\pm \sigma$ (standard deviation) range. The sample for the simulations was assumed to be polarized to $\SI{50}{\%}$ initially.
+    \caption{Simulations of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization induced ($M_{xy}$). Left: one single simulation. Right: 1000 simulations to account for the stochasticity. The solid lines indicate the value (left column) or mean value (right column) of $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate $\pm \sigma$ (standard deviation) range. The sample for the simulations was assumed to be polarized to $\SI{50}{\%}$ initially.
     }
-    \label{fig:MilkyWayAxionHalo_2col}
+    \label{fig:MilkyWayAxionHalo}
 \end{figure*}
 
 
@@ -410,7 +410,7 @@ The authors acknowledge helpful discussions with [names].
 We are grateful to the communities supporting the open-source software and tools: \texttt{git}, \texttt{NumPy}, 
 \texttt{SciPy}\footnote{\url{https://docs.scipy.org/}}\,\cite{Virtanen2020_SciPy}, 
 \texttt{matplotlib}\footnote{\url{https://matplotlib.org/}}, 
-\texttt{Pint}, 
+\texttt{astropy}, 
 \texttt{pybind11}, 
 \texttt{IPython}\footnote{\url{https://ipython.org/}}\,\cite{Perez2007_IPython}, 
 \texttt{Jupyter}\footnote{\url{https://jupyter.org/}}\,\cite{Granger2021_Jupyter}, 
