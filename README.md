@@ -1,7 +1,3 @@
-# Title of the work / manuscript
+# axionbloch: an Open-Source Python Package for Simulating Axion-Induced Spin Dynamics
 
-[The description of the work. ]
-
-Recommendations:
-
-- Use .pdf format for figures. 
+Here are stored tex files, figures, code, abd scripts that generate the paper. 
