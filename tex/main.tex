@@ -89,12 +89,13 @@ nofootinbib,
 
 \begin{abstract}
 
-Ultralight bosonic dark matter with normal-matter spins can be described as the action of a pseudomagnetic field. We model such interaction along with the usual magnetic interactions using spin-evolution (Bloch) equations. 
+% Ultralight bosonic dark matter with normal-matter spins can be described as the action of a pseudomagnetic field. 
+The interaction of ultralight bosonic dark matter with spins can be interpreted as a pseudomagnetic field acting on normal matter.
+We model such interaction along with the usual magnetic interactions using spin-evolution (Bloch) equations. 
 % Hypothetic beyond-standard-model interactions between axions and fermionic spins might induce magnetic signals. 
 We present \axionbloch{}, an open-source Python package for simulating spin dynamics induced by both usual and exotic interactions. 
-The numerical simulations serve as a complement to the analytical calculations of axion-induced spin dynamics, providing a tool for verifying the derived axion signal signatures. 
-The signal signatures are crucial for designing experimental searches and data analysis. 
-Quantitative calibrations are made against known analytical results and experimental data, ensuring the accuracy of the simulated signals. 
+The numerical simulations serve as a tool for deriving axion signal signatures, which are crucial for designing experimental searches and data analysis. 
+Calibrations are made against known analytical results and experimental data, ensuring the accuracy of the simulated signals. 
 \axionbloch{} is available at \url{https://github.com/Yuzhe98/AxionBloch}, allowing researchers to simulate axion pseudomagnetic signals under specific configurations of the axion models and experimental setups. 
 The package is documented at \url{http://axionbloch.readthedocs.io/} and includes example scripts for application. 
 
@@ -104,10 +105,11 @@ The package is documented at \url{http://axionbloch.readthedocs.io/} and include
 
 \section{Introduction}
 
-The axion was originally proposed as a consequence of the Peccei--Quinn mechanism to resolve the strong $CP$\footnote{Here $C$ denotes charge conjugation and $P$ denotes parity.} problem in quantum chromodynamics\,\cite{PecceiQuinn1977_ConstraintsCP_PRD,Weinberg1978_NewLightBoson,PecceiQuinn1977_CPConservation_PRL,Wilczek1978_ProblemStrongPAndT}. 
-Later, more general axionlike particles (ALPs) were proposed in various extensions of the Standard Model as pseudo-Nambu--Goldstone bosons associated with spontaneously broken global symmetries\,\cite{svrcek2006axions,Kim1987_LightPseudoscalars,JaeckelRingwald2010_ALPReview,Arvanitaki2010_StringAxiverse}. 
+The axion was originally proposed to resolve the strong $CP$ problem in quantum chromodynamics\,\cite{PecceiQuinn1977_ConstraintsCP_PRD,Weinberg1978_NewLightBoson,PecceiQuinn1977_CPConservation_PRL,Wilczek1978_ProblemStrongPAndT}. 
+Here $C$ denotes charge conjugation and $P$ denotes parity. 
+Later, more general axionlike particles (ALPs) were proposed in various extensions of the Standard Model associated with spontaneously broken global symmetries\,\cite{svrcek2006axions,Kim1987_LightPseudoscalars,JaeckelRingwald2010_ALPReview,Arvanitaki2010_StringAxiverse}. 
 Concerning the cosmological implications, axions and ALPs are also well-motivated dark matter candidates\,\cite{Preskill1983_invisible_axion,Abbott1983_CosmologicalBoundAxion,Marsh2016_AxionCosmology}.
-In this paper, we refer to axions and ALPs as ``axions'' for simplicity. \YZ{think about how to make it transparent. }
+In this paper, we refer to axions and ALPs as ``axions'' for simplicity. 
 
 Axions may possess couplings to ordinary Standard Model particles\,\cite{Graham2013_Newobservables}, including photons, gluons and fermions. 
 Crucially, axion field gradients ($\mathbf{\nabla}a$) may couple to fermionic spins through a pseudoscalar interaction. The Hamiltonian for this interaction can be expressed as
