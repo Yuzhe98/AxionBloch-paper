@@ -9,8 +9,8 @@ import matplotlib.gridspec as gridspec
 from matplotlib import font_manager
 
 from src.utils import high_contrast_extended
-
-echo_data = np.load("figures/SpinEcho_CPMG_simu.npz")
+data_dir = "scripts-and-data/"
+echo_data = np.load(data_dir + "SpinEcho_CPMG_simu.npz")
 echo_Tdelta = echo_data["Tdelta_s"]
 echo_T2 = echo_data["T2_s"]
 echo_T2star = (echo_T2 ** (-1) + echo_Tdelta ** (-1)) ** (-1)
@@ -103,8 +103,8 @@ echo_M_ax.plot(
 # )
 T2star_envelope = np.exp(-(echo_timeStamp_s + 0.02) / echo_T2star)
 echo_M_ax.plot(
-    echo_timeStamp_s[: len(echo_timeStamp_s) // 2],
-    T2star_envelope[: len(echo_timeStamp_s) // 2],
+    echo_timeStamp_s[: len(echo_timeStamp_s) // 4],
+    T2star_envelope[: len(echo_timeStamp_s) // 4],
     # label="$e^{{-t/T_2^*}}$",
     linestyle="dashed",
     color="k",
@@ -138,7 +138,7 @@ echo_M_ax.text(
 )
 
 echo_M_ax.set_xlabel("Time (s)")
-echo_M_ax.set_ylabel("Normalized $\\mathbf{M}$")
+echo_M_ax.set_ylabel("$M / M_\\mathrm{eqb}$")
 echo_M_ax.set_ylim(-1.1, 1.1)
 # echo_M_ax.set_xlim(right= 5)
 
@@ -157,7 +157,7 @@ echo_pulse_ax.set_xticklabels([])  # hide x-axis tick labels for the upper plot
 # echo_M_ax.legend(loc="upper right", ncol=2, frameon=False)
 
 
-CW_data = np.load("figures/RF_CW_simu.npz")
+CW_data = np.load(data_dir + "RF_CW_simu.npz")
 CW_Tdelta = CW_data["Tdelta_s"]
 CW_T2 = CW_data["T2_s"]
 CW_T2star = (CW_T2 ** (-1) + CW_Tdelta ** (-1)) ** (-1)
@@ -271,5 +271,5 @@ for i, ax in enumerate([echo_pulse_ax, CW_pulse_ax]):
 # ha = 'left' or 'right'
 # va = 'top' or 'bottom'
 # plt.tight_layout()
-plt.savefig("figures/SpinEcho_and_CW.pdf")
+plt.savefig("tex/figures/SpinEcho_and_CW.pdf")
 plt.show()

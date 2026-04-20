@@ -7,15 +7,8 @@ import matplotlib.gridspec as gridspec
 from matplotlib import font_manager
 
 from src.utils import high_contrast_extended
-# timeStamp_s=timeStamp_s,
-# B_vec=simu.excField.B_vec,
-# trjry=simu.trjry,
-# T2_s=T2_s,
-# Tdelta_s=Tdelta_s,
-# T_1_s=T1_s,
-# pol=sample.pol,
-# init_M = simu.init_M.value_in(""),
-HP_data = np.load("figures/RF_CW_hyperpolarized.npz")
+data_dir = "scripts-and-data/"
+HP_data = np.load(data_dir + "RF_CW_hyperpolarized.npz")
 HP_Tdelta = HP_data["Tdelta_s"]
 HP_T2 = HP_data["T2_s"]
 HP_T2star = (HP_T2 ** (-1) + HP_Tdelta ** (-1)) ** (-1)
@@ -131,7 +124,7 @@ HP_M_ax.axhline(
 # )
 
 HP_M_ax.set_xlabel("Time (s)")
-HP_M_ax.set_ylabel("Magnetization")
+HP_M_ax.set_ylabel("$M / M_\\mathrm{eqb}$")
 # HP_pulse_ax.set_ylim(-7, 7)
 # HP_M_ax.set_ylim(bottom=0)
 HP_M_ax.set_ylim(bottom=0.1, top=4e5)
@@ -161,5 +154,5 @@ HP_M_ax.legend(
 # # ha = 'left' or 'right'
 # # va = 'top' or 'bottom'
 # # plt.tight_layout()
-plt.savefig("figures/hyperpolarized.pdf")
+plt.savefig("tex/figures/T1_hyperpolarized.pdf")
 plt.show()
