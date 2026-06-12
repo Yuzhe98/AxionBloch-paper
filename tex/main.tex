@@ -95,7 +95,7 @@ We model such interaction along with the usual magnetic interactions using spin-
 % Hypothetic beyond-standard-model interactions between axions and fermionic spins might induce magnetic signals. 
 We present \axionbloch{}, an open-source Python package for simulating spin dynamics induced by both usual and exotic interactions. 
 The numerical simulations serve as a tool for deriving axion signal signatures, which are crucial for designing experimental searches and data analysis. 
-Calibrations are made against known analytical results and experimental data, ensuring the accuracy of the simulated signals. 
+Simulations are calibrated against theoretical expectation, ensuring the accuracy of the simulated signals. 
 \axionbloch{} is available at \url{https://github.com/Yuzhe98/AxionBloch}, allowing researchers to simulate axion pseudomagnetic signals under specific configurations of the axion models and experimental setups. 
 The package is documented at \url{http://axionbloch.readthedocs.io/} and includes example scripts for application. 
 
@@ -218,7 +218,7 @@ Using object-oriented programming, we implement the algorithm in a modular way t
 A diagram of the architecture of \axionbloch{} is shown in \cref{fig:architecture}. 
 \begin{figure*}[ht]
     \centering
-    \fbox{\includegraphics[scale=0.95]{figures/diagram_v0.4.pdf}}
+    \fbox{\includegraphics[scale=0.95]{figures/diagram_v1.1.drawio.pdf}}
     \caption{Architecture of \axionbloch{}. Each \texttt{Simulation} instance imports parameters from \texttt{Magnet}, \texttt{Sample}, and \texttt{MagField} instances. For axion simulations, axion-model objects are required both for \texttt{Simulation} to configure the simulation and for \texttt{MagField} to generate the pseudomagnetic field. \texttt{Simulations} manages one or multiple \texttt{Simulation} instances. Numerical integration is performed via the \texttt{blochSimulation} API, which provides Python access to the underlying C++ implementation. 
     }
     \label{fig:architecture}
@@ -235,23 +235,26 @@ The RK4 algorithm is implemented in a dedicated C++ library.
 The application programming interface (API) for this library is \texttt{blochSimulation}. 
 This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling cooperation between high-level Python workflow management and low-level efficient numerical computation. 
 
-
 \subsection{Calibration}
 \label{sec:calibration}
-\YZ{is calibration section too long? }
 
-Accurate calibration is essential to ensure that the simulated signals reliably reflect the underlying physical system and can be meaningfully compared with experimental observables. 
-In particular, calibration establishes the correspondence between the NMR signal and model parameters, including magnetic fields, nuclear spin gyromagnetic ratio $\gamma$ and relaxation times ($T_1$, $T_2$ and $T_2^*$). 
-It also allows one to verify the correctness and stability of the numerical implementation. 
-In this section, we describe benchmarks against known analytical or experimental results. 
-These ensure that the simulations produce quantitatively accurate results\,\cite{Abragam1961_NuclearMagnetism}. 
-For the benchmark examples in the section, we use an ethanol sample, and an axial bias field $\mathbf{B_{0}} = B_0 \mathbf{\hat{e}}_z$. 
-% Except for the example in \cref{sec:hyperpol}, the sample is initially thermally polarized and in equilibrium state. 
+% \subsection{Examples}
+% \label{sec:examples}
+
+Accurate calibration is essential to ensure that the simulated signals reliably reflect the underlying physical system and can be compared with experimental observables. 
+In particular, calibration examines the correspondence between the NMR signal and model parameters, including magnetic fields, nuclear spin gyromagnetic ratio $\gamma$ and relaxation times ($T_1$, $T_2$ and $T_2^*$). 
+It allows one to verify the correctness and stability of the numerical implementation. 
+In this section, examples of calibration simulations are presented along with theoretical predictions, demonstrating the methodology of calibration. 
+A quantitive analysis is included by the end of the section. 
+% These ensure that the simulations produce quantitatively accurate results. 
+For the examples in the section, an ethanol sample and an axial bias field $\mathbf{B_{0}} = B_0 \mathbf{\hat{e}}_z$ are used. 
+% We start with examples of common NMR experiments 
+
 
 \subsubsection{Pulsed-NMR: Free Decay and Spin Echo}
 \label{sec:pNMR}
 In the pulsed-NMR calibration, we apply one $\SI{90}{\degree}$ pulse and one $\SI{180}{\degree}$ magnetic-field pulse in the simulation. 
-The magnetization is expected to:
+The magnetization is expected to\,\cite{CPMG, Abragam1961_NuclearMagnetism}:
 \begin{itemize}
     \item oscillate at the Larmor frequency;
     \item be tipped by $\SI{90}{\degree}$ to the x-y plane by the $\SI{90}{\degree}$ pulse;
@@ -259,14 +262,12 @@ The magnetization is expected to:
     \item refocus (echo) after $\SI{180}{\degree}$ pulses; 
     \item show decaying amplitude of echoes with relaxation time $T_2$.
 \end{itemize}
-We can observe the behaviors above in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a). 
+The behaviors described above can be found in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a), indicating a rational simulation. 
 % \YZ{should we add quantitative analysis of the calibration?}
-With this benchmark, we calibrate the magnetic pulses, Larmor precession, and transverse relaxations. 
-\YZ{we stopped here. }
+With such benchmarks, magnetic pulses, Larmor precession, and transverse relaxations ($T_2$ and $T_2^*$) can be calibrated. 
 
 \begin{figure*}
     \centering
-    % \includegraphics[width=\linewidth]{figures/free_decay.pdf}
     \includegraphics{figures/SpinEcho_and_CW.pdf}
     \caption{Simulated magnetic fields in x and y directions (upper row) and induced NMR signals (lower row). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^2}$ is the magnitude of the excitation. 
     }
@@ -276,28 +277,97 @@ With this benchmark, we calibrate the magnetic pulses, Larmor precession, and tr
 
 \subsubsection{Continuous-Wave NMR}
 \label{sec:CW_NMR}
-In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is applied. When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$\,\cite{Abragam1961_NuclearMagnetism}.
+In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is applied. 
+When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$\,\cite{Abragam1961_NuclearMagnetism}.
 One such example is illustrated in \cref{fig:calibration_T2_T2star}\,(b). 
-With this benchmark, we calibrate the Larmor precession and $T_2^*$ relaxation once again. 
+The simulation goes as expected. 
+With such benchmarks, the Larmor precession and $T_2^*$ relaxation can be calibrated. 
 
 \subsubsection{Hyperpolarized sample}
 \label{sec:hyperpol}
 
-To achieve better sensitivity to the axion field, hyperpolarization is applied in experiments. Compared to typical thermal polarization at room temperature, hyperpolarization techniques can boost the polarization by orders of magnitude to the order of unity. 
+To achieve better sensitivity to the axion field, hyperpolarization is favored in experiments. Compared to thermal polarization at room temperature, hyperpolarization techniques can boost the polarization by orders of magnitude to the order of unity. 
 The \axionbloch{} package handles the polarization by the \texttt{Sample} class. 
-In \cref{fig:calibration_T1_HP} we use a \SI{1}{\%}-polarization ethanol sample as an example demonstrating how we calibrate the evolution of hyperpolarization due to the $T_1$ relaxation. 
+We use a \SI{1}{\%}-polarization ethanol sample as an example demonstrating the evolution of hyperpolarization due to the $T_1$ relaxation. 
 At first ($t\ll T_1$), the polarization exponentially decays with time constant $T_1$, until it reaches equilibrium after many $T_1$. 
-With such benchmarks, we also calibrate the longitudinal $T_1$ relaxation. 
+As can be seen in \cref{fig:calibration_T1_HP}, the $T_1$ relaxation followed the expectation. 
+More of such simulation can be applied in calibrating $T_1$ relaxation. 
 
 \begin{figure}
     \centering
     \includegraphics{figures/T1_hyperpolarized.pdf}
     \caption{
     Simulated $T_1$ relaxation of a hyperpolarized sample in a static bias field. The axial magnetization $M_z$ is normalized by the equilibrium magnetization $M_0$. 
-    \YZ{Should we add more examples to demonstrate $T_1$ relaxation?}
+    % \YZ{Should we add more examples to demonstrate $T_1$ relaxation?}
     }
     \label{fig:calibration_T1_HP}
 \end{figure}
+
+
+\subsubsection{Quantitative evaluation}
+
+Accuracy of simulations is evaluated by the discrepency between theoretically-expected magnetization and simulation results, characterized by 
+\begin{equation}
+    \chi^2 = \dfrac{\sum |M_\mathrm{expected} - M_\mathrm{simu}|^2}{\sum |M_\mathrm{simu}|^2}
+    \,. 
+    \label{eq:chisq}
+\end{equation} 
+Here $M_\mathrm{expected}$ and $M_\mathrm{simu}$ are magnetization expected and simulated, respectively. 
+$\sum$ stands for the summary over integration steps. 
+Well-calibrated simulation should give $\chi^2\ll 1$. 
+Calibration scripts are stored in the test script set of \axionbloch{}. 
+In each calibration, parameters such as Larmor frequency and relaxation times are varied over orders of magnitude to cover all possible cases in simulation.
+The results of the calibrations are summarized in \cref{tab:calibration_summary}. 
+The discrepencies are in general small ($\chi^2 < 10^{-4}$). 
+If a certain precision of simulation is demanded, $\chi^2$ value can a reference for consideration. 
+\begin{table*}
+    \caption{Summary of calibrations.
+    Parameters were swept over orders of magnitude to cover all simulation regimes.
+    $\chi^2$ is defined in \cref{eq:chisq}; $\chi^2\ll 1$ indicates a well-calibrated simulation.
+    Here $\nu_L$ stands for Larmor frequency, determined by the bias magnetic field and $\nu_\mathrm{RCF}$ is RCF frequency. 
+    Technical details of the calibrations can be found in the test script set. 
+    Note that the integration step size is chosen to be $T_2^* / 500$. 
+    Discrepencies can be even smaller by using smaller step size at the cost of runtime consumption. 
+    }
+    \label{tab:calibration_summary}
+    \begin{ruledtabular}
+    \begin{tabular}{lllll}
+        \parbox[t]{2.5cm}{\raggedright\textbf{Calibration}} &
+        \parbox[t]{3.5cm}{\raggedright\textbf{Parameters calibrated}} &
+        \parbox[t]{3.0cm}{\raggedright\textbf{Varied parameters}} &
+        \parbox[t]{1.2cm}{\raggedright $\bm{\chi^2}$} &
+        \parbox[t]{5.0cm}{\raggedright\textbf{Dominant source of error}} \\[8pt]
+        \hline
+        \parbox[t]{2.5cm}{\raggedright Pulsed NMR: free decay} &
+        \parbox[t]{3.5cm}{\raggedright Pulse amplitude, $\nu_L$, $T_2^*$, $T_2$} &
+        \parbox[t]{3.0cm}{\raggedright $\nu_\mathrm{RCF}$} &
+        \parbox[t]{1.2cm}{\raggedright $<10^{-4}$} &
+        \parbox[t]{5.0cm}{\raggedright Finite number of steps for hard pulses. } \\[8pt]
+        \parbox[t]{2.5cm}{\raggedright CW-NMR} &
+        \parbox[t]{3.5cm}{\raggedright $\nu_L$ and $T_2^*$} &
+        \parbox[t]{3.0cm}{\raggedright $\nu_\mathrm{RCF}$} &
+        \parbox[t]{1.2cm}{\raggedright $<10^{-5}$}  &
+        \parbox[t]{5.0cm}{\raggedright Finite integration step size.  } \\[8pt]
+        \parbox[t]{2.5cm}{\raggedright $T_1$ relaxation} &
+        \parbox[t]{3.5cm}{\raggedright $T_1$} &
+        \parbox[t]{3.0cm}{\raggedright $\nu_\mathrm{RCF}$, $\nu_L$, initial polarization} &
+        \parbox[t]{1.2cm}{\raggedright $<10^{-7}$}  & 
+        \parbox[t]{5.0cm}{\raggedright Finite integration step size. } \\
+    \end{tabular}
+    \end{ruledtabular}
+\end{table*}
+
+% \subsection{Calibration}
+% \label{sec:calibration}
+
+% Accurate calibration is essential to ensure that the simulated signals reliably reflect the underlying physical system and can be meaningfully compared with experimental observables. 
+% In particular, calibration establishes the correspondence between the NMR signal and model parameters, including magnetic fields, nuclear spin gyromagnetic ratio $\gamma$ and relaxation times ($T_1$, $T_2$ and $T_2^*$). 
+% It also allows one to verify the correctness and stability of the numerical integration. 
+% Examples \cref{sec:examples} can help calibrate simulations qualitatively. 
+% However, to ensure accurate results, quantitative calibrations are necessary, wchich are presented as follows. 
+
+
+
 
 \subsection{Axion Simulation}
 \label{sec:simulation}
@@ -375,7 +445,7 @@ Tests can be executed locally. In the future, we may add tools for online testin
 Regular execution of the test suite ensures that new changes do not introduce regressions, maintaining the stability and correctness of the package.
 
 % documentation
-Documentation for \axionbloch{} is available on Read the Docs.\footnote{\url{http://axionbloch.readthedocs.io}} \YZ{I am still working on the documentation, so the documentation is not complete yet.}
+Documentation for \axionbloch{} is available on Read the Docs.\footnote{\url{http://axionbloch.readthedocs.io}}
 It is built using \texttt{Sphinx}\footnote{\url{http://www.sphinx-doc.org}} and provides detailed explanations of the API, along with instructions for installation, configuration, and usage.
 
 % Future

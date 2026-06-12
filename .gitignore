@@ -32,6 +32,23 @@ venv/
 *.log
 *.tmp
 
+# ignore tex temp / log files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.loc
+*.out.ps
+*.run.xml
+*.soc
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.bbl-SAVE-ERROR
+
 # System files
 .DS_Store
 Thumbs.db
