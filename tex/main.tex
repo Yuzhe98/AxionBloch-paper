@@ -43,7 +43,6 @@ nofootinbib,
 
 \usepackage{mycommands}
 
-
 \begin{document}
 
 \preprint{APS/123-QED}
@@ -85,7 +84,7 @@ nofootinbib,
 
 % \collaboration{CASPEr Collaboration}
 
-\author{And more people? }
+% \author{And more people? }
 
 \begin{abstract}
 
@@ -93,7 +92,7 @@ nofootinbib,
 The interaction of ultralight bosonic dark matter with spins can be interpreted as a pseudomagnetic field acting on normal matter.
 Such interactions can be modeled like usual magnetic interactions using spin-evolution (Bloch) equations.
 % Hypothetic beyond-standard-model interactions between axions and fermionic spins might induce magnetic signals. 
-We present \axionbloch{}, an open-source Python package for simulating spin dynamics induced by both usual and exotic interactions. 
+\axionbloch{}, an open-source Python package for simulating spin dynamics induced by both usual and exotic interactions, is presented. 
 The numerical simulations serve as a tool for deriving axion signal signatures, which are crucial for designing experimental searches and data analysis. 
 Simulations are calibrated against theoretical expectation, ensuring the accuracy of the simulated signals. 
 \axionbloch{} is available at \url{https://github.com/Yuzhe98/AxionBloch}, allowing researchers to simulate axion pseudomagnetic signals under specific configurations of the axion models and experimental setups. 
@@ -189,7 +188,8 @@ Such inhomogeneity of the bias field is simulated by sampling the spread of the 
 \label{sec:numericalintegration}
 
 To derive the time evolution of the magnetization, \axionbloch{} numerically integrates the Bloch equations using the fourth-order Runge--Kutta (RK4) method. 
-Given a time step $\Delta t$, effective magnetic field, and initial magnetization $\mathbf{M}_0$, the magnetization at the $(n+1)$-th step can be found via
+Given a time step $\Delta t$, effective magnetic field, and initial magnetization $\mathbf{M}^0$, the magnetization at the $(n+1)$-th step can be found via 
+% \HB{Doesn't it make more sense to name the initial magnetization $\mathbf{M}^0$?}
 \begin{equation}
 \mathbf{M}^{n+1}
 =
@@ -248,8 +248,6 @@ In this section, examples of calibration simulations are presented along with th
 A quantitative analysis is included at the end of the section. 
 % These ensure that the simulations produce quantitatively accurate results. 
 For the examples in the section, an ethanol sample and an axial bias field $\mathbf{B_{0}} = B_0 \mathbf{\hat{e}}_z$ are used. 
-% We start with examples of common NMR experiments 
-
 
 \subsubsection{Pulsed-NMR: Free Decay and Spin Echo}
 \label{sec:pNMR}
@@ -263,13 +261,14 @@ The magnetization is expected to\,\cite{CPMG, Abragam1961_NuclearMagnetism}:
     \item show decaying amplitude of echoes with relaxation time $T_2$.
 \end{itemize}
 The behaviors described above can be found in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a), indicating correct simulation behavior. 
-% \YZ{should we add quantitative analysis of the calibration?}
 With such benchmarks, magnetic pulses, Larmor precession, and transverse relaxations ($T_2$ and $T_2^*$) can be calibrated. 
 
 \begin{figure*}
     \centering
     \includegraphics{figures/SpinEcho_and_CW.pdf}
     \caption{Simulated magnetic fields in x and y directions (upper row) and induced NMR signals (lower row). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^2}$ is the magnitude of the excitation. 
+    \HB{In (a)-top, why is there a nonzero $B_y$ component at the pulses?}
+    \YZ{This indicates the orientation of the magnetic pulse. The pulse is like $a B_x + b B_y$. }
     }
     \label{fig:calibration_T2_T2star}
 \end{figure*}
@@ -280,7 +279,9 @@ With such benchmarks, magnetic pulses, Larmor precession, and transverse relaxat
 In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is applied. 
 When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$\,\cite{Abragam1961_NuclearMagnetism}.
 One such example is illustrated in \cref{fig:calibration_T2_T2star}\,(b). 
-The simulation goes as expected. 
+% The simulation goes as expected. 
+The simulation produces the expected results.
+% \HB{The simulation produces the expected results.}
 With such benchmarks, the Larmor precession and $T_2^*$ relaxation can be calibrated. 
 
 \subsubsection{Hyperpolarized sample}
@@ -298,7 +299,6 @@ More of such simulations can be applied in calibrating $T_1$ relaxation.
     \includegraphics{figures/T1_hyperpolarized.pdf}
     \caption{
     Simulated $T_1$ relaxation of a hyperpolarized sample in a static bias field. The axial magnetization $M_z$ is normalized by the equilibrium magnetization $M_0$. 
-    % \YZ{Should we add more examples to demonstrate $T_1$ relaxation?}
     }
     \label{fig:calibration_T1_HP}
 \end{figure}
@@ -322,7 +322,9 @@ The discrepancies are generallly small ($\chi^2 < 10^{-4}$).
 If a certain simulation precision is required, the $\chi^2$ value serves as a quantitative reference. 
 \begin{table*}
     \caption{Summary of calibrations.
-    Parameters were swept over orders of magnitude to cover all simulation regimes.
+    Parameters were swept over orders of magnitude to cover all simulation regimes. 
+    \HB{all realistic regimes? For example, up to the highest available superconducting magnet fields? Maybe it should somewhere be mentioned (near the hamiltonians) that this package is currently not capable of simulating ZULF phenomena, such as j-coupling?}
+    \YZ{ZULF NMR is not really covered. I will include more information about the regimes. }
     $\chi^2$ is defined in \cref{eq:chisq}; $\chi^2\ll 1$ indicates a well-calibrated simulation.
     Here $\nu_L$ stands for Larmor frequency, determined by the bias magnetic field and $\nu_\mathrm{RCF}$ is RCF frequency. 
     Technical details of the calibrations can be found in the test script set. 
@@ -389,7 +391,7 @@ Such moderate runtime allows users to explore different parameter regimes with m
 % \begin{figure}
 %     \centering
 %     \includegraphics[width=\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
-%     \caption{Simulation of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization induced ($M_{xy}$). To account for the stochasticity, we generated 1000 pseudomagnetic fields. The solid lines indicate the mean of these 1000 $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate $\pm \sigma$ (standard deviation) range. The sample for the simulations was assumed to be polarized to $\SI{50}{\%}$ initially. 
+%     \caption{Simulation of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization induced ($M_{xy}$). To account for the stochasticity, generated 1000 pseudomagnetic fields were generated. The solid lines indicate the mean of these 1000 $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate $\pm \sigma$ (standard deviation) range. The sample for the simulations was assumed to be polarized to $\SI{50}{\%}$ initially. 
 %     }
 %     \label{fig:MilkyWayAxionHalo}
 % \end{figure}
@@ -465,8 +467,8 @@ https://github.com/Yuzhe98/AxionBloch-paper}.
 
 \begin{acknowledgments}
 
-The authors acknowledge helpful discussions with [names]. 
-The authors are grateful to the communities supporting the open-source software and tools: \texttt{git}, \texttt{NumPy}, 
+The author acknowledges helpful discussion with Hendrik Bekker, Dmitry Budker and Alexander Sushkov. 
+The author is grateful to the communities supporting the open-source software and tools: \texttt{git}, \texttt{NumPy}, 
 \texttt{SciPy}\footnote{\url{https://docs.scipy.org/}}\,\cite{Virtanen2020_SciPy}, 
 \texttt{matplotlib}\footnote{\url{https://matplotlib.org/}}, 
 \texttt{astropy}, 
@@ -478,68 +480,65 @@ The authors are grateful to the communities supporting the open-source software 
 GitHub\footnote{\url{https://github.com/}} 
 and 
 Read the Docs\footnote{\url{https://about.readthedocs.com/}}. 
-
 This work has been supported by the Cluster of Excellence ``Precision Physics, Fundamental Interactions, and Structure of Matter'' (PRISMA++ EXC 2118/2) funded by the
 German Research Foundation (DFG) within the German Excellence Strategy (Project ID 390831469).
 
-\YZ{Check acknowledgments! }
 \end{acknowledgments}
 
-\section*{Author Contribution Statement}
+% \section*{Author Contribution Statement}
 
-\YZ{I propose we have such a section.}
 
-Yuzhe Zhang: Conceptualization, Software, Visualization, Writing -- original draft and Writing -- review \& editing
+% Yuzhe Zhang: Conceptualization, Software, Visualization, Writing -- original draft and Writing -- review \& editing
 
-Dmitry Budker: Funding acquisition, Supervision,  Writing -- review \& editing
+% Dmitry Budker: Funding acquisition, Supervision,  Writing -- review \& editing
 
-\textbf{Author contribution roles and definitions}
+% \textbf{Author contribution roles and definitions}
 
-\begin{description}
+% \begin{description}
 
-\item[Conceptualization]
-Ideas; formulation or evolution of overarching research goals and aims.
+% \item[Conceptualization]
+% Ideas; formulation or evolution of overarching research goals and aims.
 
-\item[Data curation]
-Management activities to annotate (produce metadata), scrub data, and maintain research data (including software code, where necessary for interpreting the data itself) for initial use and later re-use.
+% \item[Data curation]
+% Management activities to annotate (produce metadata), scrub data, and maintain research data (including software code, where necessary for interpreting the data itself) for initial use and later re-use.
 
-\item[Formal analysis]
-Application of statistical, mathematical, computational, or other formal techniques to analyze or synthesize study data.
+% \item[Formal analysis]
+% Application of statistical, mathematical, computational, or other formal techniques to analyze or synthesize study data.
 
-\item[Funding acquisition]
-Acquisition of the financial support for the project leading to this publication.
+% \item[Funding acquisition]
+% Acquisition of the financial support for the project leading to this publication.
 
-\item[Investigation]
-Conducting a research and investigation process, specifically performing the experiments or data/evidence collection.
+% \item[Investigation]
+% Conducting a research and investigation process, specifically performing the experiments or data/evidence collection.
 
-\item[Methodology]
-Development or design of methodology; creation of models.
+% \item[Methodology]
+% Development or design of methodology; creation of models.
 
-\item[Project administration]
-Management and coordination responsibility for the research activity planning and execution.
+% \item[Project administration]
+% Management and coordination responsibility for the research activity planning and execution.
 
-\item[Resources]
-Provision of study materials, reagents, materials, laboratory samples, instrumentation, computing resources, or other analysis tools.
+% \item[Resources]
+% Provision of study materials, reagents, materials, laboratory samples, instrumentation, computing resources, or other analysis tools.
 
-\item[Software]
-Programming, software development; designing computer programs; implementation of the computer code and supporting algorithms; testing of existing code components.
+% \item[Software]
+% Programming, software development; designing computer programs; implementation of the computer code and supporting algorithms; testing of existing code components.
 
-\item[Supervision]
-Oversight and leadership responsibility for the research activity planning and execution, including mentorship external to the core team.
+% \item[Supervision]
+% Oversight and leadership responsibility for the research activity planning and execution, including mentorship external to the core team.
 
-\item[Validation]
-Verification, whether as a part of the activity or separate, of the overall replication or reproducibility of results, experiments, and other research outputs.
+% \item[Validation]
+% Verification, whether as a part of the activity or separate, of the overall replication or reproducibility of results, experiments, and other research outputs.
 
-\item[Visualization]
-Preparation, creation, and/or presentation of the published work, specifically visualization or data presentation.
+% \item[Visualization]
+% Preparation, creation, and/or presentation of the published work, specifically visualization or data presentation.
 
-\item[Writing -- original draft]
-Preparation, creation, and/or presentation of the published work, specifically writing the initial draft (including substantive translation).
+% \item[Writing -- original draft]
+% Preparation, creation, and/or presentation of the published work, specifically writing the initial draft (including substantive translation).
 
-\item[Writing -- review \& editing]
-Preparation, creation, and/or presentation of the published work by members of the original research group, specifically critical review, commentary, or revision, including pre- or post-publication stages.
+% \item[Writing -- review \& editing]
+% Preparation, creation, and/or presentation of the published work by members of the original research group, specifically critical review, commentary, or revision, including pre- or post-publication stages.
 
-\end{description}
+% \end{description}
 
 % \appendix
 
