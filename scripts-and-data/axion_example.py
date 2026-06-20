@@ -119,30 +119,31 @@ preamble = r"""
 
 
 code = """\
+# Example script to run axion NMR simulations
 # numpy, matplotlib, astropy dependency
-from axionbloch.dependency import *
+from axionbloch.Apparatus import Magnet
 # Gyromagnetic ratio and magnetic dipole moment of Xe-129
-from axionbloch.constants import gamma_Xe129, mu_Xe129
+from axionbloch.constants import gamma_Xe129N, mu_Xe129N
+from axionbloch.dependency import *
+from axionbloch.MilkyWayAxionHalo import MilkyWayAxionHalo
+from axionbloch.Sample import Sample
 # classes for simulations
 from axionbloch.SimuTools import MagField, Simulations
 from axionbloch.SimuTypes import SimuParams
-from axionbloch.Sample import Sample
-from axionbloch.Apparatus import Magnet
-from axionbloch.MilkyWayAxionHalo import MilkyWayAxionHalo
 # Define the Xe-129 sample with gyromagnetic ratio,
 # mass density, molar mass, number of spins per molecule,
 # relaxation times, volume, magnetic dipole moment,
 # temperature, and polarization.
 sample = Sample(
     name="Liquid Xe-129",
-    gamma=gamma_Xe129,
+    gamma=gamma_Xe129N,
     massDensity=3.1 * unit.g * unit.cm ** (-3),
     molarMass=131.29 * unit.g / unit.mol,
-    numOfSpinsPerMolecule=1 * unit.one, 
+    numOfSpinsPerMolecule=1 * unit.one,
     T2=10 * unit.minute,
     T1=15 * unit.minute,
     vol=1 * unit.cm**3,
-    mu=mu_Xe129,  # magnetic dipole moment
+    mu=mu_Xe129N,  # magnetic dipole moment
     temp=163 * unit.K,
     pol=1 * unit.percent,
     verbose=False,
@@ -161,7 +162,8 @@ magnet = Magnet(
     FWHM=2 * ppm,
 )
 # rms amplitude of pseudomagnetic field
-B_a_rms = (axion.getRabiFreq() / (sample.gamma / (2 * PI))).to(unit.T)
+B_a_rms = (axion.getRabiFreq() / \
+           (sample.gamma / (2 * PI))).to(unit.T)
 # Bundle all inputs into one dictionary
 params: SimuParams = {
     "key_info": {"nu_a": axion.nu_a},
@@ -186,7 +188,7 @@ params: SimuParams = {
 simulations = Simulations(all_params=[params])
 # run the simulation
 simulations.run(verbose=True)
-# plot results
+# Post-process results with summary stats and plotting
 for i, item in enumerate(simulations.pool):
     item.simu.displayTrjries()
 # Save to .pkl file for later analysis

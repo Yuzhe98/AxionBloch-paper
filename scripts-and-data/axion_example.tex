@@ -111,30 +111,31 @@
 \begin{document}
 \begin{varwidth}{0.9\linewidth}
 \begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Example script to run axion NMR simulations}
 \PY{c+c1}{\PYZsh{} numpy, matplotlib, astropy dependency}
-\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{dependency} \PY{k+kn}{import} \PY{o}{*}
+\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{Apparatus} \PY{k+kn}{import} \PY{n}{Magnet}
 \PY{c+c1}{\PYZsh{} Gyromagnetic ratio and magnetic dipole moment of Xe\PYZhy{}129}
-\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{constants} \PY{k+kn}{import} \PY{n}{gamma\PYZus{}Xe129}\PY{p}{,} \PY{n}{mu\PYZus{}Xe129}
+\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{constants} \PY{k+kn}{import} \PY{n}{gamma\PYZus{}Xe129N}\PY{p}{,} \PY{n}{mu\PYZus{}Xe129N}
+\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{dependency} \PY{k+kn}{import} \PY{o}{*}
+\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{MilkyWayAxionHalo} \PY{k+kn}{import} \PY{n}{MilkyWayAxionHalo}
+\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{Sample} \PY{k+kn}{import} \PY{n}{Sample}
 \PY{c+c1}{\PYZsh{} classes for simulations}
 \PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{SimuTools} \PY{k+kn}{import} \PY{n}{MagField}\PY{p}{,} \PY{n}{Simulations}
 \PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{SimuTypes} \PY{k+kn}{import} \PY{n}{SimuParams}
-\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{Sample} \PY{k+kn}{import} \PY{n}{Sample}
-\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{Apparatus} \PY{k+kn}{import} \PY{n}{Magnet}
-\PY{k+kn}{from} \PY{n+nn}{axionbloch}\PY{n+nn}{.}\PY{n+nn}{MilkyWayAxionHalo} \PY{k+kn}{import} \PY{n}{MilkyWayAxionHalo}
 \PY{c+c1}{\PYZsh{} Define the Xe\PYZhy{}129 sample with gyromagnetic ratio,}
 \PY{c+c1}{\PYZsh{} mass density, molar mass, number of spins per molecule,}
 \PY{c+c1}{\PYZsh{} relaxation times, volume, magnetic dipole moment,}
 \PY{c+c1}{\PYZsh{} temperature, and polarization.}
 \PY{n}{sample} \PY{o}{=} \PY{n}{Sample}\PY{p}{(}
     \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Liquid Xe\PYZhy{}129}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-    \PY{n}{gamma}\PY{o}{=}\PY{n}{gamma\PYZus{}Xe129}\PY{p}{,}
+    \PY{n}{gamma}\PY{o}{=}\PY{n}{gamma\PYZus{}Xe129N}\PY{p}{,}
     \PY{n}{massDensity}\PY{o}{=}\PY{l+m+mf}{3.1} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{g} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{cm} \PY{o}{*}\PY{o}{*} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{,}
     \PY{n}{molarMass}\PY{o}{=}\PY{l+m+mf}{131.29} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{g} \PY{o}{/} \PY{n}{unit}\PY{o}{.}\PY{n}{mol}\PY{p}{,}
-    \PY{n}{numOfSpinsPerMolecule}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{one}\PY{p}{,} 
+    \PY{n}{numOfSpinsPerMolecule}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{one}\PY{p}{,}
     \PY{n}{T2}\PY{o}{=}\PY{l+m+mi}{10} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{minute}\PY{p}{,}
     \PY{n}{T1}\PY{o}{=}\PY{l+m+mi}{15} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{minute}\PY{p}{,}
     \PY{n}{vol}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{cm}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}\PY{p}{,}
-    \PY{n}{mu}\PY{o}{=}\PY{n}{mu\PYZus{}Xe129}\PY{p}{,}  \PY{c+c1}{\PYZsh{} magnetic dipole moment}
+    \PY{n}{mu}\PY{o}{=}\PY{n}{mu\PYZus{}Xe129N}\PY{p}{,}  \PY{c+c1}{\PYZsh{} magnetic dipole moment}
     \PY{n}{temp}\PY{o}{=}\PY{l+m+mi}{163} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{K}\PY{p}{,}
     \PY{n}{pol}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{*} \PY{n}{unit}\PY{o}{.}\PY{n}{percent}\PY{p}{,}
     \PY{n}{verbose}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,}
@@ -153,7 +154,7 @@
     \PY{n}{FWHM}\PY{o}{=}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{ppm}\PY{p}{,}
 \PY{p}{)}
 \PY{c+c1}{\PYZsh{} rms amplitude of pseudomagnetic field}
-\PY{n}{B\PYZus{}a\PYZus{}rms} \PY{o}{=} \PY{p}{(}\PY{n}{axion}\PY{o}{.}\PY{n}{getRabiFreq}\PY{p}{(}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{sample}\PY{o}{.}\PY{n}{gamma} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{PI}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{unit}\PY{o}{.}\PY{n}{T}\PY{p}{)}
+\PY{n}{B\PYZus{}a\PYZus{}rms} \PY{o}{=} \PY{p}{(}\PY{n}{axion}\PY{o}{.}\PY{n}{getRabiFreq}\PY{p}{(}\PY{p}{)} \PY{o}{/}            \PY{p}{(}\PY{n}{sample}\PY{o}{.}\PY{n}{gamma} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{PI}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{unit}\PY{o}{.}\PY{n}{T}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} Bundle all inputs into one dictionary}
 \PY{n}{params}\PY{p}{:} \PY{n}{SimuParams} \PY{o}{=} \PY{p}{\PYZob{}}
     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{key\PYZus{}info}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nu\PYZus{}a}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{axion}\PY{o}{.}\PY{n}{nu\PYZus{}a}\PY{p}{\PYZcb{}}\PY{p}{,}
@@ -178,7 +179,7 @@
 \PY{n}{simulations} \PY{o}{=} \PY{n}{Simulations}\PY{p}{(}\PY{n}{all\PYZus{}params}\PY{o}{=}\PY{p}{[}\PY{n}{params}\PY{p}{]}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} run the simulation}
 \PY{n}{simulations}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{n}{verbose}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-\PY{c+c1}{\PYZsh{} plot results}
+\PY{c+c1}{\PYZsh{} Post\PYZhy{}process results with summary stats and plotting}
 \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{item} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{simulations}\PY{o}{.}\PY{n}{pool}\PY{p}{)}\PY{p}{:}
     \PY{n}{item}\PY{o}{.}\PY{n}{simu}\PY{o}{.}\PY{n}{displayTrjries}\PY{p}{(}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} Save to .pkl file for later analysis}
