@@ -119,24 +119,25 @@ preamble = r"""
 
 code = """\
 Define a quantity from scalar and unit
->>> from astropy import units as u
->>> B = 1.0 * u.gauss
+>>> from astropy import units as unit
+>>> B = 1.0 * unit.gauss
 >>> B
 <Quantity 1. G>
 >>> B.si
 <Quantity 0.0001 T>
 
+>>> import numpy as np
 Import constants and use them with scalars
 >>> from axionbloch.constants import gamma_p
->>> import numpy as np
-find the 90 degree pulse duration
->>> t90 = np.pi / 2 / (gamma_p * B)
->>> t90.to(u.microsecond)  
+>>> from axionbloch.dependency import PI
+Find the 90 degree pulse duration
+>>> t90 = PI / 2 / (gamma_p * B)
+>>> t90.to(unit.microsecond)  
 <Quantity 58.71648793 us>
 
 Operation on an array of quantities with numpy
 >>> tStamps = np.array([0, 1 / 3, 1]) * t90
->>> phases = gamma_p * B * tStamps * u.radian
+>>> phases = gamma_p * B * tStamps
 >>> np.sin(phases)
 <Quantity [0. , 0.5, 1. ]>
 """

@@ -154,7 +154,8 @@
     \PY{n}{FWHM}\PY{o}{=}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{ppm}\PY{p}{,}
 \PY{p}{)}
 \PY{c+c1}{\PYZsh{} rms amplitude of pseudomagnetic field}
-\PY{n}{B\PYZus{}a\PYZus{}rms} \PY{o}{=} \PY{p}{(}\PY{n}{axion}\PY{o}{.}\PY{n}{getRabiFreq}\PY{p}{(}\PY{p}{)} \PY{o}{/}            \PY{p}{(}\PY{n}{sample}\PY{o}{.}\PY{n}{gamma} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{PI}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{unit}\PY{o}{.}\PY{n}{T}\PY{p}{)}
+\PY{n}{B\PYZus{}a\PYZus{}rms} \PY{o}{=} \PY{p}{(}\PY{n}{axion}\PY{o}{.}\PY{n}{getRabiFreq}\PY{p}{(}\PY{p}{)} \PY{o}{/} \PYZbs{}
+           \PY{p}{(}\PY{n}{sample}\PY{o}{.}\PY{n}{gamma} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{PI}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{unit}\PY{o}{.}\PY{n}{T}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} Bundle all inputs into one dictionary}
 \PY{n}{params}\PY{p}{:} \PY{n}{SimuParams} \PY{o}{=} \PY{p}{\PYZob{}}
     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{key\PYZus{}info}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nu\PYZus{}a}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{axion}\PY{o}{.}\PY{n}{nu\PYZus{}a}\PY{p}{\PYZcb{}}\PY{p}{,}

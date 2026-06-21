@@ -162,7 +162,7 @@ magnet = Magnet(
     FWHM=2 * ppm,
 )
 # rms amplitude of pseudomagnetic field
-B_a_rms = (axion.getRabiFreq() / \
+B_a_rms = (axion.getRabiFreq() / \\
            (sample.gamma / (2 * PI))).to(unit.T)
 # Bundle all inputs into one dictionary
 params: SimuParams = {
