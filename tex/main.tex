@@ -218,7 +218,7 @@ Using object-oriented programming, the algorithm is implemented in a modular way
 A diagram of the architecture of \axionbloch{} is shown in \cref{fig:architecture}. 
 \begin{figure*}[ht]
     \centering
-    \fbox{\includegraphics[scale=0.95]{figures/diagram_v1.1.drawio.pdf}}
+    \fbox{\includegraphics[scale=0.99]{figures/diagram_v1.2.drawio.pdf}}
     \caption{Architecture of \axionbloch{}. Each \texttt{Simulation} instance imports parameters from \texttt{Magnet}, \texttt{Sample}, and \texttt{MagField} instances. For axion simulations, axion-model objects are required both for \texttt{Simulation} to configure the simulation and for \texttt{MagField} to generate the pseudomagnetic field. \texttt{Simulations} manages one or multiple \texttt{Simulation} instances. Numerical integration is performed via the \texttt{blochSimulation} API, which provides Python access to the underlying C++ implementation. 
     }
     \label{fig:architecture}
