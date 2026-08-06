@@ -177,10 +177,8 @@ nofootinbib,
 
 \begin{abstract}
 
-% Ultralight bosonic dark matter with normal-matter spins can be described as the action of a pseudomagnetic field. 
 The interaction of ultralight bosonic dark matter with spins can be interpreted as a pseudomagnetic field acting on normal matter.
 Such interactions can be modeled as usual magnetic interactions using spin-evolution (Bloch) equations.
-% Hypothetic beyond-standard-model interactions between axions and fermionic spins might induce magnetic signals. 
 \axionbloch{}, an open-source Python package for simulating spin dynamics induced by both usual and exotic interactions, is presented. 
 The numerical simulations serve as a tool for deriving axion signal signatures, which are crucial for designing experimental searches and data analysis. 
 Simulations are calibrated against theoretical expectations, ensuring the accuracy of the simulated signals. 
@@ -220,10 +218,8 @@ The interface is implemented in Python, a programming language known for its sim
 The package provides a flexible framework for modeling axion fields and experimental configurations. 
 By numerically solving spin-evolution equations, \axionbloch{} enables the prediction and analysis of experimentally observable signals.
 
-%-----------------------
 \section{Capabilities}
 \label{sec:capabilities}
-%-----------------------
 
 In this section, the main components of \axionbloch{} are described. The section starts with the units, physical quantities, and constants (\cref{sec:units_quantities_constants}). Then, it continues with the physics and the algorithm for the numerical simulation (\cref{sec:algorithm}), after which the calibration for the simulation follows (\cref{sec:calibration}). In the end, an example simulation of axion-induced signals is provided (\cref{sec:simulation}). 
 
@@ -278,7 +274,6 @@ Such inhomogeneity of the bias field is simulated by sampling the spread of the 
 
 To derive the time evolution of the magnetization, \axionbloch{} numerically integrates the Bloch equations using the fourth-order Runge--Kutta (RK4) method. 
 Given a time step $\Delta t$, an effective magnetic field, and initial magnetization $\mathbf{M}^0$, the magnetization at the $(n+1)$-th step can be found via 
-% \HB{Doesn't it make more sense to name the initial magnetization $\mathbf{M}^0$?}
 \begin{equation}
 \mathbf{M}^{n+1}
 =
@@ -356,8 +351,6 @@ With such a benchmark, magnetic pulses, Larmor precession, and transverse relaxa
     \centering
     \includegraphics{figures/SpinEcho_and_CW.pdf}
     \caption{Simulated magnetic fields in x and y directions (upper row) and induced NMR signals (lower row). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^2}$ is the magnitude of the excitation. 
-    % \HB{In (a)-top, why is there a nonzero $B_y$ component at the pulses?}
-    % \YZ{This indicates the orientation of the magnetic pulse. The pulse is like $a B_x + b B_y$. }
     }
     \label{fig:calibration_T2_T2star}
 \end{figure*}
@@ -368,9 +361,7 @@ With such a benchmark, magnetic pulses, Larmor precession, and transverse relaxa
 In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is applied. 
 When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$\,\cite{Abragam1961_NuclearMagnetism}.
 One such example is illustrated in \cref{fig:calibration_T2_T2star}\,(b). 
-% The simulation goes as expected. 
 The simulation produces the expected results.
-% \HB{The simulation produces the expected results.}
 With such a benchmark, the Larmor precession and $T_2^*$ relaxation can be calibrated. 
 
 \subsubsection{Hyperpolarized sample}
@@ -411,15 +402,12 @@ The discrepancies are generally small ($\chi^2 < 10^{-4}$).
 If a certain simulation precision is required, the $\chi^2$ value serves as a quantitative reference. 
 \begin{table*}
     \caption{Summary of calibrations.
-    % \HB{all realistic regimes? For example, up to the highest available superconducting magnet fields? Maybe it should somewhere be mentioned (near the hamiltonians) that this package is currently not capable of simulating ZULF phenomena, such as j-coupling?}
-    % \YZ{ZULF NMR is not really covered. I will include more information about the regimes. }
     $\chi^2$ indicating the discrepancy is defined in \cref{eq:chisq}; $\chi^2\ll 1$ indicates a well-calibrated simulation.
     Here $\nu_\mathrm{L}$ stands for Larmor frequency, determined by the bias magnetic field. 
     $\nu_\mathrm{RCF}$ is RCF frequency. 
     $\nu_\mathrm{L}$ and $\nu_\mathrm{RCF}$ are varied from \SI{1}{\kHz} to \SI{1}{\GHz}. The bias field inhomogeneity is swept from \SI{.1}{\ppm} to \SI{20}{\ppm}. 
     $T_1$ ranges from \SI{1}{\ms} to \SI{1}{\kilo\second}. 
     The integration step size is chosen to be $T_2^* / 500$. 
-    % $\chi^2$ can be even smaller by using a smaller step size at the cost of runtime consumption. 
     Finer step sizes yield lower $\chi^2$ at increased computational cost. 
     More technical details of the calibrations can be found in the test suite. 
     }
@@ -504,10 +492,8 @@ Such moderate runtime allows users to explore different parameter regimes with m
 % [should this example be mentioned?]
 
 
-%-----------------------
 \section{Development}
 \label{sec:dev-approach}
-%-----------------------
 
 % Version Control
 Development of \axionbloch{} is managed using \texttt{git},\footnote{\url{http://git-scm.com}} with the code hosted on a public GitHub repository.\footnote{\url{https://github.com/Yuzhe98/AxionBloch}} 
@@ -525,7 +511,6 @@ The test suite covers core functionalities such as:
     \item handling of each axion field configuration.
 \end{itemize}
 Tests can be executed locally. In the future, tools may be added for online testing considering the demand of testing. 
-% Regular execution of the test suite ensures that new changes do not introduce regressions, maintaining the stability and correctness of the package.
 
 % documentation
 Documentation for \axionbloch{} is available on Read the Docs.\footnote{\url{http://axionbloch.readthedocs.io}}
@@ -535,10 +520,8 @@ It is built using \texttt{Sphinx}\footnote{\url{http://www.sphinx-doc.org}} and 
 As numerous new axion models and experiments are emerging, the functionality of \axionbloch{} may extend so that it can be a tool for updating our knowledge of the induced spin dynamics. 
 Furthermore, capabilities for simulating zero-to-ultra-low-field (ZULF) NMR will be implemented in future versions. 
 
-%-----------------------
 \section{Conclusions}
 \label{sec:conclusions}
-%-----------------------
 
 \axionbloch{} has been presented as a framework for simulating spin dynamics induced by magnetic fields or axion fields under a variety of physical scenarios. 
 The package adopts SI units so that the inputs and outputs are directly comparable to experimental parameters and observables. 
@@ -551,10 +534,10 @@ By providing an open-source, well-documented, and tested tool, \axionbloch{} aim
 Note that this package can be of interest to the NMR community for its applications in, for example, educational purposes. 
 For example, students can specify pulse sequences for the simulation and see the visualized simulation results. 
 
-%-----------------------
+
+
 \section*{Data Availability}
 \label{sec:data-availability}
-%-----------------------
 The data and code that generate this manuscript are available at \url{
 https://github.com/Yuzhe98/AxionBloch-paper}. 
 
