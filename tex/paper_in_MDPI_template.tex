@@ -1,28 +1,182 @@
-%  LaTeX support: latex@mdpi.com
-\documentclass[universe,article,submit,oneauthor]{Definitions/mdpi}
-\usepackage{mycommands}
-\firstpage{1}
-\makeatletter
-\setcounter{page}{\@firstpage}
-\makeatother
-\pubvolume{1}
-\issuenum{1}
-\articlenumber{0}
-\pubyear{2026}
-\copyrightyear{2026}
-\datereceived{}
-\daterevised{}
-\dateaccepted{}
-\datepublished{}
-\Title{\axionbloch{}: an Open-Source Python Package for Simulating Axion-Induced Spin Dynamics}
-\newcommand{\orcidauthorA}{0009-0006-6082-9066}
-\Author{Yuzhe Zhang $^{1,2,3}$\orcidA{}}
-\AuthorNames{Yuzhe Zhang}
-\address{$^{1}$ \quad Johannes Gutenberg-Universit{\"a}t Mainz, 55099 Mainz, Germany\\
-$^{2}$ \quad Helmholtz Institute Mainz, 55128 Mainz, Germany\\
-$^{3}$ \quad GSI Helmholtzzentrum f{\"u}r Schwerionenforschung GmbH, 64291 Darmstadt, Germany}
-\corres{Correspondence: yuhzhang@uni-mainz.de}
-\abstract{
+%   ******Start of file apssamp.tex ******
+%
+%   This file is part of the APS files in the REVTeX 4.2 distribution.
+%   Version 4.2a of REVTeX, December 2014
+%
+%   Copyright (c) 2014 The American Physical Society.
+%
+%   See the REVTeX 4 README file for restrictions and more information.
+%
+% TeX'ing this file requires that you have AMS-LaTeX 2.0 installed
+% as well as the rest of the prerequisites for REVTeX 4.2
+%
+% See the REVTeX 4 README file
+% It also requires running BibTeX. The commands are as follows:
+%
+%  1)  latex apssamp.tex
+%  2)  bibtex apssamp
+%  3)  latex apssamp.tex
+%  4)  latex apssamp.tex
+
+
+\documentclass[%
+ reprint,
+%superscriptaddress,
+%groupedaddress,
+%unsortedaddress,
+%runinaddress,
+%frontmatterverbose, 
+%preprint,
+%preprintnumbers,
+nofootinbib,
+%nobibnotes,
+%bibnotes,
+ amsmath,amssymb,
+ aps,
+%pra,
+%prb,
+%rmp,
+%prstab,
+%prstper,
+%floatfix,
+]{revtex4-2}
+
+
+\usepackage{graphicx}% Include figure files
+% \graphicspath{{../figures/}}
+
+\usepackage{bm}% bold math
+
+%\usepackage[showframe,%Uncomment any one of the following lines to test 
+%%scale=0.7, marginratio={1:1, 2:3}, ignoreall,% default settings
+%%text={7in,10in},centering,
+%%margin=1.5in,
+%%total={6.5in,8.75in}, top=1.2in, left=0.9in, includefoot,
+%%height=10in,a5paper,hmargin={3cm,0.8in},
+%]{geometry}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ % For professional tables
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{booktabs} % if you're using \toprule, \midrule, \bottomrule
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+\renewcommand{\arraystretch}{1.5}
+% \usepackage{threeparttable}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% for chemical forumals
+\usepackage{chemformula}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\usepackage{gensymb} % for degree ° symbol
+% \usepackage{float}
+%\usepackage{floatrow}
+% \usepackage{dblfloatfix}
+\usepackage{placeins}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SI unit
+\usepackage{siunitx}
+\DeclareSIUnit\torr{torr}
+\DeclareSIUnit\ppm{ppm}
+\DeclareSIUnit\ppb{ppb}
+\DeclareSIUnit\bar{bar}
+\DeclareSIUnit\gauss{G}
+\DeclareSIUnit\neV{\nano\electronvolt}
+\DeclareSIUnit\peV{\pico\electronvolt}
+\DeclareSIUnit\kms{km/s}
+\sisetup{print-unity-mantissa=false}  % To display only the exponent (i.e., 10⁻¹¹) 
+\sisetup{separate-uncertainty = false} % use parenthesis style for uncertainty
+% \sisetup{uncertainty-mode = separate} % use +/- style for uncertainty
+\sisetup{uncertainty-mode = compact-marker} % turn this on to use style like 123.45(1.20)
+% otherwise we  turn this on to use style like 123.45(120)
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[normalem]{ulem}
+\usepackage{changes}
+
+\usepackage{hyperref}% add hypertext capabilities
+\usepackage{cleveref}
+
+% cleveref label names
+\crefname{section}{Sec.}{Secs.}
+\crefname{figure}{Fig.}{Figs.}
+\crefname{equation}{Eq.}{Eqs.}
+
+\usepackage{xcolor}
+\newcommand{\JW}[2][cyan]{\textcolor{#1}{Julian: #2}}
+\newcommand{\OM}[2][purple]{\textcolor{#1}{Olympia: #2}}
+\newcommand{\HB}[2][orange]{\textcolor{#1}{Hendrik: #2}}
+\newcommand{\YZ}[2][brown]{\textcolor{#1}{Yuzhe: #2}}
+\newcommand{\kp}[2][red]{\textcolor{#1}{* #2}}
+\newcommand{\new}[2][red]{\textcolor{#1}{#2}}
+\newcommand{\NLF}[2][teal]{\textcolor{#1}{Nate: #2}}
+\newcommand{\YG}[2][magenta]{\textcolor{#1}{Younggeun: #2}}
+\newcommand{\DB}[2][blue]{\textcolor{#1}{Dima: #2}}
+
+
+% code formatting
+\newcommand{\code}{\texttt}
+\newcommand{\axionbloch}{\code{axionbloch}}
+% \newcommand{\astropy}{\code{astropy}}
+\newcommand{\python}{\code{Python}}
+\newcommand{\scipy}{\code{SciPy}}
+\newcommand{\numpy}{\code{NumPy}}
+\newcommand{\runtests}{\code{runtests}}
+\newcommand{\pytest}{\code{pytest}}
+\newcommand{\hdfpy}{\code{h5py}}
+\newcommand{\ipython}{\code{IPython}}
+\newcommand{\jupyter}{\code{Jupyter}}
+
+\begin{document}
+
+\preprint{APS/123-QED}
+
+\title{\axionbloch{}: an Open-Source Python Package for Simulating Axion-Induced Spin Dynamics}
+
+\author{Yuzhe Zhang}
+\email{Contact author: yuhzhang@uni-mainz.de}
+\affiliation{Johannes Gutenberg-Universit{\"a}t Mainz, 55099 Mainz, Germany}
+\affiliation{Helmholtz Institute Mainz, 55128 Mainz, Germany}
+\affiliation{GSI Helmholtzzentrum für Schwerionenforschung GmbH, 64291 Darmstadt, Germany}
+
+% \author{Derek F. Jackson Kimball}
+% \affiliation{Department of Physics, California State University--East Bay, Hayward, CA 94542-3084, United States of America}
+
+% \author{Alexander O. Sushkov}
+% \affiliation{Department of Physics, Boston University, Boston, MA 02215, United States of America}
+% \affiliation{Department of Electrical and Computer Engineering, Boston University, Boston, MA 02215, United States of America}
+% \affiliation{Photonics Center, Boston University, Boston, MA 02215, United States of America}
+% \affiliation{Department of Physics \& Astronomy, The Johns Hopkins University, Baltimore, MD 21218, United States of America}
+
+% \author{Dmitry Budker}
+% \affiliation{Johannes Gutenberg-Universit{\"a}t Mainz, 55128 Mainz, Germany}
+% \affiliation{Helmholtz Institute Mainz, 55099 Mainz, Germany}
+% \affiliation{GSI Helmholtzzentrum für Schwerionenforschung GmbH, 64291 Darmstadt, Germany}
+% \affiliation{Department of Physics, University of California, Berkeley, CA 94720-7300, United States of America}
+
+% \author{Hendrik Bekker}
+% \affiliation{Johannes Gutenberg-Universit{\"a}t Mainz, 55128 Mainz, Germany}
+% \affiliation{Helmholtz Institute Mainz, 55099 Mainz, Germany}
+% \affiliation{GSI Helmholtzzentrum für Schwerionenforschung GmbH, 64291 Darmstadt, Germany}
+
+
+% \author{Arne Wickenbrock}
+% \affiliation{Johannes Gutenberg-Universit{\"a}t Mainz, 55128 Mainz, Germany}
+% \affiliation{Helmholtz Institute Mainz, 55099 Mainz, Germany}
+% \affiliation{GSI Helmholtzzentrum für Schwerionenforschung GmbH, 64291 Darmstadt, Germany}
+
+
+% \collaboration{CASPEr Collaboration}
+
+% \author{And more people? }
+
+\begin{abstract}
+
 The interaction of ultralight bosonic dark matter with spins can be interpreted as a pseudomagnetic field acting on normal matter.
 Such interactions can be modeled as usual magnetic interactions using spin-evolution (Bloch) equations.
 \axionbloch{}, an open-source Python package for simulating spin dynamics induced by both usual and exotic interactions, is presented. 
@@ -30,25 +184,17 @@ The numerical simulations serve as a tool for deriving axion signal signatures, 
 Simulations are calibrated against theoretical expectations, ensuring the accuracy of the simulated signals. 
 \axionbloch{} is available at \url{https://github.com/Yuzhe98/AxionBloch}, allowing researchers to simulate pseudomagnetic signals under specific configurations of the axion models and experimental setups. 
 The package is documented at \url{http://axionbloch.readthedocs.io/} and includes example scripts for application. 
-}
-\keyword{axion dark matter; nuclear magnetic resonance; Bloch equations; spin dynamics; Python package}
-\begin{document}
-\crefname{section}{Section}{Sections}
-\Crefname{section}{Section}{Sections}
-\crefname{figure}{Figure}{Figures}
-\Crefname{figure}{Figure}{Figures}
-\crefname{equation}{Equation}{Equations}
-\Crefname{equation}{Equation}{Equations}
+
+\end{abstract}
+
 \maketitle
-
-
 
 \section{Introduction}
 
 The axion was originally proposed to resolve the strong $CP$ problem in quantum chromodynamics\,\cite{PecceiQuinn1977_ConstraintsCP_PRD,Weinberg1978_NewLightBoson,PecceiQuinn1977_CPConservation_PRL,Wilczek1978_ProblemStrongPAndT}. 
 Here $C$ denotes charge conjugation and $P$ denotes parity. 
 Later, more general axionlike particles (ALPs) were proposed in various extensions of the Standard Model associated with spontaneously broken global symmetries\,\cite{svrcek2006axions,Kim1987_LightPseudoscalars,JaeckelRingwald2010_ALPReview,Arvanitaki2010_StringAxiverse}. 
-Concerning the cosmological implications, axions and ALPs are also well-motivated dark matter candidates\,\cite{Preskill1983_invisible_axion,Abbott1983_CosmologicalBoundAxion,Dine1983_not_so_harmless_axion,Marsh2016_AxionCosmology}.
+Concerning the cosmological implications, axions and ALPs are also well-motivated dark matter candidates\,\cite{Preskill1983_invisible_axion,Abbott1983_CosmologicalBoundAxion,Marsh2016_AxionCosmology}.
 In this paper, axions and ALPs are referred to as ``axions'' for simplicity. 
 
 Axions may possess couplings to ordinary Standard Model particles\,\cite{Graham2013_Newobservables}, including photons, gluons, and fermions. 
@@ -62,9 +208,10 @@ The axion field gradient can be regarded as a pseudomagnetic field that mimics t
     \mathcal{H} = -\hbar \gamma \mathbf{B} \cdot \mathbf{S} \,,
 \end{equation} 
 where $\gamma$ is the gyromagnetic ratio of the spin, and $\mathbf{B}$ is the magnetic field. 
-The pseudomagnetic field induces spin dynamics, providing a pathway for detection in precision measurement experiments such as nuclear magnetic resonance (NMR) and comagnetometer-based searches~\cite{Gramolin2021_Ferromagnetic,CASPErProposal2014,kimball2018overview,Walter2025_CASPErG}. There have been dedicated studies of the axion-induced spin dynamics~\cite{Aybas_2021_Quantum_sensitivity,Yuzhe2023_FrequencyScanning}, providing axion signal signatures and experimental sensitivity to axion fields. 
+The pseudomagnetic field induces spin dynamics, providing a pathway for detection in precision measurement experiments such as nuclear magnetic resonance (NMR) and comagnetometer-based searches\,\cite{ouellet2019first, du2018search, ALPHA2023,aja2022canfranc,CAPP2024,brouwer2022projected,alesini2023future,ZhongL2018results,garcia2024searchaxiondarkmatter,Quiskamp2024_ORGAN,rettaroli2024search,Gramolin2021_Ferromagnetic,gavilan2024searching,bloch2105nasduck,abel2023_HgDM,karanth2023first,LeeJunyi2023_NeutronSpin,capozzi2023new, CASPErProposal2014, kimball2018overview, wang2018application, aybas2021_SolidStateNMR, CASPEr_ZULF_2019,Walter2025_CASPErG}. 
+There have been dedicated studies of the axion-induced spin dynamics\,\cite{Aybas_2021_Quantum_sensitivity, Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning}, providing axion signal signatures and experimental sensitivity to axion fields. 
 However, to our knowledge, there have not been studies taking advantage of numerical methods to verify the derived axion signal signatures. 
-On the other hand, as more axion models and experiments are being proposed, such as new virialized-halo scenarios and other dark-matter substructure models~\cite{Evans2019_SHMRefined,Gramolin2022Feb_SpectralSignatures}, a tool is needed to systematically simulate the axion-induced spin dynamics under various physical conditions and axion field configurations.
+On the other hand, as more axion models and experiments are being proposed, such as cosmic axion background\,\cite{Dror2021_CosmicAxionBackground,Nitta2023_ADMX_CosmicAxionBackground}, fine-grained axion\,\cite{OHare2025_Finegrained}, and quadratically coupled axion\,\cite{GanXucheng2026_quadraticPTA, huang2026earthmatterenhancedaxion}, a tool is needed to systematically simulate the axion-induced spin dynamics under various physical conditions and axion field configurations.
 
 In this work, \axionbloch{}, an open-source package designed to simulate spin dynamics induced by axion fields, is introduced. 
 The interface is implemented in Python, a programming language known for its simplicity and readability, while the underlying numerical integration is implemented in C++ for efficiency. 
@@ -78,6 +225,8 @@ In this section, the main components of \axionbloch{} are described. The section
 
 
 \subsection{Units, physical quantities, and constants}
+
+
 \label{sec:units_quantities_constants}
 
 The package takes advantage of \texttt{astropy}\footnote{\url{https://astropy.org/}}\,\cite{Astropy2013} to deal with units and physical quantities. 
@@ -92,7 +241,7 @@ The constants are instances of \texttt{astropy.units.Quantity}; therefore, all o
 
 \begin{figure}
 \center
-\fbox{\includegraphics[width=0.6\linewidth,clip]{figures/code_quantities.pdf}}
+\fbox{\includegraphics[scale=0.8,clip]{figures/code_quantities.pdf}}
 % \vspace{0.1in}
 \caption{Examples of operations on physical quantities using \texttt{astropy.units} and \texttt{axionbloch.constants}. }
 \label{code:quantities}
@@ -151,13 +300,13 @@ The time step $\Delta t$ is usually set to be at least one order of magnitude sm
 
 Using object-oriented programming, the algorithm is implemented in a modular way to separate experimental configuration, axion field modeling, and numerical integration, allowing for flexible configuration of simulations. 
 A diagram of the architecture of \axionbloch{} is shown in \cref{fig:architecture}. 
-\begin{figure}[htb][ht]
+\begin{figure*}[ht]
     \centering
-    \fbox{\includegraphics[width=0.99\linewidth]{figures/diagram_v1.2.drawio.pdf}}
+    \fbox{\includegraphics[scale=0.99]{figures/diagram_v1.2.drawio.pdf}}
     \caption{Architecture of \axionbloch{}. Each \texttt{Simulation} instance imports parameters from \texttt{Magnet}, \texttt{Sample}, and \texttt{MagField} instances. For axion simulations, axion-model objects are required both for \texttt{Simulation} to configure the simulation and for \texttt{MagField} to generate the pseudomagnetic field. \texttt{Simulations} manages one or multiple \texttt{Simulation} instances. Numerical integration is performed via the \texttt{blochSimulation} API, which provides Python access to the underlying C++ implementation. 
     }
     \label{fig:architecture}
-\end{figure}
+\end{figure*}
 
 On the Python side, classes \texttt{Sample}, \texttt{Magnet}, and \texttt{MagField} encapsulate the relevant experimental parameters, including sample relaxation times, magnetic field strength, and inhomogeneity. 
 The axion models are implemented by dedicated classes, such as \texttt{MilkyWayAxionHalo}, which carry the properties of the axion fields. Together with the method \texttt{MagField.setAxionFields()}, the pseudomagnetic fields can be generated. 
@@ -166,23 +315,28 @@ Simulation is handled within the \texttt{axionbloch.SimuTools} module.
 In particular, the classes \texttt{Simulation} and \texttt{Simulations} manage the interaction between experimental configurations and axion models, organizing the parameters and execution of single or multiple simulation runs. 
 
 The RK4 algorithm is implemented in a dedicated C++ library. 
+% This library is more efficient compared to a pure Python implementation. 
 The application programming interface (API) for this library is \texttt{blochSimulation}. 
 This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling cooperation between high-level Python workflow management and low-level efficient numerical computation. 
 
 \subsection{Calibration}
 \label{sec:calibration}
 
+% \subsection{Examples}
+% \label{sec:examples}
+
 Accurate calibration is essential to ensure that the simulated signals reliably reflect the underlying physical system and can be compared with experimental observables. 
 In particular, calibration examines the correspondence between the NMR signal and model parameters, including magnetic fields, nuclear spin gyromagnetic ratio $\gamma$, and relaxation times ($T_1$, $T_2$, and $T_2^*$). 
 It allows one to verify the correctness and stability of the numerical implementation. 
 In this section, examples of calibration simulations are presented along with theoretical predictions, demonstrating the methodology of calibration. 
 A quantitative analysis is included at the end of the section. 
+% These ensure that the simulations produce quantitatively accurate results. 
 For the examples in the section, an ethanol sample and an axial bias field $\mathbf{B_{0}} = B_0 \mathbf{\hat{e}}_z$ are used. 
 
 \subsubsection{Pulsed-NMR: free decay and spin echo}
 \label{sec:pNMR}
 In the pulsed-NMR calibration, one $\SI{90}{\degree}$ and one $\SI{180}{\degree}$ magnetic-field pulse are applied in the simulation. 
-The magnetization is expected to:
+The magnetization is expected to\,\cite{CPMG, Abragam1961_NuclearMagnetism}:
 \begin{itemize}
     \item oscillate at the Larmor frequency;
     \item be tipped by $\SI{90}{\degree}$ to the x-y plane by the $\SI{90}{\degree}$ pulse;
@@ -193,19 +347,19 @@ The magnetization is expected to:
 The behaviors described above can be found in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a), indicating correct simulation behavior. 
 With such a benchmark, magnetic pulses, Larmor precession, and transverse relaxations ($T_2$ and $T_2^*$) can be calibrated. 
 
-\begin{figure}[htb]
+\begin{figure*}
     \centering
-    \includegraphics[width=0.99\linewidth]{figures/SpinEcho_and_CW.pdf}
+    \includegraphics{figures/SpinEcho_and_CW.pdf}
     \caption{Simulated magnetic fields in x and y directions (upper row) and induced NMR signals (lower row). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^2}$ is the magnitude of the excitation. 
     }
     \label{fig:calibration_T2_T2star}
-\end{figure}
+\end{figure*}
 
 
 \subsubsection{Continuous-wave NMR}
 \label{sec:CW_NMR}
 In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is applied. 
-When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$.
+When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$\,\cite{Abragam1961_NuclearMagnetism}.
 One such example is illustrated in \cref{fig:calibration_T2_T2star}\,(b). 
 The simulation produces the expected results.
 With such a benchmark, the Larmor precession and $T_2^*$ relaxation can be calibrated. 
@@ -222,7 +376,7 @@ More of such simulations can be applied in calibrating $T_1$ relaxation.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.495\linewidth]{figures/T1_hyperpolarized.pdf}
+    \includegraphics{figures/T1_hyperpolarized.pdf}
     \caption{
     Simulated $T_1$ relaxation of a hyperpolarized sample in a static bias field. The axial magnetization $M_z$ is normalized by the equilibrium magnetization $M_\mathrm{eqb}$. 
     }
@@ -258,31 +412,31 @@ If a certain simulation precision is required, the $\chi^2$ value serves as a qu
     More technical details of the calibrations can be found in the test suite. 
     }
     \label{tab:calibration_summary}
-    \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{1.2cm} >{\raggedright\arraybackslash}p{5.0cm}}
-        \toprule
-        \textbf{Calibration} &
-        \textbf{Parameters calibrated} &
-        \textbf{Varied parameters} &
-        $\bm{\chi^2}$ &
-        \textbf{Dominant source of error} \\[8pt]
-        \midrule
-        Pulsed NMR: free decay &
-        Pulse amplitude, $\nu_\mathrm{L}$, $T_2^*$, $T_2$ &
-        $\nu_\mathrm{RCF}$ &
-        $<10^{-4}$ &
-        Finite number of steps for hard pulses. \\[8pt]
-        CW-NMR &
-        $\nu_\mathrm{L}$ and $T_2^*$ &
-        $\nu_\mathrm{RCF}$ &
-        $<10^{-5}$  &
-        Finite integration step size.  \\[8pt]
-        $T_1$ relaxation &
-        $T_1$ &
-        $\nu_\mathrm{RCF}$, $\nu_\mathrm{L}$, initial polarization &
-        $<10^{-7}$  & 
-        Finite integration step size. \\
-        \bottomrule
-    \end{tabularx}
+    \begin{ruledtabular}
+    \begin{tabular}{lllll}
+        \parbox[t]{2.5cm}{\raggedright\textbf{Calibration}} &
+        \parbox[t]{3.5cm}{\raggedright\textbf{Parameters calibrated}} &
+        \parbox[t]{3.0cm}{\raggedright\textbf{Varied parameters}} &
+        \parbox[t]{1.2cm}{\raggedright $\bm{\chi^2}$} &
+        \parbox[t]{5.0cm}{\raggedright\textbf{Dominant source of error}} \\[8pt]
+        \hline
+        \parbox[t]{2.5cm}{\raggedright Pulsed NMR: free decay} &
+        \parbox[t]{3.5cm}{\raggedright Pulse amplitude, $\nu_\mathrm{L}$, $T_2^*$, $T_2$} &
+        \parbox[t]{3.0cm}{\raggedright $\nu_\mathrm{RCF}$} &
+        \parbox[t]{1.2cm}{\raggedright $<10^{-4}$} &
+        \parbox[t]{5.0cm}{\raggedright Finite number of steps for hard pulses. } \\[8pt]
+        \parbox[t]{2.5cm}{\raggedright CW-NMR} &
+        \parbox[t]{3.5cm}{\raggedright $\nu_\mathrm{L}$ and $T_2^*$} &
+        \parbox[t]{3.0cm}{\raggedright $\nu_\mathrm{RCF}$} &
+        \parbox[t]{1.2cm}{\raggedright $<10^{-5}$}  &
+        \parbox[t]{5.0cm}{\raggedright Finite integration step size.  } \\[8pt]
+        \parbox[t]{2.5cm}{\raggedright $T_1$ relaxation} &
+        \parbox[t]{3.5cm}{\raggedright $T_1$} &
+        \parbox[t]{3.0cm}{\raggedright $\nu_\mathrm{RCF}$, $\nu_\mathrm{L}$, initial polarization} &
+        \parbox[t]{1.2cm}{\raggedright $<10^{-7}$}  & 
+        \parbox[t]{5.0cm}{\raggedright Finite integration step size. } \\
+    \end{tabular}
+    \end{ruledtabular}
 \end{table*}
 
 
@@ -308,20 +462,28 @@ Such moderate runtime allows users to explore different parameter regimes with m
 
 \begin{figure}
 \center
-\fbox{\includegraphics[width=0.6\linewidth,clip]{figures/axion_example.pdf}}
+\fbox{\includegraphics[scale=0.7,clip]{figures/axion_example.pdf}}
 % \vspace{0.1in}
 \caption{Example code of an axion simulation.}
 \label{code:axion_example}
 \end{figure}
 
-\begin{figure}[htb]
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
+%     \caption{Simulation of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization induced ($M_{xy}$). To account for the stochasticity, generated 1000 pseudomagnetic fields were generated. The solid lines indicate the mean of these 1000 $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate $\pm \sigma$ (standard deviation) range. The sample for the simulations was assumed to be polarized to $\SI{50}{\%}$ initially. 
+%     }
+%     \label{fig:MilkyWayAxionHalo}
+% \end{figure}
+
+\begin{figure*}
     \centering
-    \includegraphics[width=0.495\linewidth]{figures/MilkyWayAxionHalo-1.pdf}
-    \includegraphics[width=0.495\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
+    \includegraphics[width=0.49\linewidth]{figures/MilkyWayAxionHalo-1.pdf}
+    \includegraphics[width=0.49\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
     \caption{Simulations of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization normalized by the equilibrium magnetization ($M_{xy}/M_\mathrm{eqb}$). Left: one single simulation. Right: 1000 simulations to account for the stochasticity. The solid lines indicate the value (left column) or mean value (right column) of $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate the $\pm \sigma$ (standard deviation) range. The sample for the simulations is assumed to be polarized to $\SI{50}{\%}$ initially.
     }
     \label{fig:MilkyWayAxionHalo}
-\end{figure}
+\end{figure*}
 
 
 
@@ -330,10 +492,8 @@ Such moderate runtime allows users to explore different parameter regimes with m
 % [should this example be mentioned?]
 
 
-
 \section{Development}
 \label{sec:dev-approach}
-
 
 % Version Control
 Development of \axionbloch{} is managed using \texttt{git},\footnote{\url{http://git-scm.com}} with the code hosted on a public GitHub repository.\footnote{\url{https://github.com/Yuzhe98/AxionBloch}} 
@@ -360,10 +520,8 @@ It is built using \texttt{Sphinx}\footnote{\url{http://www.sphinx-doc.org}} and 
 As numerous new axion models and experiments are emerging, the functionality of \axionbloch{} may extend so that it can be a tool for updating our knowledge of the induced spin dynamics. 
 Furthermore, capabilities for simulating zero-to-ultra-low-field (ZULF) NMR will be implemented in future versions. 
 
-
 \section{Conclusions}
 \label{sec:conclusions}
-
 
 \axionbloch{} has been presented as a framework for simulating spin dynamics induced by magnetic fields or axion fields under a variety of physical scenarios. 
 The package adopts SI units so that the inputs and outputs are directly comparable to experimental parameters and observables. 
@@ -378,19 +536,32 @@ For example, students can specify pulse sequences for the simulation and see the
 
 
 
+\section*{Data Availability}
+\label{sec:data-availability}
+The data and code that generate this manuscript are available at \url{
+https://github.com/Yuzhe98/AxionBloch-paper}. 
 
+\begin{acknowledgments}
 
+The author acknowledges helpful discussions with Hendrik Bekker, Dmitry Budker, and Alexander Sushkov, and thanks the CASPEr Collaboration for its support. 
+The author is grateful to the communities supporting the open-source software and tools: \texttt{git}, \texttt{NumPy}, 
+\texttt{SciPy}\footnote{\url{https://docs.scipy.org/}}\,\cite{Virtanen2020_SciPy}, 
+\texttt{matplotlib}\footnote{\url{https://matplotlib.org/}}, 
+\texttt{astropy}, 
+\texttt{pybind11}, 
+\texttt{IPython}\footnote{\url{https://ipython.org/}}\,\cite{Perez2007_IPython}, 
+\texttt{Jupyter}\footnote{\url{https://jupyter.org/}}\,\cite{Granger2021_Jupyter}, 
+\texttt{pytest}, 
+\texttt{Sphinx}, 
+GitHub\footnote{\url{https://github.com/}} 
+and 
+Read the Docs\footnote{\url{https://about.readthedocs.com/}}. 
+This work has been supported by the Cluster of Excellence ``Precision Physics, Fundamental Interactions, and Structure of Matter'' (PRISMA++ EXC 2118/2) funded by the
+German Research Foundation (DFG) within the German Excellence Strategy (Project ID 390831469).
 
+\end{acknowledgments}
 
-\authorcontributions{Conceptualization, Yuzhe Zhang; methodology, Yuzhe Zhang; software, Yuzhe Zhang; validation, Yuzhe Zhang; formal analysis, Yuzhe Zhang; investigation, Yuzhe Zhang; writing---original draft preparation, Yuzhe Zhang; writing---review and editing, Yuzhe Zhang.}
-\funding{This research received no external funding.}
-\institutionalreview{Not applicable.}
-\informedconsent{Not applicable.}
-\dataavailability{The data and code that generate this manuscript are available at \url{https://github.com/Yuzhe98/AxionBloch-paper}.}
-\acknowledgments{The author acknowledges helpful discussions with Hendrik Bekker, Dmitry Budker, and Alexander Sushkov, and thanks the CASPEr Collaboration for its support. This work has been supported by the Cluster of Excellence ``Precision Physics, Fundamental Interactions, and Structure of Matter'' (PRISMA++ EXC 2118/2) funded by the German Research Foundation (DFG) within the German Excellence Strategy (Project ID 390831469).}
-\conflictsofinterest{The author declares no conflicts of interest.}
+\bibliographystyle{unsrt}
+\bibliography{references}% Produces the bibliography via BibTeX.
 
-\reftitle{References}
-\bibliography{references}
-\PublishersNote{}
 \end{document}
