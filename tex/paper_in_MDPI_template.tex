@@ -1,6 +1,95 @@
 %  LaTeX support: latex@mdpi.com
 \documentclass[universe,article,submit,oneauthor]{Definitions/mdpi}
-\usepackage{mycommands}
+\newcommand{\code}{\texttt}
+\newcommand{\axionbloch}{\code{axionbloch}}
+\newcommand{\python}{\code{Python}}
+\newcommand{\scipy}{\code{SciPy}}
+\newcommand{\numpy}{\code{NumPy}}
+\newcommand{\runtests}{\code{runtests}}
+\newcommand{\pytest}{\code{pytest}}
+\newcommand{\hdfpy}{\code{h5py}}
+\newcommand{\ipython}{\code{IPython}}
+\newcommand{\jupyter}{\code{Jupyter}}
+
+\usepackage{graphicx}% Include figure files
+% \graphicspath{{../figures/}}
+
+\usepackage{bm}% bold math
+
+%\usepackage[showframe,%Uncomment any one of the following lines to test 
+%%scale=0.7, marginratio={1:1, 2:3}, ignoreall,% default settings
+%%text={7in,10in},centering,
+%%margin=1.5in,
+%%total={6.5in,8.75in}, top=1.2in, left=0.9in, includefoot,
+%%height=10in,a5paper,hmargin={3cm,0.8in},
+%]{geometry}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ % For professional tables
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{booktabs} % if you're using \toprule, \midrule, \bottomrule
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+\renewcommand{\arraystretch}{1.5}
+% \usepackage{threeparttable}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% for chemical forumals
+\usepackage{chemformula}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\usepackage{gensymb} % for degree ° symbol
+% \usepackage{float}
+%\usepackage{floatrow}
+% \usepackage{dblfloatfix}
+\usepackage{placeins}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SI unit
+\usepackage{siunitx}
+\DeclareSIUnit\torr{torr}
+\DeclareSIUnit\ppm{ppm}
+\DeclareSIUnit\ppb{ppb}
+\DeclareSIUnit\bar{bar}
+\DeclareSIUnit\gauss{G}
+\DeclareSIUnit\neV{\nano\electronvolt}
+\DeclareSIUnit\peV{\pico\electronvolt}
+\DeclareSIUnit\kms{km/s}
+\sisetup{print-unity-mantissa=false}  % To display only the exponent (i.e., 10⁻¹¹) 
+\sisetup{separate-uncertainty = false} % use parenthesis style for uncertainty
+% \sisetup{uncertainty-mode = separate} % use +/- style for uncertainty
+\sisetup{uncertainty-mode = compact-marker} % turn this on to use style like 123.45(1.20)
+% otherwise we  turn this on to use style like 123.45(120)
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[normalem]{ulem}
+\usepackage{changes}
+
+% % cleveref label names
+% \crefname{section}{Sec.}{Secs.}
+% \Crefname{section}{Sec.}{Secs.}
+% \crefname{figure}{Fig.}{Figs.}
+% \Crefname{figure}{Fig.}{Figs.}
+% \crefname{equation}{Eq.}{Eqs.}
+% \Crefname{equation}{Eq.}{Eqs.}
+
+
+\usepackage{xcolor}
+\newcommand{\JW}[2][cyan]{\textcolor{#1}{Julian: #2}}
+\newcommand{\OM}[2][purple]{\textcolor{#1}{Olympia: #2}}
+\newcommand{\HB}[2][orange]{\textcolor{#1}{Hendrik: #2}}
+\newcommand{\YZ}[2][brown]{\textcolor{#1}{Yuzhe: #2}}
+\newcommand{\kp}[2][red]{\textcolor{#1}{* #2}}
+\newcommand{\new}[2][red]{\textcolor{#1}{#2}}
+\newcommand{\NLF}[2][teal]{\textcolor{#1}{Nate: #2}}
+\newcommand{\YG}[2][magenta]{\textcolor{#1}{Younggeun: #2}}
+\newcommand{\DB}[2][blue]{\textcolor{#1}{Dima: #2}}
+
+
+% ----------------------------------------
 \firstpage{1}
 \makeatletter
 \setcounter{page}{\@firstpage}
@@ -247,44 +336,52 @@ In each calibration, parameters such as Larmor frequency and relaxation times ar
 The results of the calibrations are summarized in \cref{tab:calibration_summary}. 
 The discrepancies are generally small ($\chi^2 < 10^{-4}$).
 If a certain simulation precision is required, the $\chi^2$ value serves as a quantitative reference. 
-\begin{table*}
-    \caption{Summary of calibrations.
-    $\chi^2$ indicating the discrepancy is defined in \cref{eq:chisq}; $\chi^2\ll 1$ indicates a well-calibrated simulation.
-    Here $\nu_\mathrm{L}$ stands for Larmor frequency, determined by the bias magnetic field. 
-    $\nu_\mathrm{RCF}$ is RCF frequency. 
-    $\nu_\mathrm{L}$ and $\nu_\mathrm{RCF}$ are varied from \SI{1}{\kHz} to \SI{1}{\GHz}. The bias field inhomogeneity is swept from \SI{.1}{\ppm} to \SI{20}{\ppm}. 
-    $T_1$ ranges from \SI{1}{\ms} to \SI{1}{\kilo\second}. 
-    The integration step size is chosen to be $T_2^* / 500$. 
-    Finer step sizes yield lower $\chi^2$ at increased computational cost. 
-    More technical details of the calibrations can be found in the test suite. 
-    }
-    \label{tab:calibration_summary}
-    \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{1.2cm} >{\raggedright\arraybackslash}p{5.0cm}}
-        \toprule
-        \textbf{Calibration} &
-        \textbf{Parameters calibrated} &
-        \textbf{Varied parameters} &
-        $\bm{\chi^2}$ &
-        \textbf{Dominant source of error} \\[8pt]
-        \midrule
-        Pulsed NMR: free decay &
-        Pulse amplitude, $\nu_\mathrm{L}$, $T_2^*$, $T_2$ &
-        $\nu_\mathrm{RCF}$ &
-        $<10^{-4}$ &
-        Finite number of steps for hard pulses. \\[8pt]
-        CW-NMR &
-        $\nu_\mathrm{L}$ and $T_2^*$ &
-        $\nu_\mathrm{RCF}$ &
-        $<10^{-5}$  &
-        Finite integration step size.  \\[8pt]
-        $T_1$ relaxation &
-        $T_1$ &
-        $\nu_\mathrm{RCF}$, $\nu_\mathrm{L}$, initial polarization &
-        $<10^{-7}$  & 
-        Finite integration step size. \\
-        \bottomrule
-    \end{tabularx}
-\end{table*}
+
+% \begin{table}[H] 
+% %\small % Change table font size
+% \caption{This is a table caption. Tables should be placed in the main text near the first time they are~cited.\label{tab1}}
+% %\isPreprints{\centering}{} % Only used for preprints
+% \begin{tabularx}{\textwidth}{CCC}
+% \toprule
+% \textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+% \midrule
+% Entry 1		& Data			& Data\\
+% Entry 2		& Data			& Data \textsuperscript{1}\\
+% \bottomrule
+% \end{tabularx}
+
+% \noindent{\footnotesize{\textsuperscript{1} Tables may have a footer.}}
+% \end{table}
+
+\begin{table}[htb]
+\small % Change table font size
+\caption{Summary of calibrations. $\chi^2$ indicating the discrepancy is defined in \cref{eq:chisq}; $\chi^2\ll 1$ indicates a well-calibrated simulation. Here $\nu_\mathrm{L}$ stands for Larmor frequency, determined by the bias magnetic field. $\nu_\mathrm{RCF}$ is RCF frequency. $\nu_\mathrm{L}$ and $\nu_\mathrm{RCF}$ are varied from \SI{1}{\kHz} to \SI{1}{\GHz}. The bias field inhomogeneity is swept from \SI{.1}{\ppm} to \SI{20}{\ppm}. $T_1$ ranges from \SI{1}{\ms} to \SI{1}{\kilo\second}. The integration step size is chosen to be $T_2^* / 500$. Finer step sizes yield lower $\chi^2$ at increased computational cost. More technical details of the calibrations can be found in the test suite.\label{tab:calibration_summary}}
+\begin{tabularx}{\textwidth}{CCCCC}
+    \toprule
+    \textbf{Calibration} &
+    \textbf{Parameters calibrated} &
+    \textbf{Varied parameters} &
+    $\bm{\chi^2}$ &
+    \textbf{Dominant source of error} \\
+    \midrule
+    Pulsed NMR: free decay &
+    Pulse amplitude, $\nu_\mathrm{L}$, $T_2^*$, $T_2$ &
+    $\nu_\mathrm{RCF}$ &
+    $<10^{-4}$ &
+    Finite number of steps for hard pulses. \\
+    CW-NMR &
+    $\nu_\mathrm{L}$ and $T_2^*$ &
+    $\nu_\mathrm{RCF}$ &
+    $<10^{-5}$ &
+    Finite integration step size. \\
+    $T_1$ relaxation &
+    $T_1$ &
+    $\nu_\mathrm{RCF}$, $\nu_\mathrm{L}$, initial polarization &
+    $<10^{-7}$ &
+    Finite integration step size. \\
+    \bottomrule
+\end{tabularx}
+\end{table}
 
 
 \subsection{Axion simulation}
@@ -378,16 +475,17 @@ Note that this package can be of interest to the NMR community for its applicati
 For example, students can specify pulse sequences for the simulation and see the visualized simulation results. 
 
 
+% \authorcontributions{Conceptualization, methodology, software, validation, formal analysis, investigation, and writing---original draft preparation, Yuzhe Zhang; writing---review and editing, Yuzhe Zhang.}
 
+\funding{This work has been supported by the Cluster of Excellence ``Precision Physics, Fundamental Interactions, and Structure of Matter'' (PRISMA++ EXC 2118/2) funded by the
+German Research Foundation (DFG) within the German Excellence Strategy (Project ID 390831469).}
 
-
-
-
-\authorcontributions{Conceptualization, Yuzhe Zhang; methodology, Yuzhe Zhang; software, Yuzhe Zhang; validation, Yuzhe Zhang; formal analysis, Yuzhe Zhang; investigation, Yuzhe Zhang; writing---original draft preparation, Yuzhe Zhang; writing---review and editing, Yuzhe Zhang.}
-\funding{This research received no external funding.}
 \institutionalreview{Not applicable.}
+
 \informedconsent{Not applicable.}
+
 \dataavailability{The data and code that generate this manuscript are available at \url{https://github.com/Yuzhe98/AxionBloch-paper}.}
+
 \acknowledgments{The author acknowledges helpful discussions with Hendrik Bekker, Dmitry Budker, and Alexander Sushkov, and thanks the CASPEr Collaboration for its support. 
 The author is grateful to the communities supporting the open-source software and tools: \texttt{git}, \texttt{NumPy}, 
 \texttt{SciPy}\footnote{\url{https://docs.scipy.org/}}\,\cite{Virtanen2020_SciPy}, 
@@ -400,9 +498,8 @@ The author is grateful to the communities supporting the open-source software an
 \texttt{Sphinx}, 
 GitHub\footnote{\url{https://github.com/}} 
 and 
-Read the Docs\footnote{\url{https://about.readthedocs.com/}}. 
-This work has been supported by the Cluster of Excellence ``Precision Physics, Fundamental Interactions, and Structure of Matter'' (PRISMA++ EXC 2118/2) funded by the
-German Research Foundation (DFG) within the German Excellence Strategy (Project ID 390831469).}
+Read the Docs\footnote{\url{https://about.readthedocs.com/}}. }
+
 \conflictsofinterest{The author declares no conflicts of interest.}
 
 \reftitle{References}
