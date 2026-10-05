@@ -1,0 +1,23 @@
+The manuscript presents axionbloch, an open-source Python package with a C++ backend (via pybind11). It numerically integrates the Bloch equations for spin-1/2 ensembles subject to real magnetic fields and to the pseudomagnetic field produced by the axion-nucleon gradient coupling. The package uses astropy for unit handling, integrates in a rotating coordinate frame with a fourth-order Runge-Kutta scheme, and models bias-field inhomogeneity by sampling an ensemble of bias fields.
+
+The author benchmarks the code against standard NMR behaviour: free induction decay and spin echoes, continuous-wave excitation, and T₁ relaxation of a hyperpolarised sample. Agreement is quantified by a normalised residual metric, with discrepancies below 10⁻⁴. The manuscript then demonstrates an axion simulation for a hyperpolarised liquid ¹²⁹Xe sample in the standard halo model, showing single-realisation and ensemble-averaged (1000 realisations) transverse magnetisation, and reports a runtime of 2.7 s for 7×10⁸ integration steps. The code, documentation and test suite are publicly available.
+
+The manuscript is clearly written and describes a well-structured, usable piece of software. The architecture is sensible, the benchmarks behave as expected, and the open-source, tested and documented delivery is commendable. I expect the package will be useful to groups designing and analysing spin-based axion searches, and for teaching, as the author notes.
+
+That said, the manuscript does not contain new physical results. The physics implemented is well established: the Bloch equations, the axion-gradient pseudomagnetic field, and the stochastic description of the virialised halo field. So are the numerical methods (fixed-step RK4 in a rotating frame). The calibration results are correct but predictable, since they reproduce textbook NMR behaviour. The axion simulation reproduces qualitative signal features already described analytically in the literature. The contribution is therefore a software and methods paper.
+
+I question whether Universe is the most appropriate venue, or whether a journal dedicated to research software or computational physics would suit the work better. I leave that judgement to the editors. My comments below assume the manuscript remains under consideration at Universe.
+
+Comments on the paper are addressed pointwise below:
+
+---------------------------------------------------------------
+Are there shape anisotropy effects that must be taken into account with regards to the magnetisation dynamics of the sample? Is the shape of the sample important e.g. spherical vs cylindrical?
+
+In Fig 5, polarisation is written as 1%, whilst in the text it is stated as 50%. 
+
+Please specify the convention connecting Eq. (1) to the pseudomagnetic field B_a used in the code (factors of 2 between S and σ, and factors of ħ and c), and how negative gyromagnetic ratios are handled.
+
+More detail should be given regarding the computational methodologies used when referring to the runtime – was multithreading used? Is the backend parallelised?
+--------------------------------------------------------------
+
+In summary, I recommend publication after minor revisions, provided the editors consider a software-focused manuscript of this kind suitable for the journal.
