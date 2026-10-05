@@ -145,7 +145,7 @@ sample = Sample(
     vol=1 * unit.cm**3,
     mu=mu_Xe129N,  # magnetic dipole moment
     temp=163 * unit.K,
-    pol=1 * unit.percent,
+    pol=50 * unit.percent,
     verbose=False,
 )
 # Define the axion field with axion Compton frequency

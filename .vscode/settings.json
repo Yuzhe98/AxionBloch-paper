@@ -6,7 +6,7 @@
         "numpy",
         "scipy"
     ],
-    "latex-workshop.latex.outDir": "%DIR%/build",
+    "latex-workshop.latex.outDir": "C:/Users/zhenf/D/Yu0702/CASPEr-Collaboration/AxionBloch-paper/tex/build",
     "latex-workshop.latex.autoBuild.run": "never",
     "latex-workshop.latex.autoClean.run": "onBuilt",
     "latex-workshop.latex.clean.fileTypes": [

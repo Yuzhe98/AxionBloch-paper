@@ -7,16 +7,24 @@ Concerning the cosmological implications, axions and ALPs are also well-motivate
 In this paper, axions and ALPs are referred to as ``axions'' for simplicity. 
 
 Axions may possess couplings to ordinary Standard Model particles\,\cite{Graham2013_Newobservables}, including photons, gluons, and fermions. 
-Crucially, axion field gradients ($\mathbf{\nabla}a$) may couple to fermionic spins through a pseudoscalar interaction. The Hamiltonian for this interaction can be expressed as
+Crucially, axion field gradients ($\boldsymbol{\nabla}a$) may couple to fermionic spins through a pseudoscalar interaction. 
+The Hamiltonian for this axion--fermion interaction is written as
 \begin{equation}
-    \mathcal{H}_{\mathrm{int}} = - g_\mathrm{aNN} \mathbf{\nabla}a \cdot \mathbf{S}\,,
+    \mathcal{H}_{\mathrm{int}} = c g_\mathrm{aNN} \boldsymbol{\nabla}a \cdot \boldsymbol{S}\,,
 \end{equation}
-where $g_\mathrm{aNN}$ is the axion-spin coupling strength, and $\mathbf{S}$ is the spin operator. 
+where $g_\mathrm{aNN}$ is the axion--fermion coupling strength, $c$ is the speed of light, and $\boldsymbol{S}$ denotes the physical spin operator, $\boldsymbol{S}=\hbar\boldsymbol{\sigma}/2$, with $\boldsymbol{\sigma}$ the vector of Pauli matrices. 
 The axion field gradient can be regarded as a pseudomagnetic field that mimics the behavior of a real magnetic field, where the Hamiltonian can be written as
 \begin{equation}
-    \mathcal{H} = -\hbar \gamma \mathbf{B} \cdot \mathbf{S} \,,
+    \mathcal{H} = -\gamma \boldsymbol{B} \cdot \boldsymbol{S} \,,
 \end{equation} 
-where $\gamma$ is the gyromagnetic ratio of the spin, and $\mathbf{B}$ is the magnetic field. 
+where $\gamma$ is the gyromagnetic ratio of the spin, and $\boldsymbol{B}$ is the magnetic field. 
+Comparing the two Hamiltonians, it can be found that the gradient of the axion field acts effectively as a magnetic field. 
+Therefore, the concept of an axion-induced pseudomagnetic field is introduced, which is defined as
+\begin{equation}
+    \boldsymbol{B}_a = -\frac{c g_\mathrm{aNN}}{\gamma}\boldsymbol{\nabla}a\,.
+\end{equation}
+The exact formula of the pseudomagnetic field depends on the axion model. 
+
 The pseudomagnetic field induces spin dynamics, providing a pathway for detection in precision measurement experiments such as nuclear magnetic resonance (NMR) and comagnetometer-based searches\,\cite{ouellet2019first, du2018search, ALPHA2023,aja2022canfranc,CAPP2024,brouwer2022projected,alesini2023future,ZhongL2018results,garcia2024searchaxiondarkmatter,Quiskamp2024_ORGAN,rettaroli2024search,Gramolin2021_Ferromagnetic,gavilan2024searching,bloch2105nasduck,abel2023_HgDM,karanth2023first,LeeJunyi2023_NeutronSpin,capozzi2023new, CASPErProposal2014, kimball2018overview, wang2018application, aybas2021_SolidStateNMR, CASPEr_ZULF_2019,Walter2025_CASPErG}. 
 There have been dedicated studies of the axion-induced spin dynamics\,\cite{Aybas_2021_Quantum_sensitivity, Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning}, providing axion signal signatures and experimental sensitivity to axion fields. 
 However, to our knowledge, there have not been studies taking advantage of numerical methods to verify the derived axion signal signatures. 
@@ -63,13 +71,13 @@ The constants are instances of \texttt{astropy.units.Quantity}; therefore, all o
 Considering the current experiments looking for axion-induced spin dynamics, \axionbloch{} focuses on spin-$1/2$ magnetic resonance. 
 Different spins may be addressed in future updates. 
 Magnetization is used as the observable to characterize the spin ensemble. 
-In the presence of magnetic fields or axion-induced pseudomagnetic fields, the magnetization $\mathbf{M}$ evolves as
+In the presence of magnetic fields or axion-induced pseudomagnetic fields, the magnetization $\boldsymbol{M}$ evolves as
 \begin{align}
-\frac{d M_x}{dt} &= \gamma \left( \mathbf{M} \times \mathbf{B}_{\mathrm{eff}} \right)_x - \frac{M_x}{T_2}\,,\label{eq:bloch_x} \\
-\frac{d M_y}{dt} &= \gamma \left( \mathbf{M} \times \mathbf{B}_{\mathrm{eff}} \right)_y - \frac{M_y}{T_2}\,,\label{eq:bloch_y} \\
-\frac{d M_z}{dt} &= \gamma \left( \mathbf{M} \times \mathbf{B}_{\mathrm{eff}} \right)_z - \frac{M_z - M_0}{T_1}\,,\label{eq:bloch_z}
+\frac{d M_x}{dt} &= \gamma \left( \boldsymbol{M} \times \boldsymbol{B}_{\mathrm{eff}} \right)_x - \frac{M_x}{T_2}\,,\label{eq:bloch_x} \\
+\frac{d M_y}{dt} &= \gamma \left( \boldsymbol{M} \times \boldsymbol{B}_{\mathrm{eff}} \right)_y - \frac{M_y}{T_2}\,,\label{eq:bloch_y} \\
+\frac{d M_z}{dt} &= \gamma \left( \boldsymbol{M} \times \boldsymbol{B}_{\mathrm{eff}} \right)_z - \frac{M_z - M_0}{T_1}\,,\label{eq:bloch_z}
 \end{align}
-where $\gamma$ is the gyromagnetic ratio, $\mathbf{B}_{\mathrm{eff}}$ is the total effective field, $T_1$ and $T_2$ are relaxation times, and the subscripts $x$, $y$, $z$ denote the Cartesian components. 
+where $\gamma$ is the gyromagnetic ratio, $\boldsymbol{B}_{\mathrm{eff}}$ is the total effective field, $T_1$ and $T_2$ are relaxation times, and the subscripts $x$, $y$, $z$ denote the Cartesian components. 
 The bias field is usually much stronger than the pseudomagnetic field. 
 Therefore, the rotating coordinate frame (RCF) is adopted to remove the Larmor precession due to the bias field, allowing efficient simulation of the slower axion-induced dynamics of interest. 
 
@@ -80,25 +88,25 @@ Such inhomogeneity of the bias field is simulated by sampling the spread of the 
 \label{sec:numericalintegration}
 
 To derive the time evolution of the magnetization, \axionbloch{} numerically integrates the Bloch equations using the fourth-order Runge--Kutta (RK4) method. 
-Given a time step $\Delta t$, an effective magnetic field, and initial magnetization $\mathbf{M}^0$, the magnetization at the $(n+1)$-th step can be found via 
+Given a time step $\Delta t$, an effective magnetic field, and initial magnetization $\boldsymbol{M}^0$, the magnetization at the $(n+1)$-th step can be found via 
 \begin{equation}
-\mathbf{M}^{n+1}
+\boldsymbol{M}^{n+1}
 =
-\mathbf{M}^n
+\boldsymbol{M}^n
 +
 \frac{\Delta t}{6}
 \left(
-\mathbf{k}_1 + 2\mathbf{k}_2 + 2\mathbf{k}_3 + \mathbf{k}_4
+\boldsymbol{k}_1 + 2\boldsymbol{k}_2 + 2\boldsymbol{k}_3 + \boldsymbol{k}_4
 \right)\,.
 \end{equation}
 Here 
 \begin{align}
-\mathbf{k}_1 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n}\,, \\
-\mathbf{k}_2 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \frac{1}{2}\mathbf{k}_1\Delta t}\,, \\
-\mathbf{k}_3 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \frac{1}{2}\mathbf{k}_2\Delta t}\,, \\
-\mathbf{k}_4 &= \left.\frac{d\mathbf{M}}{dt}\right|_{\mathbf{M}=\mathbf{M}^n + \mathbf{k}_3\Delta t}\,,
+\boldsymbol{k}_1 &= \left.\frac{d\boldsymbol{M}}{dt}\right|_{\boldsymbol{M}=\boldsymbol{M}^n}\,, \\
+\boldsymbol{k}_2 &= \left.\frac{d\boldsymbol{M}}{dt}\right|_{\boldsymbol{M}=\boldsymbol{M}^n + \frac{1}{2}\boldsymbol{k}_1\Delta t}\,, \\
+\boldsymbol{k}_3 &= \left.\frac{d\boldsymbol{M}}{dt}\right|_{\boldsymbol{M}=\boldsymbol{M}^n + \frac{1}{2}\boldsymbol{k}_2\Delta t}\,, \\
+\boldsymbol{k}_4 &= \left.\frac{d\boldsymbol{M}}{dt}\right|_{\boldsymbol{M}=\boldsymbol{M}^n + \boldsymbol{k}_3\Delta t}\,,
 \end{align}
-where $d\mathbf{M}/dt$ can be found using the Bloch equations [Eqs.\,(\ref{eq:bloch_x}--\ref{eq:bloch_z})]. 
+where $d\boldsymbol{M}/dt$ can be found using the Bloch equations [Eqs.\,(\ref{eq:bloch_x}--\ref{eq:bloch_z})]. 
 This fourth-order method yields a local truncation error of $\mathcal{O}(\Delta t^5)$, while the accumulated error over $N = 1/\Delta t$ steps is of order $\mathcal{O}(\Delta t^4)$. 
 The time step $\Delta t$ is usually set to be at least one order of magnitude smaller than the characteristic timescales of the system, such as relaxation times. 
 
@@ -125,6 +133,7 @@ The RK4 algorithm is implemented in a dedicated C++ library.
 The application programming interface (API) for this library is \texttt{blochSimulation}. 
 This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling cooperation between high-level Python workflow management and low-level efficient numerical computation. 
 
+
 \subsection{Calibration}
 \label{sec:calibration}
 
@@ -133,7 +142,7 @@ In particular, calibration examines the correspondence between the NMR signal an
 It allows one to verify the correctness and stability of the numerical implementation. 
 In this section, examples of calibration simulations are presented along with theoretical predictions, demonstrating the methodology of calibration. 
 A quantitative analysis is included at the end of the section. 
-For the examples in the section, an ethanol sample and an axial bias field $\mathbf{B_{0}} = B_0 \mathbf{\hat{e}}_z$ are used. 
+For the examples in the section, an ethanol sample and an axial bias field $\boldsymbol{B_{0}} = B_0 \boldsymbol{\hat{e}}_z$ are used. 
 
 \subsubsection{Pulsed-NMR: free decay and spin echo}
 \label{sec:pNMR}
@@ -171,7 +180,7 @@ With such a benchmark, the Larmor precession and $T_2^*$ relaxation can be calib
 
 To achieve better sensitivity to the axion field, hyperpolarization is favored in experiments. Compared to thermal polarization at room temperature, hyperpolarization techniques can boost the polarization by orders of magnitude to the order of unity. 
 The \axionbloch{} package handles the polarization by the \texttt{Sample} class. 
-A \SI{1}{\%}-polarization ethanol sample is used as an example demonstrating the evolution of polarization due to the $T_1$ relaxation. 
+A \SI{1}{\percent}-polarization ethanol sample is used as an example demonstrating the evolution of polarization due to the $T_1$ relaxation. 
 At first ($t\ll T_1$), the polarization should exponentially decay with time constant $T_1$, until it reaches equilibrium after many $T_1$. 
 As can be seen in \cref{fig:calibration_T1_HP}, the simulated $T_1$ relaxation agrees with the expected behavior. 
 More of such simulations can be applied in calibrating $T_1$ relaxation. 
@@ -258,7 +267,7 @@ If a certain simulation precision is required, the $\chi^2$ value serves as a qu
 Similar to the calibration examples, axion-induced NMR signals are generated by solving the Bloch equations with the axion-induced pseudomagnetic field as part of the effective magnetic field. 
 An example of a commonly considered model -- axion constituting the Milky Way galactic dark matter halo\,\cite{Evans2019_SHMRefined,Gramolin2022Feb_SpectralSignatures} is implemented in the class \texttt{MilkyWayAxionHalo}. 
 In this model, the axion field is treated as an oscillating field with a frequency determined by the axion mass, and a linewidth (characterizing the stochasticity) determined by the velocity dispersion of the virialized dark matter halo. 
-The sample is chosen to be \ch{^{129}Xe}, polarized to $\SI{50}{\%}$ initially, and the bias field is applied along the z direction. 
+The sample is chosen to be \ch{^{129}Xe}, polarized to $\SI{50}{\percent}$ initially, and the bias field is applied along the z direction. 
 The details of the simulation configuration can be found in the code example in \cref{code:axion_example}. 
 Readers are referred to \cref{fig:architecture} which illustrates the relationship between the objects in the code example. 
 The simulated pseudomagnetic fields and the amplitude of the induced transverse magnetization are shown in \cref{fig:MilkyWayAxionHalo}, in which the signal increases with time at the beginning of the simulation due to the pseudomagnetic field, and then decays due to the $T_1$ relaxation. 
@@ -268,7 +277,12 @@ The total number of integration steps $N$ can be found by
     N &= \text{\texttt{Simulation.rate}} \times \text{\texttt{Simulation.duration}} \nonumber\\
     &\quad \times \text{\texttt{MagField.numFields}} \times \text{\texttt{Magnet.numPt}}\,,
 \end{align}
-where \texttt{Simulation.rate} and \texttt{Simulation.duration} are the simulation rate and duration, \texttt{MagField.numFields} is the number of random pseudomagnetic fields generated to account for the stochasticity of the axion field, and \texttt{Magnet.numPt} is the number of bias fields sampled to account for the inhomogeneity of the bias field.
+where \texttt{Simulation.rate} and \texttt{Simulation.duration} are the simulation rate and duration, \texttt{MagField.numFields} is the number of random pseudomagnetic fields generated to account for the stochasticity of the axion field, and \texttt{Magnet.numPt} is the number of bias fields sampled to account for the inhomogeneity of the bias field. 
+
+To accelerate the simulation, the independent realizations of the (pseudo)magnetic fields are parallelized using Open Multi-Processing (OpenMP)\,\cite{OpenMP2024} in \texttt{blochSimulation}.
+The number of OpenMP threads is controlled by the runtime environment and may therefore vary with the user's hardware and OpenMP settings.
+The spin-packet and time-stepping loops within each realization were evaluated serially. 
+
 For the example in \cref{code:axion_example}, the total number of integration steps is \SI{7e8}{}, and the runtime is \SI{2.7}{\s} on a personal computer (CPU: Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} Ultra 7 155H; base speed: 1.40\,GHz). 
 Such moderate runtime allows users to explore different parameter regimes with many simulations. 
 
@@ -284,17 +298,10 @@ Such moderate runtime allows users to explore different parameter regimes with m
     \centering
     \includegraphics[width=0.495\linewidth]{figures/MilkyWayAxionHalo-1.pdf}
     \includegraphics[width=0.495\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
-    \caption{Simulations of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization normalized by the equilibrium magnetization ($M_{xy}/M_\mathrm{eqb}$). Left: one single simulation. Right: 1000 simulations to account for the stochasticity. The solid lines indicate the value (left column) or mean value (right column) of $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate the $\pm \sigma$ (standard deviation) range. The sample for the simulations is assumed to be polarized to $\SI{50}{\%}$ initially.
+    \caption{Simulations of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization normalized by the equilibrium magnetization ($M_{xy}/M_\mathrm{eqb}$). Left: one single simulation. Right: 1000 simulations to account for the stochasticity. The solid lines indicate the value (left column) or mean value (right column) of $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate the $\pm \sigma$ (standard deviation) range. The sample for the simulations is assumed to be polarized to $\SI{50}{\percent}$ initially.
     }
     \label{fig:MilkyWayAxionHalo}
 \end{figure}
-
-
-
-% \subsubsection{Earth-bound axionlike dark matter}
-
-% [should this example be mentioned?]
-
 
 
 \section{Development}

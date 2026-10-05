@@ -12,6 +12,7 @@
 \usepackage{setspace}
 % \doublespacing
 \usepackage[skip=10pt plus1pt, indent=20pt]{parskip}
+\emergencystretch=2em
 % \parskip=1\baselineskip \advance\parskip by 0pt plus 2pt
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,7 +63,9 @@
   \DIFdelbegin \DIFdel{#1}\DIFdelend 
 }
 \newcommand{\difAddContent}[1]{
-  \DIFaddbegin \DIFadd{#1}\DIFaddend 
+  \DIFaddbegin
+  \begingroup\color{blue}#1\endgroup
+  \DIFaddend
 }
 
 %DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
@@ -71,21 +74,22 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % commands for simplifying the boxes
 \newcommand{\refereeOverallComment}[2]{
-  \noindent \textbf{Referee #1 gives their overall opinion as follows:}
+  \noindent \textbf{Reviewer #1 gives their overall opinion as follows:}
   \begin{mdframed}[linecolor=black]
   #2
   \end{mdframed}
 }
 
+
 \newcommand{\refereeNoOneBox}[2]{
   \begin{mdframed}[linecolor=black]
-  \noindent \textbf{Referee 1: (#1)} #2
+  \noindent \textbf{Reviewer 1: (#1)} #2
   \end{mdframed}
 }
 
 \newcommand{\refereeNoTwoBox}[2]{
   \begin{mdframed}[linecolor=black]
-  \noindent \textbf{Referee 2: (#1)} #2
+  \noindent \textbf{Reviewer 2: (#1)} #2
   \end{mdframed}
 }
 
@@ -128,280 +132,185 @@
 
 \begin{document}
 
-\title{Response to Referee 2 for Manuscript ID universe-4542087}
+\title{Response to Reviewer 2 for Manuscript ID universe-4542087}
 %==================================
 
 \date{\today}
+\author{Yuzhe Zhang}
 
 \maketitle
 
-\noindent Dear Editors of \textit{Universe} and the Referee,
+\noindent Dear Reviewer,
+ 
+I would like to express my sincere gratitude to you. 
+You understood this paper very well. 
+You spotted a few important points and made useful comments and suggestions, which have helped improve my manuscript. 
+Below I give the responses to the your comments and describe the related changes to the manuscript.
 
-% \noindent 
-We would like to express our sincere gratitude to the Editors and the Referees. 
-The referees understood the idea of this paper very well. They spotted a few important points and made useful comments and suggestions, which have helped improve our manuscript. 
-Below we give the responses to the reviewers' comments and describe the related changes to the manuscript.
 
 
+\refereeOverallComment{2}{
+    The manuscript presents axionbloch, an open-source Python package with a C++ backend (via pybind11). It numerically integrates the Bloch equations for spin-1/2 ensembles subject to real magnetic fields and to the pseudomagnetic field produced by the axion-nucleon gradient coupling. The package uses astropy for unit handling, integrates in a rotating coordinate frame with a fourth-order Runge-Kutta scheme, and models bias-field inhomogeneity by sampling an ensemble of bias fields.
 
-\refereeOverallComment{2}{This is an interesting and well organized manuscript.  The authors describe a
-commissioning measurement in the CASPEr-Gradient-LF experiment to search for
-couplings between the gradient of $\sim \SI{5.6}{\neV/c^2} $ axion field and proton spins in a
-liquid methanol sample.  The measurements were run in a liquid helium cryostat
-containing a superconducting solenoid with a bias field of 0.1 T.  In the
-apparatus, an axion-induced signal would appear as a temporal precession in the
-magnetization of the sample, measured with a readout chain that includes a
-dc-SQUID and lock-in amplifier.  The sensitivity of the system is validated by
-detection of RF test pulses that induce a magnetic field perpendicular to the
-bias field.  The manuscript contains useful high-level information in the main
-text, followed by detailed calculations of the readout, signal model, and
-efficiency in the Appendices.
+    The author benchmarks the code against standard NMR behaviour: free induction decay and spin echoes, continuous-wave excitation, and $T_1$ relaxation of a hyperpolarised sample. Agreement is quantified by a normalised residual metric, with discrepancies below $10^{-4}$. The manuscript then demonstrates an axion simulation for a hyperpolarised liquid $^{129}$Xe sample in the standard halo model, showing single-realisation and ensemble-averaged (1000 realisations) transverse magnetisation, and reports a runtime of 2.7 s for $7\times 10^8$ integration steps. The code, documentation and test suite are publicly available.
+
+    The manuscript is clearly written and describes a well-structured, usable piece of software. The architecture is sensible, the benchmarks behave as expected, and the open-source, tested and documented delivery is commendable. I expect the package will be useful to groups designing and analysing spin-based axion searches, and for teaching, as the author notes.
+
+    That said, the manuscript does not contain new physical results. The physics implemented is well established: the Bloch equations, the axion-gradient pseudomagnetic field, and the stochastic description of the virialised halo field. So are the numerical methods (fixed-step RK4 in a rotating frame). The calibration results are correct but predictable, since they reproduce textbook NMR behaviour. The axion simulation reproduces qualitative signal features already described analytically in the literature. The contribution is therefore a software and methods paper.
+
 }
 
-We are very glad to see the positive evaluation and constructive comments from the referee. Point-to-point responses are addressed as follows. 
+I am very glad to see the positive evaluation and constructive comments from the referee. 
+Point-to-point responses are addressed as follows. 
 
-\refereeNoOneBox{1}{The manuscript could probably benefit from more contextual information.  For
-example, the authors highlight the applicability of the approach toward
-``hitherto unexplored mass-coupling parameter space'', but without a direct
-explanation.  In particular, the targeted mass range of 5.6 \unit{neV/c^2} is indeed
-higher than in other searches such as in [50] (0.4 $->$ 4 \unit{feV/c^2}), or in the
-NASDUCK experiment [e.g. Nature Communications volume 14, Article number: 5784
-(2023)] (1.e-12 \unit{eV/c^2} $->$ 2e-10 \unit{eV/c^2}), but the reader is not informed directly
-that the relatively high mass range here is accessible because of the
-hyperpolarized sample being used.  If the latter is true, it would be helpful to
-state this.  Table II hints at this information with predicted improvements
-based on higher polarizations in liquid 129Xe, but otherwise the reader is left
-to draw their own conclusions with respect to past measurements.
+
+\refereeNoTwoBox{1}{
+    I question whether Universe is the most appropriate venue, or whether a journal dedicated to research software or computational physics would suit the work better. I leave that judgement to the editors. My comments below assume the manuscript remains under consideration at Universe.
 }
 
-\response{1}{Thank you for pointing this out. 
-We realize here more contextual information is necessary. 
-There are two aspects in the mass-coupling parameter space: mass range and experimental sensitivity to the coupling.  
-The mass range available for DM search using the CASPEr-Gradient apparatuses depends on the gyromagnetic ratio of the sample in use and the bias field. For example, with liquid xenon sample, atomic proton sample and a 0.1\,T magnet, we can explore a mass range of \SI{4.1}{\peV/c^2} to \SI{17}{\neV/c^2}.  
-The sensitivity in that mass range depends on the polarization of the sample. With a hyperpolarized sample we plan to boost the sensitivity compared to thermally polarised sample by some orders of magnitude. 
-We tried to indicate that, with hyperpolarized samples CASPEr will put the most stringent constraint in the accessible mass range.
-Therefore, we modify the sentence in the abstract as: }
-\mdframedBox{
-\difDelContent{It opens the door to probing large swaths of hitherto unexplored mass-coupling parameter space in the future by using hyperpolarized samples.}
+\response{1}{
+I thank the referee for raising this point and appreciate the concern.
+I fully respect that the final judgment regarding its suitability rests with the Editors. 
 
-\difAddContent{
-CASPEr-Gradient Low-Field will probe the mass range from 
-$\SI{4.1}{peV/c^2}$ to $\SI{17}{neV/c^2}$
-with hyperpolarized samples to boost the sensitivity beyond the astronomical limits.
-}
-% \DIFaddend 
-}
-We hope there is enough contextual information for the readers now.  
+The manuscript was submitted to the \textit{Universe} Special Issue ``Ultralight Bosonic Dark Matter: Theoretical Developments and Experimental Searches,'' whose scope includes experimental axion searches. 
+I believe that \texttt{axionbloch} is particularly relevant to the axion-search community, as it provides a validated and reusable tool for modeling axion-induced spin dynamics. 
+I therefore believe the manuscript is well suited to the Special Issue. }
+
+
+
+% \mdframedBox{
+% \difDelContent{It opens the door to probing large swaths of hitherto unexplored mass-coupling parameter space in the future by using hyperpolarized samples.}
+
+% \difAddContent{
+% CASPEr-Gradient Low-Field will probe the mass range from 
+% $\SI{4.1}{peV/c^2}$ to $\SI{17}{neV/c^2}$
+% with hyperpolarized samples to boost the sensitivity beyond the astronomical limits.
+% }
+% }
 
 ~\
 ~\
 
-\refereeNoOneBox{2}{Similarly, the authors do not discuss the lower sensitivity achieved here with
-respect to the other measurements as above ($\mathrm{g_{aP}}$~3.e-2/GeV vs. $\mathrm{g_{aNN}}$~1.e-10/GeV
-[50] and $\mathrm{g_{aP}}$P~1.e-5/GeV [NASDUCK]).  Clearly the mass ranges are different, but
-what are the technical limitations in this mass range compared with lower mass
-ranges?  A reader might infer that the relaxation time T2 and T2*, quantified
-empirically in this manuscript, might be the systematic effect that makes this
-neV mass regime challenging.  Whereas the NASCUCK measurement operates
-explicitly in the spin exchange relaxation free (SERF) regime.  Is that the key
-technical challenge that makes hyperpolarized samples relevant for neV searches
-such as CASPEr-Gradient-LF?  If not, then why are the hyperpolarized samples
-needed here?
+\refereeNoTwoBox{2}{
+    Are there shape anisotropy effects that must be taken into account with regards to the magnetisation dynamics of the sample? Is the shape of the sample important e.g. spherical vs cylindrical?
 }
 
-\response{2}{ 
-It would be natural for readers to compare CASPEr to other experiments, and it is true that they deserve explanations on that.  
-You are right about relaxation time T2 and T2* being systematic, frequency dependent effects that make this neV mass regime challenging.  
-However, relaxation time is only one of several factors limiting our sensitivity. 
-Some other factors are: 
-\begin{itemize}
-    \item polarization 
-    \item axion coherence time 
-    \item SQUID noise 
-    \item spin projection noise (SPN) 
-    \item Number of spins in sample 
-\end{itemize}
-The most significant technical limitation of our experiment that limited our sensitivity is the polarization of the sample. 
-We want to use hyperpolarized samples to increase the sensitivity at a given mass range. Hyperpolarization increase the magnetization of the sample, thus improving the signal strength. This is true for experiments at any frequency/mass range.  
-Currently we employ temperature control and delivery system to provide the CASPEr-gradient setup with liquid hyperpolarized xenon. 
-To make this clear we added this text to the manuscript:  
-\mdframedBox{As evident from Table I, the degree of polarization of the sample presents the largest limiting factor to CASPEr-Gradient-LF sensitivity. 
-For that reason, in the future we will employ a hyperpolarized liquid Xe sample, which can boost sensitivity by up to several orders of magnitude alone.} 
+\response{2}{
+Yes, and the effect can be taken into account by settings in the \texttt{axionbloch} simulation.
+Shape anisotropy effects can influence the magnetization dynamics of the sample. 
+The shape of the sample can affect the distribution of the magnetic field across the NMR sample and, consequently, the spin dynamics. 
+For instance, a spherical sample will experience a different magnetic field distribution compared to a cylindrical one. 
+Therefore, it is important to consider these effects when doing simulations.
+
+In \texttt{axionbloch}, users can account for a specified field distribution by setting the field spread and relative sampling weights through \texttt{Magnet.B\_spread} and \texttt{Magnet.ratios}. 
+This allows users to model the effective field inhomogeneity associated with a particular sample geometry.
 } 
 ~\
 ~\
 
 
 
-\refereeNoOneBox{3}{Other comments are:
-The description of the data analysis is clear and useful.  The analysis consists
-of filtering of the raw signals, followed by matched filtering according to the
-expected axion signal lineshape.  I do not have recommendations for changes.
+\refereeNoTwoBox{3}{
+    In Fig 5, polarisation is written as \SI{1}{\percent}, whilst in the text it is stated as \SI{50}{\percent}.
 }
 
-\response{3}{Thank you for your appreciation on the data analysis part. } 
+\response{3}{
+Thank you for pointing out this inconsistency.
+The polarization value in the figure caption was a mistake.
+Now the value is correctly stated as \SI{50}{\percent}.
+} 
 ~\
 ~\
-\clearpage
+% \clearpage
 
-\refereeNoOneBox{4}{Spin exchange optical pumping (SEOP) is referenced in Table II, but is not
-defined until the conclusion.}
+\refereeNoTwoBox{4}{Please specify the convention connecting Eq. (1) to the pseudomagnetic field $B_a$ used in the code (factors of 2 between $S$ and $\sigma$, and factors of $\hbar$ and $c$), and how negative gyromagnetic ratios are handled.}
 
-\response{4}{It was a mistake. Thank you again for the careful reading. Now we have included the information of the acronyms in the table as: }
+\response{4}{
+Thank you for mentioning this. 
+This is an important point since different conventions are used in the literature.
+After careful consideration, I decided to update the manuscript to stay consistent with common conventions and clarify the convention used. 
+The questions raised by the referee are addressed as follows.
 
+The Hamiltonian for the axion--fermion interaction is updated to be consistent with the convention used in Ref.~\cite{kimball2018overview}.
+Factors of $\hbar/2$ between $S$ and $\sigma$ are mentioned in the text: 
 \mdframedBox{
- Brute Force$^\text{c}$ PHIP$^\text{d}$ / DNP$^\text{e}$  SEOP$^\text{f}$
-\begin{itemize}
-    \footnotesize
-    % \item[a] Here we take \SI{180}{\kelvin} methanol prepolarized at \SI{2}{\tesla} and measurement time $100\,\tau_a$ as the conditions for computing the baseline of future improvements. 
-    % \item[b] \ch{^{129}Xe}-enriched sample. The \ch{^{129}Xe} concentration can be close to unity. The details of calculations about liquid \ch{^{129}Xe} sample can be found in Ref.\,\cite{kimball2018overview}.
-    \item[c] Prepolarization in a strong magnetic field and/or at low temperature. 
-    \item[d] Parahydrogen-Induced Polarization (PHIP). 
-    \item[e] Dynamic Nuclear Polarization (DNP).
-    \item[f] Spin Exchange Optical Pumping (SEOP).
-\end{itemize}
-}  
+\difDelContent{The Hamiltonian for this interaction can be expressed as}
+\begin{center}
+{\color{red}\sout{\(\displaystyle
+    \mathcal{H}_{\mathrm{int}} = - g_\mathrm{aNN} \boldsymbol{\nabla}a \cdot \boldsymbol{S}\,,\)}}
+\end{center}
+\difDelContent{where $g_\mathrm{aNN}$ is the axion-spin coupling strength, and $\boldsymbol{S}$ is the spin operator.}
+
+\DIFadd{The Hamiltonian for this axion--fermion interaction is written as}
+\begin{equation}
+    \color{blue}
+    \mathcal{H}_{\mathrm{int}} = c g_\mathrm{aNN} \boldsymbol{\nabla}a \cdot \boldsymbol{S}\nonumber
+    \,,
+\end{equation}
+\DIFadd{where $g_\mathrm{aNN}$ is the axion--fermion coupling strength, $c$ is the speed of light, and $\boldsymbol{S}$ denotes the physical spin operator, $\boldsymbol{S}=\hbar\boldsymbol{\sigma}/2$, with $\boldsymbol{\sigma}$ the vector of Pauli matrices.}
+}
+
+After the Hamiltonians are mentioned, the pseudomagnetic field is defined in the text and the corresponding code implementation is clarified:
+
+\DIFadd{????}
+
+For negative gyromagnetic ratios, \texttt{axionbloch} uses exactly the same Bloch equations and numerical procedure as for positive gyromagnetic ratios.
+The signed value of $\gamma$ is retained in the equations of motion; therefore, the resulting spin precession occurs in the opposite direction compared with a spin having the same positive gyromagnetic ratio. 
+No separate correction or special treatment is applied for negative gyromagnetic ratios.
+}
+
+
+
+% \mdframedBox{
+% \difDelContent{It opens the door to probing large swaths of hitherto unexplored mass-coupling parameter space in the future by using hyperpolarized samples.}
+
+% \difAddContent{
+% CASPEr-Gradient Low-Field will probe the mass range from 
+% $\SI{4.1}{peV/c^2}$ to $\SI{17}{neV/c^2}$
+% with hyperpolarized samples to boost the sensitivity beyond the astronomical limits.
+% }
+% }
 ~\
 ~\
 
-\refereeNoOneBox{5}{Table I:  What is spin projection noise, and why is it higher at 1\,kHz than at
-4.3 MHz?
+\refereeNoTwoBox{5}{
+    More detail should be given regarding the computational methodologies used when referring to the runtime – was multithreading used? Is the backend parallelised?
 }
 
 \response{5}{
-We admit that the description of spin projection noise is missing from the text.
-In section II we added a sentence to introduce spin-projection noise:
+Thank you for requesting this clarification. 
+This is a good point. 
+The C++ backend uses OpenMP shared-memory multithreading to parallelize the independent pseudomagnetic-field realizations, while the loops within each realization remain serial. 
+The following clarification has been added to the runtime discussion:
 \mdframedBox{
-\difAddContent{One intrinsic noise source is due to the spins within the
-sample, known as spin-projection noise (SPN).}}
-And in section III we added the following text to describe the dependence of spin-projection noise on frequency:
-\mdframedBox{
-\difAddContent{
-The PSD of a full 100\,s data set is plotted in Fig.\,2\,(c).
-The resulting noise floor of our PSD spectra is determined by spin-projection noise, SQUID noise, electronic noise (e.g. the amplifier noise) and noise created by mechanical vibrations. 
-The SPN is proportional to the number of spins and inversely proportional to the NMR linewidth [$\Delta\nu=1/(\pi T_2^*)$]. Since the NMR linewidth is proportional to the frequency, SPN scales inversely with frequency (see Table\,I).}}
+\DIFadd{To accelerate the simulation, the independent realizations of the (pseudo)magnetic fields are parallelized using Open Multi-Processing (OpenMP)\,\cite{OpenMP2024} in \texttt{blochSimulation}.
+The number of OpenMP threads is controlled by the runtime environment and may therefore vary with the user's hardware and OpenMP settings.
+The spin-packet and time-stepping loops within each realization were evaluated serially. }
+}
 }
 ~\
 ~\
-\refereeNoOneBox{6}{typo:  ``Appe'' $->$ Appendix.}
 
-\response{6}{We appreciate your careful reading and helpful correction. It has been corrected. } 
-~\
-~\
-
-
-% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \refereeNoOneBox{}{referee's comment here}
-
-% \response{}{Thank you for pointing out the mistake in our manuscript. ??????? Thus we add the following text, indicated by blue. }
-
-% \mdframedBox{content} 
-% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-~\
-
-~\
-
-
-\refereeOverallComment{2}{This letter provides an overview of a search for axion-like particles
-with the Cosmic Axion Spin Precession Experiment Gradient. The results
-discussed in this paper were a proof-of-principle for the
-experiment.The results detailed in this work set limits on the
-axion-to-proton coupling for axion-like particle dark matter in a
-narrow region about the 1.348570 MHz frequency range. This mass range
-has not been well covered by lab experiments and CASPER-Gradient has
-the potential to cover a large amount of new parameter space. I
-recommend the manuscript be published on PRD. I have a few minor
-clarification questions before the manuscript can be considered for
-publication.
+\refereeNoTwoBox{6}{
+    In summary, I recommend publication after minor revisions, provided the editors consider a software-focused manuscript of this kind suitable for the journal.
 }
-
-We sincerely appreciate your review and comments. Your comments have helped us improve the manuscript. 
-% Point-to-point responses are addressed as follows. 
-
-
-\refereeNoTwoBox{1}{What was the operating temperature of the experiment?}
-
-\response{1}{This is a good question, as temperature plays an important role in our experiments. 
-1. The magnets, coils, Nb shield and the SQUID were kept in liquid helium bath, which is at 4.2\,K so that they can be superconducting. 
-2. The temperature of the sample was regulated by flowing nitrogen gas next to it. Throughout the measurements, it was kept constant around 180\,K, which is above the freezing point of methanol. This is also mentioned in the Appendix.}
-
-% \mdframedBox{ccccccccccc\DIFdelbegin \DIFdel{as }\DIFdelend \DIFaddbegin \DIFadd{from }\DIFaddend} 
-
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\refereeNoOneBox{2}{The letter details the use of pi pulses to determine the relaxation
-time. Are there any uncertainties associated with these pulses?
-}
-
-\response{2}{We determined the parameters of the $\pi$-pulse by a pulse-duration sweep. Of course there is uncertainty in it, which is related to the step in the sweep. 
-But when it comes to the T2 measurement, the uncertainty of pulse is relatively small compared to the uncertainty in spin-echo signal amplitudes due to the noise [as can be found in the Fig.2(c)]. Therefore, we do not consider the uncertainty of the pulse, but only the uncertainty of the spin-echo amplitude for the T2 value given in the manuscript. }
-
-% \mdframedBox{content}  
-~\
-~\
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\refereeNoOneBox{3}{The author details a series of veto procedures to account reduce the
-number of outliers from X to X''. Following the veto procedure, were
-the number of observed outliers within the statistically expected
-number of false positives?
-}
-
-\response{3}{Yes, the numbers are consistent with the expected number of false positives. Indeed a statistical expectation value for the number of outliers after each veto can be calculated. For example in the case of the outliers on resonance, X', this would simply be the the expected outliers $\langle X \rangle$ multiplied by the fraction of the width of the resonant window to the width of the analysis window (approx. 140Hz/8kHz). We have added the expectation values into our table II, and hope it has become more clear that way. }
-% \mdframedBox{[check Table II in the manuscript]} 
-~\
-~\
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\refereeNoOneBox{4}{What was the primary factor limiting the bandwidth to 240 Hz. What are
-the key upgrades that will expand that bandwidth?
-}
-
-\response{4}{The main limiting factor is the time it takes to scan the full range accessible by our experiment by ramping the bias field. In addition, our experiment has a limited duty cycle due to the need for manual intervention during each frequency scan, such as adjusting the magnetic field, initiating NMR diagnostics. In future iterations, this procedure will be fully automated, allowing for longer measurement times and thus broader bandwidth coverage.  }
-
-% \mdframedBox{content}  
-~\
-~\
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\refereeNoOneBox{5}{Fig 4- Would it be possible to include in your plot any limits set by
-other experiments? Even though what is being presented is a
-proof-of-concept, it would still be helpful to have additional context
-on how the results compare?
-}
-
+6
 \response{5}{
-We have considered this and, in fact, have this plot available.
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=\linewidth]{AxionProtoncouplinglimit.png}
-%     \caption{The limit set by our commissioning measurement is depicted as ``CASPEr-gradient". Taken from \url{https://cajohare.github.io/AxionLimits/docs/app.html.}}
-%     \label{fig:enter-label}
-% \end{figure}
+    Thank you for your positive assessment. 
+}
+~\
+~\
 
-However, we would prefer not to include it in the current manuscript because it may give a false impression to the reader that CASPER-G-Low-Field does not possess competitive sensitivity. We could add our projections for the forthcoming run with a hyperpolarized sample, but this, again, may be misleading to readers expecting the actual results. Moreover, as you might be aware, Dr.\,Ciaran O'Hare operates a website where nearly all ultralight bosonic dark matter searches are combined in exclusion plots. This resource is used by many people in the field looking for the context that you ask for. We ensured that our latests results are included there, and feel that therefore it is not necessary to include it in our manuscript. Especially considering the proof-of-concept nature of the current work}
+I hope that I have responded appropriately to all the sentences in the comments and made sufficient modifications. 
+I feel that the manuscript has significantly improved and hope you will find it acceptable for publication in the present form. 
+If there is any mistake or some comments are not well addressed, please let me know. I am happy to further improve the manuscript. 
 
-% \mdframedBox{content}  
-% ~\
-% ~\
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-We feel that the manuscript has significantly improved and hope you will find it acceptable for publication in the present form. 
-
-
-% We hope that we have responded appropriately to all the sentences in the comments and made sufficient modifications. If there is any mistake or some comments are not well addressed, please let us know. We are happy to further improve the manuscript. 
 \noindent Sincerely,
 
 
+\noindent Yuzhe Zhang
 
-\noindent Julian Walter, Olympia Maliaka, Yuzhe Zhang and Dmitry Budker on behalf of the authors. 
-%Pavel Fadeev and Derek F. Jackson Kimball on behalf of the authors.
-
+\bibliographystyle{unsrt}
+\bibliography{../references}
 
 \end{document} 
