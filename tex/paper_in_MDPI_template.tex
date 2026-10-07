@@ -1,5 +1,6 @@
 ﻿%  LaTeX support: latex@mdpi.com
 \documentclass[universe,article,submit,oneauthor]{Definitions/mdpi}
+
 \newcommand{\code}{\texttt}
 \newcommand{\axionbloch}{\code{axionbloch}}
 \newcommand{\python}{\code{Python}}
@@ -46,6 +47,19 @@
 %\usepackage{floatrow}
 % \usepackage{dblfloatfix}
 \usepackage{placeins}
+\newenvironment{paperwidefigure}
+  {\begin{figurewide}}
+  {\end{figurewide}}
+\newenvironment{paperwidetable}
+  {\begin{table}}
+  {\end{table}}
+\AtBeginDocument{%
+  \crefname{equation}{Equation}{Equations}%
+  \Crefname{equation}{Equation}{Equations}%
+  \crefname{figurewide}{Figure}{Figures}%
+  \Crefname{figurewide}{Figure}{Figures}%
+  \crefalias{figurewide}{figure}%
+}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SI unit
@@ -68,13 +82,6 @@
 \usepackage[normalem]{ulem}
 \usepackage{changes}
 
-% % cleveref label names
-% \crefname{section}{Sec.}{Secs.}
-% \Crefname{section}{Sec.}{Secs.}
-% \crefname{figure}{Fig.}{Figs.}
-% \Crefname{figure}{Fig.}{Figs.}
-% \crefname{equation}{Eq.}{Eqs.}
-% \Crefname{equation}{Eq.}{Eqs.}
 
 
 \usepackage{xcolor}
@@ -121,16 +128,10 @@ Simulations are calibrated against theoretical expectations, ensuring the accura
 The package is documented at \url{http://axionbloch.readthedocs.io/} and includes example scripts for application. 
 }
 \keyword{axion dark matter; nuclear magnetic resonance; Bloch equations; spin dynamics; Python package}
+
 \begin{document}
-\crefname{section}{Section}{Sections}
-\Crefname{section}{Section}{Sections}
-\crefname{figure}{Figure}{Figures}
-\Crefname{figure}{Figure}{Figures}
-\crefname{equation}{Equation}{Equations}
-\Crefname{equation}{Equation}{Equations}
+
 \maketitle
-
-
 
 \input{body}
 

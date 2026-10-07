@@ -18,12 +18,12 @@ The axion field gradient can be regarded as a pseudomagnetic field that mimics t
     \mathcal{H} = -\gamma \boldsymbol{B} \cdot \boldsymbol{S} \,,
 \end{equation} 
 where $\gamma$ is the gyromagnetic ratio of the spin, and $\boldsymbol{B}$ is the magnetic field. 
-Comparing the two Hamiltonians, it can be found that the gradient of the axion field acts effectively as a magnetic field. 
-Therefore, the concept of an axion-induced pseudomagnetic field is introduced, which is defined as
+Comparing the two Hamiltonians shows that the gradient of the axion field acts effectively as a magnetic field. 
+Therefore, the concept of an axion-induced pseudomagnetic field is introduced to represent this effective magnetic field, which is defined as
 \begin{equation}
     \boldsymbol{B}_a = -\frac{c g_\mathrm{aNN}}{\gamma}\boldsymbol{\nabla}a\,.
 \end{equation}
-The exact formula of the pseudomagnetic field depends on the axion model. 
+The precise form of the pseudomagnetic field depends on the axion model.
 
 The pseudomagnetic field induces spin dynamics, providing a pathway for detection in precision measurement experiments such as nuclear magnetic resonance (NMR) and comagnetometer-based searches\,\cite{ouellet2019first, du2018search, ALPHA2023,aja2022canfranc,CAPP2024,brouwer2022projected,alesini2023future,ZhongL2018results,garcia2024searchaxiondarkmatter,Quiskamp2024_ORGAN,rettaroli2024search,Gramolin2021_Ferromagnetic,gavilan2024searching,bloch2105nasduck,abel2023_HgDM,karanth2023first,LeeJunyi2023_NeutronSpin,capozzi2023new, CASPErProposal2014, kimball2018overview, wang2018application, aybas2021_SolidStateNMR, CASPEr_ZULF_2019,Walter2025_CASPErG}. 
 There have been dedicated studies of the axion-induced spin dynamics\,\cite{Aybas_2021_Quantum_sensitivity, Dror2023_SensitivityAxion, Yuzhe2023_FrequencyScanning}, providing axion signal signatures and experimental sensitivity to axion fields. 
@@ -56,7 +56,7 @@ The constants are instances of \texttt{astropy.units.Quantity}; therefore, all o
 
 \begin{figure}
 \center
-\fbox{\includegraphics[width=0.6\linewidth,clip]{figures/code_quantities.pdf}}
+\fbox{\includegraphics[width=0.45\textwidth,clip]{figures/code_quantities.pdf}}
 % \vspace{0.1in}
 \caption{Examples of operations on physical quantities using \texttt{astropy.units} and \texttt{axionbloch.constants}. }
 \label{code:quantities}
@@ -115,13 +115,13 @@ The time step $\Delta t$ is usually set to be at least one order of magnitude sm
 
 Using object-oriented programming, the algorithm is implemented in a modular way to separate experimental configuration, axion field modeling, and numerical integration, allowing for flexible configuration of simulations. 
 A diagram of the architecture of \axionbloch{} is shown in \cref{fig:architecture}. 
-\begin{figure}[htb]
+\begin{paperwidefigure}[htb]
     \centering
-    \fbox{\includegraphics[width=0.8\linewidth]{figures/AxionBloch_diagram.drawio.pdf}}
+    \fbox{\includegraphics[width=0.8\textwidth]{figures/AxionBloch_diagram.drawio.pdf}}
     \caption{Architecture of \axionbloch{}. Each \texttt{Simulation} instance imports parameters from \texttt{Magnet}, \texttt{Sample}, and \texttt{MagField} instances. For axion simulations, axion-model objects are required both for \texttt{Simulation} to configure the simulation and for \texttt{MagField} to generate the pseudomagnetic field. \texttt{Simulations} manages one or multiple \texttt{Simulation} instances. Numerical integration is performed via the \texttt{blochSimulation} API, which provides Python access to the underlying C++ implementation. 
     }
     \label{fig:architecture}
-\end{figure}
+\end{paperwidefigure}
 
 On the Python side, classes \texttt{Sample}, \texttt{Magnet}, and \texttt{MagField} encapsulate the relevant experimental parameters, including sample relaxation times, magnetic field strength, and inhomogeneity. 
 The axion models are implemented by dedicated classes, such as \texttt{MilkyWayAxionHalo}, which carry the properties of the axion fields. Together with the method \texttt{MagField.setAxionFields()}, the pseudomagnetic fields can be generated. 
@@ -158,13 +158,13 @@ The magnetization is expected to\,\cite{CPMG, Abragam1961_NuclearMagnetism}:
 The behaviors described above can be found in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a), indicating correct simulation behavior. 
 With such a benchmark, magnetic pulses, Larmor precession, and transverse relaxations ($T_2$ and $T_2^*$) can be calibrated. 
 
-\begin{figure}[htb]
+\begin{paperwidefigure}[htb]
     \centering
-    \includegraphics[width=0.99\linewidth]{figures/SpinEcho_and_CW.pdf}
+    \includegraphics[width=0.9\textwidth]{figures/SpinEcho_and_CW.pdf}
     \caption{Simulated magnetic fields in x and y directions (upper row) and induced NMR signals (lower row). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^2}$ is the magnitude of the excitation. 
     }
     \label{fig:calibration_T2_T2star}
-\end{figure}
+\end{paperwidefigure}
 
 
 \subsubsection{Continuous-wave NMR}
@@ -187,7 +187,7 @@ More of such simulations can be applied in calibrating $T_1$ relaxation.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.495\linewidth]{figures/T1_hyperpolarized.pdf}
+    \includegraphics[width=0.45\textwidth]{figures/T1_hyperpolarized.pdf}
     \caption{
     Simulated $T_1$ relaxation of a hyperpolarized sample in a static bias field. The axial magnetization $M_z$ is normalized by the equilibrium magnetization $M_\mathrm{eqb}$. 
     }
@@ -228,7 +228,7 @@ If a certain simulation precision is required, the $\chi^2$ value serves as a qu
 % \noindent{\footnotesize{\textsuperscript{1} Tables may have a footer.}}
 % \end{table}
 
-\begin{table}[htb]
+\begin{paperwidetable}
 \small % Change table font size
 \caption{Summary of calibrations. $\chi^2$ indicating the discrepancy is defined in \cref{eq:chisq}; $\chi^2\ll 1$ indicates a well-calibrated simulation. Here $\nu_\mathrm{L}$ stands for Larmor frequency, determined by the bias magnetic field. $\nu_\mathrm{RCF}$ is RCF frequency. $\nu_\mathrm{L}$ and $\nu_\mathrm{RCF}$ are varied from \SI{1}{\kHz} to \SI{1}{\GHz}. The bias field inhomogeneity is swept from \SI{.1}{\ppm} to \SI{20}{\ppm}. $T_1$ ranges from \SI{1}{\ms} to \SI{1}{\kilo\second}. The integration step size is chosen to be $T_2^* / 500$. Finer step sizes yield lower $\chi^2$ at increased computational cost. More technical details of the calibrations can be found in the test suite.\label{tab:calibration_summary}}
 \resizebox{\linewidth}{!}{%
@@ -258,7 +258,7 @@ If a certain simulation precision is required, the $\chi^2$ value serves as a qu
     \bottomrule
 \end{tabular}
 }%
-\end{table}
+\end{paperwidetable}
 
 
 \subsection{Axion simulation}
@@ -288,20 +288,26 @@ Such moderate runtime allows users to explore different parameter regimes with m
 
 \begin{figure}
 \center
-\fbox{\includegraphics[width=0.6\linewidth,clip]{figures/axion_example.pdf}}
-% \vspace{0.1in}
+\fbox{%
+  \includegraphics[
+    % width=0.9\linewidth,
+    height=0.9\textheight,
+    keepaspectratio,
+    clip
+  ]{figures/axion_example.pdf}%
+}% \vspace{0.1in}
 \caption{Example code of an axion simulation.}
 \label{code:axion_example}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{paperwidefigure}[htb]
     \centering
-    \includegraphics[width=0.495\linewidth]{figures/MilkyWayAxionHalo-1.pdf}
-    \includegraphics[width=0.495\linewidth]{figures/MilkyWayAxionHalo-1000.pdf}
+    \includegraphics[width=0.45\textwidth]{figures/MilkyWayAxionHalo-1.pdf}
+    \includegraphics[width=0.45\textwidth]{figures/MilkyWayAxionHalo-1000.pdf}
     \caption{Simulations of local virialized axion dark matter halo. From top to bottom: pseudomagnetic fields in the transverse plane ($B_x$ and $B_y$) and the transverse magnetization normalized by the equilibrium magnetization ($M_{xy}/M_\mathrm{eqb}$). Left: one single simulation. Right: 1000 simulations to account for the stochasticity. The solid lines indicate the value (left column) or mean value (right column) of $B_x$, $B_y$, and $M_{xy}$, while the gray shadows indicate the $\pm \sigma$ (standard deviation) range. The sample for the simulations is assumed to be polarized to $\SI{50}{\percent}$ initially.
     }
     \label{fig:MilkyWayAxionHalo}
-\end{figure}
+\end{paperwidefigure}
 
 
 \section{Development}

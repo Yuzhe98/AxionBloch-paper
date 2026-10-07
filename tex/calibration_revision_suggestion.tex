@@ -1,0 +1,219 @@
+% Suggested revision in response to the reviewer comment on calibration.
+% This file is intentionally separate from body.tex.  The text below can be
+% adapted after the experimental pulsed-NMR and CPMG analysis is available.
+
+% -----------------------------------------------------------------------------
+% Suggested response to the reviewer
+% -----------------------------------------------------------------------------
+% Thank you for this helpful suggestion.  We have revised the calibration
+% section to make the expected behavior and quantitative agreement more
+% explicit.  For each calibration, the simulated signal is now compared with
+% the corresponding analytical expectation, and the residual (simulation
+% minus theory) is shown in an additional row of the relevant figure.  We
+% also added an appendix describing a common analysis workflow for comparing
+% simulated signals with measured pulsed-NMR and CPMG data.  The comparison
+% includes the same pulse sequence, sampling interval, receiver phase,
+% normalization, and relaxation parameters in simulation and experiment.
+% Experimental-data comparisons will be populated with the measured data and
+% their uncertainties; where appropriate, agreement is quantified using a
+% normalized residual or reduced chi-square.
+
+% -----------------------------------------------------------------------------
+% Suggested replacement/addition for the calibration section
+% -----------------------------------------------------------------------------
+
+% Replace or substantially expand the current opening paragraphs of the
+% Calibration section with the following text.
+
+\subsection{Calibration}
+\label{sec:calibration_revision}
+
+Calibration was performed at two levels.  First, idealized pulse sequences
+and continuous-wave excitation were compared with analytical solutions of
+the Bloch equations.  This tests the numerical integrator and the mapping
+between input parameters and observables.  Second, the simulated observables
+were prepared in the same form as experimental NMR data, providing a direct
+workflow for comparison with measured free-induction decays and spin echoes.
+For every calibration, the simulated and expected signals were evaluated on
+the same time grid.  In addition to displaying the signals themselves, we
+show the pointwise residual
+\begin{equation}
+    r(t_i) = M_{\mathrm{simu}}(t_i)-M_{\mathrm{theory}}(t_i),
+    \label{eq:calibration_residual_revision}
+\end{equation}
+and summarize its normalized squared norm,
+\begin{equation}
+    \chi^2_{\mathrm{rel}}
+    = \frac{\sum_i |r(t_i)|^2}
+    {\sum_i |M_{\mathrm{theory}}(t_i)|^2}.
+    \label{eq:calibration_chisq_revision}
+\end{equation}
+The residual panels make numerical errors, pulse-discretization effects, and
+any systematic deviations from the analytical model visible rather than
+representing them only by a single summary statistic.
+
+For the pulsed-NMR calibration, the analytical expectations used for the
+comparison are the free-induction decay
+\begin{equation}
+    M_{\perp}(t) = A_{\mathrm{FID}}
+    \exp(-t/T_2^*)\exp\!\left[i(\omega_{\mathrm{L}}t+\phi)\right],
+    \label{eq:fid_expectation_revision}
+\end{equation}
+and the spin-echo envelope
+\begin{equation}
+    A_{\mathrm{echo}}(t_{\mathrm{echo}})
+    = A_0\exp(-t_{\mathrm{echo}}/T_2).
+    \label{eq:echo_expectation_revision}
+\end{equation}
+Here, $\omega_{\mathrm{L}}=\gamma B_0$ and the phase $\phi$ is chosen to
+match the receiver reference.  For the weak, resonant continuous-wave case,
+the transverse response is compared with
+\begin{equation}
+    M_{\perp}(t) \simeq \gamma B_1 T_2^*
+    \left(1-\exp(-t/T_2^*)\right),
+    \qquad \gamma B_1T_2^*\ll 1.
+    \label{eq:cw_expectation_revision}
+\end{equation}
+For longitudinal relaxation of a hyperpolarized sample, the expected curve is
+\begin{equation}
+    M_z(t)=M_{\mathrm{eq}}
+    +\left[M_z(0)-M_{\mathrm{eq}}\right]\exp(-t/T_1).
+    \label{eq:t1_expectation_revision}
+\end{equation}
+
+The calibration parameter ranges and numerical results are listed in
+Table~\ref{tab:calibration_summary_revision}.  The integration step size is
+reported explicitly because the residual is expected to decrease as the step
+size is reduced, while the computational cost increases.
+
+% -----------------------------------------------------------------------------
+% Suggested figure organization
+% -----------------------------------------------------------------------------
+
+% Regenerate the existing calibration figures with three rows where practical:
+% (i) applied field/pulse sequence, (ii) simulated and theoretical signal,
+% and (iii) residual.  For example, replace the existing SpinEcho_and_CW.pdf
+% figure with a version containing the following caption.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.99\linewidth]{figures/SpinEcho_and_CW_with_residuals.pdf}
+    \caption{Calibration against analytical expectations.  The upper rows
+    show the applied fields and the middle rows show the simulated
+    magnetization together with the corresponding theoretical curves.  The
+    bottom rows show the pointwise residual defined in
+    Eq.~\eqref{eq:calibration_residual_revision}.  Panels (a) and (b) show,
+    respectively, the pulsed-NMR free-induction/spin-echo sequence and the
+    weak resonant continuous-wave response.  Signal amplitudes are normalized
+    consistently between the simulation and analytical model.}
+    \label{fig:calibration_with_residuals_revision}
+\end{figure}
+
+% For the T1 calibration, use the same layout with the simulated M_z curve,
+% exponential expectation, and residual as the three rows.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.70\linewidth]{figures/T1_hyperpolarized_with_residual.pdf}
+    \caption{Longitudinal relaxation calibration.  The simulated $M_z$
+    signal is compared with the exponential expectation in
+    Eq.~\eqref{eq:t1_expectation_revision}; the lower panel shows their
+    residual.  The magnetization is normalized by $M_{\mathrm{eq}}$.}
+    \label{fig:calibration_T1_residual_revision}
+\end{figure}
+
+% Add a residual column to the calibration summary table if the numerical
+% values are available from the revised scripts.
+
+\begin{table}[htb]
+\small
+\caption{Expanded summary of the numerical calibration tests.  The relative
+$\chi^2_{\mathrm{rel}}$ is defined in Eq.~\eqref{eq:calibration_chisq_revision}.
+The entries marked ``TBD'' should be replaced by values generated using the
+same parameter sets as the revised figures.}
+\label{tab:calibration_summary_revision}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llllll}
+    \toprule
+    \textbf{Calibration} & \textbf{Observable} &
+    \textbf{Theory used} & \textbf{Parameter range} &
+    $\bm{\chi^2_{\mathrm{rel}}}$ & \textbf{Main limitation} \\
+    \midrule
+    Pulsed NMR: FID & $M_{\perp}(t)$ &
+    Eq.~\eqref{eq:fid_expectation_revision} &
+    $T_2^*$, $\nu_{\mathrm L}$ & TBD & Pulse discretization \\
+    Pulsed NMR: spin echo & Echo envelope &
+    Eq.~\eqref{eq:echo_expectation_revision} &
+    $T_2$, pulse spacing & TBD & Finite pulse width \\
+    CW NMR & $M_{\perp}(t)$ &
+    Eq.~\eqref{eq:cw_expectation_revision} &
+    $B_1$, $T_2^*$ & TBD & Weak-drive approximation \\
+    Hyperpolarized sample & $M_z(t)$ &
+    Eq.~\eqref{eq:t1_expectation_revision} &
+    $T_1$, $M_z(0)$ & TBD & Step-size error \\
+    \bottomrule
+\end{tabular}}
+\end{table}
+
+% -----------------------------------------------------------------------------
+% Proposed appendix for comparison with real measurements
+% -----------------------------------------------------------------------------
+
+\appendix
+\section{Comparison with measured pulsed-NMR and CPMG signals}
+\label{app:experimental_comparison_revision}
+
+This appendix describes the procedure used to compare \axionbloch{} outputs
+with measured NMR data.  The purpose is to separate discrepancies caused by
+the numerical solver from those caused by experimental imperfections or by
+an incomplete physical model.
+
+\subsection{Data and metadata}
+
+Each data set should be accompanied by the static-field magnitude and
+orientation, gyromagnetic ratio, pulse amplitudes and phases, pulse duration,
+interpulse delay, sampling interval, receiver phase, number of averages, and
+the values or independent estimates of $T_1$, $T_2$, and $T_2^*$.  The exact
+pulse sequence is reproduced in the simulation, including finite pulse
+duration when it is relevant.  The measured and simulated traces are then
+resampled onto a common time grid.
+
+\subsection{Pulsed-NMR comparison}
+
+For a free-induction decay, the comparison should use the same acquisition
+window and account for receiver phase, dead time, baseline offset, and signal
+normalization.  The fitted Larmor frequency and $T_2^*$ can first be used to
+check the phase evolution and envelope independently.  For CPMG data, the
+echo centers and echo amplitudes should be extracted using an identical
+procedure for simulation and measurement.  The echo amplitudes can then be
+compared with the $T_2$ envelope in Eq.~\eqref{eq:echo_expectation_revision}.
+
+The comparison should be shown in three panels: measured and simulated
+signals, the residual, and (where uncertainties are available) the residual
+divided by the experimental standard deviation.  A suitable weighted metric
+is
+\begin{equation}
+    \chi^2_{\nu} = \frac{1}{N-p}
+    \sum_{i=1}^{N}
+    \frac{\left[M_{\mathrm{meas}}(t_i)-M_{\mathrm{simu}}(t_i)\right]^2}
+    {\sigma_i^2},
+    \label{eq:experimental_reduced_chisq_revision}
+\end{equation}
+where $N$ is the number of data points, $p$ is the number of fitted
+parameters, and $\sigma_i$ is the uncertainty of point $i$.  If pointwise
+uncertainties are unavailable, the unweighted residual norm in
+Eq.~\eqref{eq:calibration_chisq_revision} should be reported instead, with
+that limitation stated explicitly.
+
+\subsection{Scope and limitations}
+
+The first experimental comparison should use a calibration sample and a
+well-characterized pulse sequence.  Agreement is expected to be limited by
+field inhomogeneity, pulse imperfections, receiver response, noise, finite
+bandwidth, and possible deviations from single-component Bloch relaxation.
+These effects should not be absorbed into the numerical-calibration metric
+without being identified.  The appendix therefore reports both the ideal
+analytical comparison and the experiment comparison, using separate residual
+definitions and clearly stated fitted parameters.
+
+% End of proposed revision.
