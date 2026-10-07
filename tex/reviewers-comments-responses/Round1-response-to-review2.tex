@@ -143,9 +143,9 @@
 \noindent Dear Reviewer,
  
 I would like to express my sincere gratitude to you. 
-You understood this paper very well. 
-You spotted a few important points and made useful comments and suggestions, which have helped improve my manuscript. 
-Below I give the responses to the your comments and describe the related changes to the manuscript.
+You understood the manuscript very well. 
+You identified several important points and made useful comments and suggestions that have helped improve it. 
+Below, I provide responses to your comments and describe the related changes to the manuscript.
 
 
 
@@ -161,7 +161,7 @@ Below I give the responses to the your comments and describe the related changes
 }
 
 I am very glad to see the positive evaluation and constructive comments from the referee. 
-Point-to-point responses are addressed as follows. 
+Responses to the individual points are provided below. 
 
 
 \refereeNoTwoBox{1}{
@@ -196,11 +196,12 @@ I therefore believe the manuscript is well suited to the Special Issue. }
 }
 
 \response{2}{
-Yes, and the effect can be taken into account by settings in the \texttt{axionbloch} simulation.
+Yes, and this effect can be taken into account by configuring the \texttt{axionbloch} simulation.
+
 Shape anisotropy effects can influence the magnetization dynamics of the sample. 
 The shape of the sample can affect the distribution of the magnetic field across the NMR sample and, consequently, the spin dynamics. 
-For instance, a spherical sample will experience a different magnetic field distribution compared to a cylindrical one. 
-Therefore, it is important to consider these effects when doing simulations.
+For instance, a spherical sample will experience a different magnetic-field distribution from a cylindrical one. 
+Therefore, it is important to consider these effects when conducting simulations.
 
 In \texttt{axionbloch}, users can account for a specified field distribution by setting the field spread and relative sampling weights through \texttt{Magnet.B\_spread} and \texttt{Magnet.ratios}. 
 This allows users to model the effective field inhomogeneity associated with a particular sample geometry.
@@ -216,8 +217,8 @@ This allows users to model the effective field inhomogeneity associated with a p
 
 \response{3}{
 Thank you for pointing out this inconsistency.
-The polarization value in the figure caption was a mistake.
-Now the value is correctly stated as \SI{50}{\percent}.
+The polarization value in the figure caption was incorrect.
+It has now been corrected to \SI{50}{\percent}.
 } 
 ~\
 ~\
@@ -232,7 +233,7 @@ After careful consideration, I decided to update the manuscript to stay consiste
 The questions raised by the referee are addressed as follows.
 
 The Hamiltonian for the axion--fermion interaction is updated to be consistent with the convention used in Ref.~\cite{kimball2018overview}.
-Factors of $\hbar/2$ between $S$ and $\sigma$ are mentioned in the text: 
+Factors of $\hbar/2$ between $S$ and $\sigma$ are explicitly included in the text: 
 \mdframedBox{
 \difDelContent{The Hamiltonian for this interaction can be expressed as}
 \begin{center}
@@ -250,12 +251,38 @@ Factors of $\hbar/2$ between $S$ and $\sigma$ are mentioned in the text:
 \DIFadd{where $g_\mathrm{aNN}$ is the axion--fermion coupling strength, $c$ is the speed of light, and $\boldsymbol{S}$ denotes the physical spin operator, $\boldsymbol{S}=\hbar\boldsymbol{\sigma}/2$, with $\boldsymbol{\sigma}$ the vector of Pauli matrices.}
 }
 
-After the Hamiltonians are mentioned, the pseudomagnetic field is defined in the text and the corresponding code implementation is clarified:
+\mdframedBox{
+\difDelContent{The axion field gradient can be regarded as a pseudomagnetic field that mimics the behavior of a real magnetic field, where the Hamiltonian can be written as}
+\begin{center}
+{\color{red}\sout{\(\displaystyle
+    \mathcal{H} = -\hbar \gamma \mathbf{B} \cdot \mathbf{S} \,,
+    \)}}
+\end{center}
+\difDelContent{where $\gamma$ is the gyromagnetic ratio of the spin, and $\mathbf{B}$ is the magnetic field.}
 
-\DIFadd{????}
+\DIFadd{The axion field gradient can be regarded as a pseudomagnetic field that mimics the behavior of a real magnetic field, where the Hamiltonian can be written as}
+\begin{equation}
+  \color{blue}
+    \mathcal{H} = -\gamma \boldsymbol{B} \cdot \boldsymbol{S} \,,\nonumber
+\end{equation} 
+\DIFadd{where $\gamma$ is the gyromagnetic ratio of the spin, and $\boldsymbol{B}$ is the magnetic field. }
+}
+
+The pseudomagnetic field is then defined in the text. The corresponding addition is as follows:
+
+\mdframedBox{
+\DIFadd{Comparing the two Hamiltonians shows that the gradient of the axion field acts effectively as a magnetic field. 
+Therefore, the concept of an axion-induced pseudomagnetic field is introduced to represent this effective magnetic field, which is defined as}
+\begin{equation}
+  \color{blue}
+    \boldsymbol{B}_a = -\frac{c g_\mathrm{aNN}}{\gamma}\boldsymbol{\nabla}a\,.\nonumber
+\end{equation}
+\DIFadd{The precise form of the pseudomagnetic field depends on the axion model.}
+}
+
 
 For negative gyromagnetic ratios, \texttt{axionbloch} uses exactly the same Bloch equations and numerical procedure as for positive gyromagnetic ratios.
-The signed value of $\gamma$ is retained in the equations of motion; therefore, the resulting spin precession occurs in the opposite direction compared with a spin having the same positive gyromagnetic ratio. 
+The signed value of $\gamma$ is retained in the equations of motion; therefore, the resulting spin precession occurs in the opposite direction relative to that of a spin with the same positive gyromagnetic ratio. 
 No separate correction or special treatment is applied for negative gyromagnetic ratios.
 }
 
@@ -294,8 +321,8 @@ The spin-packet and time-stepping loops within each realization were evaluated s
 \refereeNoTwoBox{6}{
     In summary, I recommend publication after minor revisions, provided the editors consider a software-focused manuscript of this kind suitable for the journal.
 }
-6
-\response{5}{
+
+\response{6}{
     Thank you for your positive assessment. 
 }
 ~\
