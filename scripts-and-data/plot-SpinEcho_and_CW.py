@@ -65,7 +65,7 @@ plt.rcParams["font.family"] = "Times New Roman"
 # Make math text match Times New Roman
 plt.rcParams["mathtext.fontset"] = "cm"
 plt.rcParams["mathtext.rm"] = "Times New Roman"
-cm = 1 / 2.56  # convert cm to inch
+cm = 1 / 2.54  # convert cm to inch
 fig = plt.figure(
     figsize=(2 * 8.5 * cm, 9 * cm), dpi=300
 )  # initialize a figure following APS journal requirements

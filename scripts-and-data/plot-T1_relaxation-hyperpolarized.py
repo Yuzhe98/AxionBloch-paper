@@ -7,6 +7,7 @@ import matplotlib.gridspec as gridspec
 from matplotlib import font_manager
 
 from src.utils import high_contrast_extended
+
 data_dir = "scripts-and-data/"
 HP_data = np.load(data_dir + "T1_relaxation-hyperpolarized.npz")
 HP_Tdelta = HP_data["Tdelta_s"]
@@ -34,7 +35,7 @@ plt.rcParams["font.family"] = "Times New Roman"
 # Make math text match Times New Roman
 plt.rcParams["mathtext.fontset"] = "cm"
 plt.rcParams["mathtext.rm"] = "Times New Roman"
-cm = 1 / 2.56  # convert cm to inch
+cm = 1 / 2.54  # convert cm to inch
 fig = plt.figure(
     figsize=(8.5 * cm, 10 * cm), dpi=300
 )  # initialize a figure following APS journal requirements
@@ -119,7 +120,7 @@ HP_M_ax.plot(
 # )
 gamma = 2 * np.pi * 42.57747892e6  # gyromagnetic ratio of proton in Hz/T
 B1_T = 0.5 * 1e-11  # magnetic field strength in Tesla
-decay_envelope = HP_init_M *  np.exp(-HP_timeStamp_s / HP_T1)
+decay_envelope = HP_init_M * np.exp(-HP_timeStamp_s / HP_T1)
 HP_M_ax.plot(
     HP_timeStamp_s[: len(HP_timeStamp_s) // 1],
     decay_envelope[: len(HP_timeStamp_s) // 1],
@@ -156,7 +157,13 @@ HP_residual_ax.plot(
 axis_settings = (
     (HP_B_ax, "", "$B\\,(\\mathrm{T})$", None, None),
     (HP_M_ax, "", "$M \\, (M_\\mathrm{eqb})$", None, (0.1, 4e5)),
-    (HP_residual_ax, "Time (s)", "$M_z^{\\mathrm{sim}} - M_z^{\\mathrm{theory}}$", None, None),
+    (
+        HP_residual_ax,
+        "Time (s)",
+        "$M_z^{\\mathrm{sim}} - M_z^{\\mathrm{theory}}$",
+        None,
+        None,
+    ),
 )
 for ax, xlabel, ylabel, xlim, ylim in axis_settings:
     ax.set_xlabel(xlabel)

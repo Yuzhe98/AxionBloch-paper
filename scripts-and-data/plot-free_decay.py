@@ -10,9 +10,11 @@ from src.utils import high_contrast_extended
 
 data = np.load("figures/RF_pulse_simu.npz")
 size = len(data["timeStamp_s"])
-timeStamp_s = data["timeStamp_s"][:size//2]  # timeStamp_s.shape (5050,)
-B_vec = data["B_vec"][0][:size//2]  # data["B_vec"].shape : tuple((1, 5050, 3)) [len=3]
-M = data["trjry"][0][:size//2]  # data["trjry"].shape : tuple((1, 5051, 3)) [len=3]
+timeStamp_s = data["timeStamp_s"][: size // 2]  # timeStamp_s.shape (5050,)
+B_vec = data["B_vec"][0][
+    : size // 2
+]  # data["B_vec"].shape : tuple((1, 5050, 3)) [len=3]
+M = data["trjry"][0][: size // 2]  # data["trjry"].shape : tuple((1, 5051, 3)) [len=3]
 
 
 plt.rc("font", size=10)  # font size for all figures
@@ -24,7 +26,7 @@ plt.rcParams["font.family"] = "Times New Roman"
 # Make math text match Times New Roman
 plt.rcParams["mathtext.fontset"] = "cm"
 plt.rcParams["mathtext.rm"] = "Times New Roman"
-cm = 1 / 2.56  # convert cm to inch
+cm = 1 / 2.54  # convert cm to inch
 fig = plt.figure(
     figsize=(8.5 * cm, 5 * cm), dpi=300
 )  # initialize a figure following APS journal requirements
@@ -86,7 +88,7 @@ M_ax.plot(
 #     linestyle="dashed",
 #     color=high_contrast_extended[5],
 # )
-decay_envelope = np.exp(-(timeStamp_s+0.02) / 1)
+decay_envelope = np.exp(-(timeStamp_s + 0.02) / 1)
 M_ax.plot(
     timeStamp_s,
     decay_envelope,

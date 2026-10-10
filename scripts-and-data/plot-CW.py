@@ -15,7 +15,9 @@ CW_T2star = (CW_T2 ** (-1) + CW_Tdelta ** (-1)) ** (-1)
 
 size = len(CW_data["timeStamp_s"]) - 1
 CW_timeStamp_s = CW_data["timeStamp_s"][:size]  # timeStamp_s.shape (5050,)
-CW_B_vec = CW_data["B_vec"][0][:size]  # data["B_vec"].shape : tuple((1, 5050, 3)) [len=3]
+CW_B_vec = CW_data["B_vec"][0][
+    :size
+]  # data["B_vec"].shape : tuple((1, 5050, 3)) [len=3]
 CW_M = CW_data["trjry"][0][:size]  # data["trjry"].shape : tuple((1, 5051, 3)) [len=3]
 
 linewidth = 1
@@ -29,7 +31,7 @@ plt.rcParams["font.family"] = "Times New Roman"
 # Make math text match Times New Roman
 plt.rcParams["mathtext.fontset"] = "cm"
 plt.rcParams["mathtext.rm"] = "Times New Roman"
-cm = 1 / 2.56  # convert cm to inch
+cm = 1 / 2.54  # convert cm to inch
 fig = plt.figure(
     figsize=(8.5 * cm, 5 * cm), dpi=300
 )  # initialize a figure following APS journal requirements
@@ -60,14 +62,14 @@ CW_pulse_ax.plot(
     CW_B_vec[:, 0] * 1e12,
     label="$B_{x}$",
     color=high_contrast_extended[0],
-    linewidth = linewidth ,
+    linewidth=linewidth,
 )
 CW_pulse_ax.plot(
     CW_timeStamp_s,
     CW_B_vec[:, 1] * 1e12,
     label="$B_{y}$",
     color=high_contrast_extended[1],
-    linewidth = linewidth ,
+    linewidth=linewidth,
 )
 CW_pulse_ax.set_xlabel("")
 CW_pulse_ax.set_ylabel("$B\\,(\\mathrm{p T})$")
@@ -78,14 +80,14 @@ CW_M_ax.plot(
     CW_M[:, 0],
     label="$M_{x}$",
     color=high_contrast_extended[2],
-    linewidth = linewidth ,
+    linewidth=linewidth,
 )
 CW_M_ax.plot(
     CW_timeStamp_s,
     CW_M[:, 1],
     label="$M_{y}$",
     color=high_contrast_extended[3],
-    linewidth = linewidth ,
+    linewidth=linewidth,
 )
 # M_ax.plot(
 #     timeStamp_s,
@@ -96,7 +98,7 @@ CW_M_ax.plot(
 # )
 gamma = 2 * np.pi * 42.57747892e6  # gyromagnetic ratio of proton in Hz/T
 B1_T = 0.5 * 1e-11  # magnetic field strength in Tesla
-T2star_envelope = (1-np.exp(-(CW_timeStamp_s) / CW_T2star)) * B1_T * gamma * CW_T2star
+T2star_envelope = (1 - np.exp(-(CW_timeStamp_s) / CW_T2star)) * B1_T * gamma * CW_T2star
 CW_M_ax.plot(
     CW_timeStamp_s[: len(CW_timeStamp_s) // 1],
     T2star_envelope[: len(CW_timeStamp_s) // 1],

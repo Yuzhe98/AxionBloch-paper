@@ -38,7 +38,7 @@ By numerically solving spin-evolution equations, \axionbloch{} enables the predi
 \section{Capabilities}
 \label{sec:capabilities}
 
-In this section, the main components of \axionbloch{} are described. The section starts with the units, physical quantities, and constants (\cref{sec:units_quantities_constants}). Then, it continues with the physics and the algorithm for the numerical simulation (\cref{sec:algorithm}), after which the calibration for the simulation follows (\cref{sec:calibration}). In the end, an example simulation of axion-induced signals is provided (\cref{sec:simulation}). 
+In this section, the main components of \axionbloch{} are described. The section starts with the units, physical quantities, and constants (\cref{sec:units_quantities_constants}). Then, it continues with the physics and the algorithm for the numerical simulation (\cref{sec:algorithm}), followed by calibrations (\cref{sec:calibration}), comparisons with NMR measurements (\cref{sec:nmr_simulation}), and an example simulation of axion-induced signals (\cref{sec:simulation}). 
 
 
 \subsection{Units, physical quantities, and constants}
@@ -140,59 +140,10 @@ This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\ur
 Accurate calibration is essential to ensure that the simulated signals reliably reflect the underlying physical system and can be compared with experimental observables. 
 In particular, calibration examines the correspondence between the NMR signal and model parameters, including magnetic fields, nuclear spin gyromagnetic ratio $\gamma$, and relaxation times ($T_1$, $T_2$, and $T_2^*$). 
 It allows one to verify the correctness and stability of the numerical implementation. 
-In this section, examples of calibration simulations are presented along with theoretical predictions, demonstrating the methodology of calibration. 
-A quantitative analysis is included at the end of the section. 
+In this section, calibration simulations are presented along with theoretical predictions, demonstrating the methodology of calibration. 
+% A quantitative analysis is included at the end of the section. 
 For the examples in the section, an ethanol sample and an axial bias field $\boldsymbol{B_{0}} = B_0 \boldsymbol{\hat{e}}_z$ are used. 
 
-\subsubsection{Pulsed-NMR: free decay and spin echo}
-\label{sec:pNMR}
-In the pulsed-NMR calibration, one $\SI{90}{\degree}$ and one $\SI{180}{\degree}$ magnetic-field pulse are applied in the simulation. 
-The magnetization is expected to\,\cite{CPMG, Abragam1961_NuclearMagnetism}:
-\begin{itemize}
-    \item oscillate at the Larmor frequency;
-    \item be tipped by $\SI{90}{\degree}$ to the x-y plane by the $\SI{90}{\degree}$ pulse;
-    \item free decay with relaxation time $T_2^*$ in the absence of pulses;
-    \item refocus (echo) after $\SI{180}{\degree}$ pulses; 
-    \item show decaying amplitude of echoes with relaxation time $T_2$.
-\end{itemize}
-The behaviors described above can be found in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a), indicating correct simulation behavior. 
-With such a benchmark, magnetic pulses, Larmor precession, and transverse relaxations ($T_2$ and $T_2^*$) can be calibrated. 
-
-\begin{paperwidefigure}[htb]
-    \centering
-    \includegraphics[width=0.9\textwidth]{figures/SpinEcho_and_CW.pdf}
-    \caption{Simulated magnetic fields in x and y directions (upper row) and induced NMR signals (lower row). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^2}$ is the magnitude of the excitation. 
-    }
-    \label{fig:calibration_T2_T2star}
-\end{paperwidefigure}
-
-
-\subsubsection{Continuous-wave NMR}
-\label{sec:CW_NMR}
-In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is applied. 
-When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$\,\cite{Abragam1961_NuclearMagnetism}.
-One such example is illustrated in \cref{fig:calibration_T2_T2star}\,(b). 
-The simulation produces the expected results.
-With such a benchmark, the Larmor precession and $T_2^*$ relaxation can be calibrated. 
-
-\subsubsection{Hyperpolarized sample}
-\label{sec:hyperpol}
-
-To achieve better sensitivity to the axion field, hyperpolarization is favored in experiments. Compared to thermal polarization at room temperature, hyperpolarization techniques can boost the polarization by orders of magnitude to the order of unity. 
-The \axionbloch{} package handles the polarization by the \texttt{Sample} class. 
-A \SI{1}{\percent}-polarization ethanol sample is used as an example demonstrating the evolution of polarization due to the $T_1$ relaxation. 
-At first ($t\ll T_1$), the polarization should exponentially decay with time constant $T_1$, until it reaches equilibrium after many $T_1$. 
-As can be seen in \cref{fig:calibration_T1_HP}, the simulated $T_1$ relaxation agrees with the expected behavior. 
-More of such simulations can be applied in calibrating $T_1$ relaxation. 
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.45\textwidth]{figures/T1_hyperpolarized.pdf}
-    \caption{
-    Simulated $T_1$ relaxation of a hyperpolarized sample in a static bias field. The axial magnetization $M_z$ is normalized by the equilibrium magnetization $M_\mathrm{eqb}$. 
-    }
-    \label{fig:calibration_T1_HP}
-\end{figure}
 
 
 \subsubsection{Quantitative evaluation}
@@ -256,6 +207,112 @@ summarize their range after applying \cref{eq:relative_l2_error}].
 \end{tabular}
 }%
 \end{paperwidetable}
+
+
+
+
+
+
+
+
+
+\subsubsection{Pulse calibration}
+\label{sec:calibration_pulses}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{NMR simulation}
+\label{sec:nmr_simulation}
+
+% TODO: Introduce the measurement data and explain how the corresponding
+% simulation reproduces each experimental sequence. State the phase and
+% amplitude normalization, fit parameters, and residual metric used.
+
+\subsubsection{Spin echo}
+\label{sec:nmr_spin_echo}
+\textit{[TODO: Describe the spin-echo measurement and pulse sequence, compare
+the measured echoes with the simulation, and report the residual or normalized
+error.]}
+
+\subsubsection{$T_1$ inversion recovery}
+\label{sec:nmr_t1_inversion_recovery}
+\textit{[TODO: Describe the inversion-recovery measurement, compare the data
+with the simulated recovery curve, and report the fitted $T_1$ and residual or
+normalized error.]}
+
+\subsubsection{Pulsed-NMR: free decay and spin echo}
+\label{sec:pNMR}
+In the pulsed-NMR calibration, one $\SI{90}{\degree}$ and one $\SI{180}{\degree}$ magnetic-field pulse are applied in the simulation. 
+The magnetization is expected to\,\cite{CPMG, Abragam1961_NuclearMagnetism}:
+\begin{itemize}
+    \item oscillate at the Larmor frequency;
+    \item be tipped by $\SI{90}{\degree}$ to the x-y plane by the $\SI{90}{\degree}$ pulse;
+    \item free decay with relaxation time $T_2^*$ in the absence of pulses;
+    \item refocus (echo) after $\SI{180}{\degree}$ pulses; 
+    \item show decaying amplitude of echoes with relaxation time $T_2$.
+\end{itemize}
+The behaviors described above can be found in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a), indicating correct simulation behavior. 
+With such a benchmark, magnetic pulses, Larmor precession, and transverse relaxations ($T_2$ and $T_2^*$) can be calibrated. 
+
+\begin{paperwidefigure}[htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/SpinEcho_and_CW.pdf}
+    \caption{Simulated magnetic fields in x and y directions (upper row) and induced NMR signals (lower row). The magnetizations plotted are normalized by equilibrium magnetization. (a) After $\SI{90}{\degree}$ and $\SI{180}{\degree}$ magnetic-field pulses in x-y plane, free decay (relaxation time $T_2^*$) and echo signals (relaxation time $T_2$) are generated. (b) Excited by a weak CW magnetic field, the NMR signals increase with $\gamma B T_2^* (1 - e^{-t/T_2^*})$, where $B = \sqrt{B_x^2+B_y^2}$ is the magnitude of the excitation. 
+    }
+    \label{fig:calibration_T2_T2star}
+\end{paperwidefigure}
+
+
+\subsubsection{Continuous-wave NMR}
+\label{sec:CW_NMR}
+In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is applied. 
+When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$\,\cite{Abragam1961_NuclearMagnetism}.
+One such example is illustrated in \cref{fig:calibration_T2_T2star}\,(b). 
+The simulation produces the expected results.
+With such a benchmark, the Larmor precession and $T_2^*$ relaxation can be calibrated. 
+
+\subsubsection{Hyperpolarized sample}
+\label{sec:hyperpol}
+
+To achieve better sensitivity to the axion field, hyperpolarization is favored in experiments. Compared to thermal polarization at room temperature, hyperpolarization techniques can boost the polarization by orders of magnitude to the order of unity. 
+The \axionbloch{} package handles the polarization by the \texttt{Sample} class. 
+A \SI{1}{\percent}-polarization ethanol sample is used as an example demonstrating the evolution of polarization due to the $T_1$ relaxation. 
+At first ($t\ll T_1$), the polarization should exponentially decay with time constant $T_1$, until it reaches equilibrium after many $T_1$. 
+As can be seen in \cref{fig:calibration_T1_HP}, the simulated $T_1$ relaxation agrees with the expected behavior. 
+More of such simulations can be applied in calibrating $T_1$ relaxation. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/T1_hyperpolarized.pdf}
+    \caption{
+    Simulated $T_1$ relaxation of a hyperpolarized sample in a static bias field. The axial magnetization $M_z$ is normalized by the equilibrium magnetization $M_\mathrm{eqb}$. 
+    }
+    \label{fig:calibration_T1_HP}
+\end{figure}
+
+
+
 
 
 \subsection{Axion simulation}

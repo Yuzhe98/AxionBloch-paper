@@ -16,8 +16,12 @@ echo_T2 = echo_data["T2_s"]
 echo_T2star = (echo_T2 ** (-1) + echo_Tdelta ** (-1)) ** (-1)
 size = len(echo_data["timeStamp_s"]) - 1
 echo_timeStamp_s = echo_data["timeStamp_s"][:size]  # timeStamp_s.shape (5050,)
-echo_B_vec = echo_data["B_vec"][0][:size]  # data["B_vec"].shape : tuple((1, 5050, 3)) [len=3]
-echo_M = echo_data["trjry"][0][:size]  # data["trjry"].shape : tuple((1, 5051, 3)) [len=3]
+echo_B_vec = echo_data["B_vec"][0][
+    :size
+]  # data["B_vec"].shape : tuple((1, 5050, 3)) [len=3]
+echo_M = echo_data["trjry"][0][
+    :size
+]  # data["trjry"].shape : tuple((1, 5051, 3)) [len=3]
 
 linewidth = 1
 
@@ -30,7 +34,7 @@ plt.rcParams["font.family"] = "Times New Roman"
 # Make math text match Times New Roman
 plt.rcParams["mathtext.fontset"] = "cm"
 plt.rcParams["mathtext.rm"] = "Times New Roman"
-cm = 1 / 2.56  # convert cm to inch
+cm = 1 / 2.54  # convert cm to inch
 fig = plt.figure(
     figsize=(8.5 * cm, 5 * cm), dpi=300
 )  # initialize a figure following APS journal requirements
