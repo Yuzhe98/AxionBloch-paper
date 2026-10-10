@@ -63,7 +63,9 @@
   \DIFdelbegin \DIFdel{#1}\DIFdelend 
 }
 \newcommand{\difAddContent}[1]{
-  \DIFaddbegin \DIFadd{#1}\DIFaddend 
+  \DIFaddbegin
+  \begingroup\color{blue}#1\endgroup
+  \DIFaddend
 }
 
 %DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
@@ -140,42 +142,38 @@
 
 \noindent Dear Reviewer,
  
-I would like to express my sincere gratitude to you. 
-You understood this paper very well. 
-You spotted a few important points and made useful comments and suggestions, which have helped improve my manuscript. 
-Below I give the responses to the your comments and describe the related changes to the manuscript.
+I sincerely appreciate your careful evaluation.
+Your comments have identified important points and provided valuable suggestions.
+Below, I provide responses to your comments and describe the related changes to the manuscript.
 
-
-
-\refereeOverallComment{2}{
-    The manuscript presents axionbloch, an open-source Python package with a C++ backend (via pybind11). It numerically integrates the Bloch equations for spin-1/2 ensembles subject to real magnetic fields and to the pseudomagnetic field produced by the axion-nucleon gradient coupling. The package uses astropy for unit handling, integrates in a rotating coordinate frame with a fourth-order Runge-Kutta scheme, and models bias-field inhomogeneity by sampling an ensemble of bias fields.
-
-    The author benchmarks the code against standard NMR behaviour: free induction decay and spin echoes, continuous-wave excitation, and $T_1$ relaxation of a hyperpolarised sample. Agreement is quantified by a normalised residual metric, with discrepancies below $10^{-4}$. The manuscript then demonstrates an axion simulation for a hyperpolarised liquid $^{129}$Xe sample in the standard halo model, showing single-realisation and ensemble-averaged (1000 realisations) transverse magnetisation, and reports a runtime of 2.7 s for $7\times 10^8$ integration steps. The code, documentation and test suite are publicly available.
-
-    The manuscript is clearly written and describes a well-structured, usable piece of software. The architecture is sensible, the benchmarks behave as expected, and the open-source, tested and documented delivery is commendable. I expect the package will be useful to groups designing and analysing spin-based axion searches, and for teaching, as the author notes.
-
-    That said, the manuscript does not contain new physical results. The physics implemented is well established: the Bloch equations, the axion-gradient pseudomagnetic field, and the stochastic description of the virialised halo field. So are the numerical methods (fixed-step RK4 in a rotating frame). The calibration results are correct but predictable, since they reproduce textbook NMR behaviour. The axion simulation reproduces qualitative signal features already described analytically in the literature. The contribution is therefore a software and methods paper.
+\refereeOverallComment{1}{
+    The article  presents an interesting tool and is written in a very clear manner. However the article before publishing needs a major revision, particulary in the calibration section where findings should be clearly presented and possibly compared with real measurements.
 
 }
 
 I am very glad to see the positive evaluation and constructive comments from the referee. 
-Point-to-point responses are addressed as follows. 
+I fully respect your opinion and have taken action to improve the manuscript according to your suggestions. 
+Edits of the manuscript are listed below. 
+
+\section{Enriched examples of calibrations}
+The examples of calibrations have been enriched in the revised manuscript in the following ways. 
 
 
-\refereeNoTwoBox{1}{
-    I question whether Universe is the most appropriate venue, or whether a journal dedicated to research software or computational physics would suit the work better. I leave that judgement to the editors. My comments below assume the manuscript remains under consideration at Universe.
-}
+\section{Detailed description of the quantitative calibration}
 
-\response{1}{
-I thank the referee for raising this point and appreciate the concern.
-I fully respect that the final judgment regarding its suitability rests with the Editors. 
+\section{Comparison with real measurements}
 
-The manuscript was submitted to the \textit{Universe} Special Issue ``Ultralight Bosonic Dark Matter: Theoretical Developments and Experimental Searches,'' whose scope includes experimental axion searches. 
-I believe that \texttt{axionbloch} is particularly relevant to the axion-search community, as it provides a validated and reusable tool for modeling axion-induced spin dynamics. 
-I therefore believe the manuscript is well suited to the Special Issue. }
+In the calibration section, the simulation results are compared with the well tested theoretical predictions. 
+What can even be more convincing is to compare the simulation results with real measurements, as suggested by the referee.
+Therefore, I have added examples of real measurements in the appendix to demonstrate the validity of the simulation results.
 
+In Appendix A, I have added two examples of real measurements. 
+The first example is the spin-echo NMR simulation using a CPMG pulse train, which is compared with the real measurements in Ref. 
+\mdframedBox{}
 
+As can be seen, the simulation results are in good agreement with the real measurements, which validates the accuracy of the simulation tool. 
 
+\section{Further description of multi-thread implementation}
 % \mdframedBox{
 % \difDelContent{It opens the door to probing large swaths of hitherto unexplored mass-coupling parameter space in the future by using hyperpolarized samples.}
 
@@ -189,46 +187,17 @@ I therefore believe the manuscript is well suited to the Special Issue. }
 ~\
 ~\
 
-\refereeNoTwoBox{2}{
-    Are there shape anisotropy effects that must be taken into account with regards to the magnetisation dynamics of the sample? Is the shape of the sample important e.g. spherical vs cylindrical?
-}
+I hope that the responses adequately address your comments and that the revisions are sufficient.
+I believe that the manuscript has been substantially improved and hope that you will find it suitable for publication in its present form.
+If any errors remain or if any of the comments have not been fully addressed, please let me know.
+I would be pleased to make further improvements.
 
-\response{2}{
-Yes, and the effect can be taken into account by settings in the \texttt{axionbloch} simulation.
-Shape anisotropy effects can influence the magnetization dynamics of the sample. 
-The shape of the sample can affect the distribution of the magnetic field across the NMR sample and, consequently, the spin dynamics. 
-For instance, a spherical sample will experience a different magnetic field distribution compared to a cylindrical one. 
-Therefore, it is important to consider these effects when doing simulations.
+\noindent Yours sincerely,
 
-In \texttt{axionbloch}, users can account for a specified field distribution by setting the field spread and relative sampling weights through \texttt{Magnet.B\_spread} and \texttt{Magnet.ratios}. 
-This allows users to model the effective field inhomogeneity associated with a particular sample geometry.
-} 
-~\
-~\
-
-
-
-\refereeNoTwoBox{3}{
-    In Fig 5, polarisation is written as \SI{1}{\percent}, whilst in the text it is stated as \SI{50}{\percent}.
-}
-
-\response{3}{
-Thank you for pointing out this inconsistency.
-The polarization value in the figure caption was a mistake.
-Now the value is correctly stated as \SI{50}{\percent}.
-} 
-~\
-~\
-% \clearpage
-
-
-We feel that the manuscript has significantly improved and hope you will find it acceptable for publication in the present form. 
-
-
-% We hope that we have responded appropriately to all the sentences in the comments and made sufficient modifications. If there is any mistake or some comments are not well addressed, please let us know. We are happy to further improve the manuscript. 
-\noindent Sincerely,
 
 \noindent Yuzhe Zhang
 
+\bibliographystyle{unsrt}
+\bibliography{../references}
 
 \end{document} 

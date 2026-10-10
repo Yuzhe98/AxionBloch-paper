@@ -197,63 +197,60 @@ More of such simulations can be applied in calibrating $T_1$ relaxation.
 
 \subsubsection{Quantitative evaluation}
 
-The accuracy of simulations is evaluated by the discrepancy between the theoretically expected magnetization and simulation results, characterized by
+The accuracy of the simulations is quantified by the relative $L^2$ error
+between the simulated and theoretically expected transverse magnetization:
 \begin{equation}
-    \chi^2 = \dfrac{\sum |M_\mathrm{expected} - M_\mathrm{simu}|^2}{\sum |M_\mathrm{simu}|^2}
-    \,. 
-    \label{eq:chisq}
-\end{equation} 
-Here $M_\mathrm{expected}$ and $M_\mathrm{simu}$ are magnetization expected and simulated, respectively. 
-$\sum$ denotes the sum over integration steps.
-A well-calibrated simulation should give $\chi^2\ll 1$. 
+    \epsilon_{L^2}
+    =
+    \frac{
+        \left[
+        \sum_{i\in\mathcal{V}}
+        \left|\boldsymbol{M}_{\perp,i}^\mathrm{simu}-\boldsymbol{M}_{\perp,i}^\mathrm{theo}\right|^2
+        \right]^{1/2}
+    }{
+        \left[
+        \sum_{i\in\mathcal{V}}
+        \left|\boldsymbol{M}_{\perp,i}^\mathrm{theo}\right|^2
+        \right]^{1/2}
+    },
+    \label{eq:relative_l2_error}
+\end{equation}
+where $\boldsymbol{M}_{\perp,i}=(M_{x,i},M_{y,i})$ is the transverse
+magnetization at the $i$th sample, and $\mathcal{V}$ is the set of samples
+included in the comparison. For equally spaced samples, the time-step factors
+cancel in this ratio. Samples during finite-duration pulses are excluded when
+the theoretical model does not describe pulse evolution [REMINDER: specify the
+excluded pulse intervals used for each calibration].
+
+
 Calibration scripts are stored in the test suite of \axionbloch{}. 
 In each calibration, parameters such as Larmor frequency and relaxation times are varied over orders of magnitude to cover all possible cases in simulation.
 The results of the calibrations are summarized in \cref{tab:calibration_summary}. 
-The discrepancies are generally small ($\chi^2 < 10^{-4}$).
-If a certain simulation precision is required, the $\chi^2$ value serves as a quantitative reference. 
-
-% \begin{table}[H] 
-% %\small % Change table font size
-% \caption{This is a table caption. Tables should be placed in the main text near the first time they are~cited.\label{tab1}}
-% %\isPreprints{\centering}{} % Only used for preprints
-% \begin{tabularx}{\textwidth}{CCC}
-% \toprule
-% \textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
-% \midrule
-% Entry 1		& Data			& Data\\
-% Entry 2		& Data			& Data \textsuperscript{1}\\
-% \bottomrule
-% \end{tabularx}
-
-% \noindent{\footnotesize{\textsuperscript{1} Tables may have a footer.}}
-% \end{table}
+The relative $L^2$ errors are [REMINDER: insert the recalculated values and
+summarize their range after applying \cref{eq:relative_l2_error}].
 
 \begin{paperwidetable}
 \small % Change table font size
-\caption{Summary of calibrations. $\chi^2$ indicating the discrepancy is defined in \cref{eq:chisq}; $\chi^2\ll 1$ indicates a well-calibrated simulation. Here $\nu_\mathrm{L}$ stands for Larmor frequency, determined by the bias magnetic field. $\nu_\mathrm{RCF}$ is RCF frequency. $\nu_\mathrm{L}$ and $\nu_\mathrm{RCF}$ are varied from \SI{1}{\kHz} to \SI{1}{\GHz}. The bias field inhomogeneity is swept from \SI{.1}{\ppm} to \SI{20}{\ppm}. $T_1$ ranges from \SI{1}{\ms} to \SI{1}{\kilo\second}. The integration step size is chosen to be $T_2^* / 500$. Finer step sizes yield lower $\chi^2$ at increased computational cost. More technical details of the calibrations can be found in the test suite.\label{tab:calibration_summary}}
+\caption{Summary of calibrations and their relative $L^2$ errors, defined in \cref{eq:relative_l2_error}. Here $\nu_\mathrm{L}$ stands for Larmor frequency, determined by the bias magnetic field. $\nu_\mathrm{RCF}$ is RCF frequency. $\nu_\mathrm{L}$ and $\nu_\mathrm{RCF}$ are varied from \SI{1}{\kHz} to \SI{1}{\GHz}. The bias field inhomogeneity is swept from \SI{.1}{\ppm} to \SI{20}{\ppm}. $T_1$ ranges from \SI{1}{\ms} to \SI{1}{\kilo\second}. The integration step size is chosen to be $T_2^* / 500$. Finer step sizes yield lower relative errors at increased computational cost. More technical details of the calibrations can be found in the test suite.\label{tab:calibration_summary}}
 \resizebox{\linewidth}{!}{%
-\begin{tabular}{lllll}
+\begin{tabular}{llll}
     \toprule
     \textbf{Calibration} &
     \textbf{Parameters calibrated} &
-    \textbf{Varied parameters} &
-    $\bm{\chi^2}$ &
+    $\bm{\epsilon_{L^2}}$ &
     \textbf{Dominant source of error} \\
     \midrule
-    Pulsed NMR: free decay &
+    Pulsed NMR &
     Pulse amplitude, $\nu_\mathrm{L}$, $T_2^*$, $T_2$ &
-    $\nu_\mathrm{RCF}$ &
-    $<10^{-4}$ &
+    \textit{[fill in]} &
     Finite number of steps for hard pulses. \\
     CW-NMR &
     $\nu_\mathrm{L}$ and $T_2^*$ &
-    $\nu_\mathrm{RCF}$ &
-    $<10^{-5}$ &
+    \textit{[fill in]} &
     Finite integration step size. \\
     $T_1$ relaxation &
     $T_1$ &
-    $\nu_\mathrm{RCF}$, $\nu_\mathrm{L}$, initial polarization &
-    $<10^{-7}$ &
+    \textit{[fill in]} &
     Finite integration step size. \\
     \bottomrule
 \end{tabular}
