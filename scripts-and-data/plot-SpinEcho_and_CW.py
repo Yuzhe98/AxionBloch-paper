@@ -78,7 +78,7 @@ gs = gridspec.GridSpec(
 )  # create grid for multiple figures
 # #############################################################################
 # fix the margins
-left = 0.12
+left = 0.14
 bottom = 0.157
 right = 0.776
 top = 0.888
@@ -399,7 +399,7 @@ axis_settings = (
     (
         echo_residual_ax,
         "Time (s)",
-        "Residual $(M_\\mathrm{eqb})$",
+        "Residual\n$(M_\\mathrm{eqb})$",
         echo_xlim,
         (-1.2e-2, 1.2e-2),
     ),

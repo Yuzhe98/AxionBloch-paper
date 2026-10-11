@@ -31,7 +31,7 @@ However, to our knowledge, there have not been studies taking advantage of numer
 On the other hand, as more axion models and experiments are being proposed, such as cosmic axion background\,\cite{Dror2021_CosmicAxionBackground,Nitta2023_ADMX_CosmicAxionBackground}, fine-grained axion\,\cite{OHare2025_Finegrained}, and quadratically coupled axion\,\cite{GanXucheng2026_quadraticPTA, huang2026earthmatterenhancedaxion}, a tool is needed to systematically simulate the axion-induced spin dynamics under various physical conditions and axion field configurations.
 
 In this work, \axionbloch{}, an open-source package designed to simulate spin dynamics induced by axion fields, is introduced. 
-The interface is implemented in Python, a programming language known for its simplicity and readability, while the underlying numerical integration is implemented in C++ for efficiency. 
+The interface is implemented in Python, a programming language known for its simplicity and readability, while the underlying numerical integration is implemented in \code{C++} for efficiency. 
 The package provides a flexible framework for modeling axion fields and experimental configurations. 
 By numerically solving spin-evolution equations, \axionbloch{} enables the prediction and analysis of experimentally observable signals.
 
@@ -118,7 +118,7 @@ A diagram of the architecture of \axionbloch{} is shown in \cref{fig:architectur
 \begin{paperwidefigure}[htb]
     \centering
     \fbox{\includegraphics[width=0.8\textwidth]{figures/AxionBloch_diagram.drawio.pdf}}
-    \caption{Architecture of \axionbloch{}. Each \texttt{Simulation} instance imports parameters from \texttt{Magnet}, \texttt{Sample}, and \texttt{MagField} instances. For axion simulations, axion-model objects are required both for \texttt{Simulation} to configure the simulation and for \texttt{MagField} to generate the pseudomagnetic field. \texttt{Simulations} manages one or multiple \texttt{Simulation} instances. Numerical integration is performed via the \texttt{blochSimulation} API, which provides Python access to the underlying C++ implementation. 
+    \caption{Architecture of \axionbloch{}. Each \texttt{Simulation} instance imports parameters from \texttt{Magnet}, \texttt{Sample}, and \texttt{MagField} instances. For axion simulations, axion-model objects are required both for \texttt{Simulation} to configure the simulation and for \texttt{MagField} to generate the pseudomagnetic field. \texttt{Simulations} manages one or multiple \texttt{Simulation} instances. Numerical integration is performed via the \texttt{blochSimulation} API, which provides Python access to the underlying \code{C++} implementation. 
     }
     \label{fig:architecture}
 \end{paperwidefigure}
@@ -129,137 +129,152 @@ Different axion models can be incorporated as separate classes without modifying
 Simulation is handled within the \texttt{axionbloch.SimuTools} module. 
 In particular, the classes \texttt{Simulation} and \texttt{Simulations} manage the interaction between experimental configurations and axion models, organizing the parameters and execution of single or multiple simulation runs. 
 
-The RK4 algorithm is implemented in a dedicated C++ library. 
+The RK4 algorithm is implemented in a dedicated \code{C++} library. 
 The application programming interface (API) for this library is \texttt{blochSimulation}. 
-This C++ backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling cooperation between high-level Python workflow management and low-level efficient numerical computation. 
+This \code{C++} backend is interfaced with Python using \texttt{pybind11},\footnote{\url{http://pybind11.readthedocs.io/}} enabling cooperation between high-level Python workflow management and low-level efficient numerical computation.
 
 
 \subsection{Calibration}
 \label{sec:calibration}
 
+\subsubsection{Methodology}
+\label{sec:calibration:methodology}
+
 Accurate calibration is essential to ensure that the simulated signals reliably reflect the underlying physical system and can be compared with experimental observables. 
-In particular, calibration examines the correspondence between the NMR signal and model parameters, including magnetic fields, nuclear spin gyromagnetic ratio $\gamma$, and relaxation times ($T_1$, $T_2$, and $T_2^*$). 
+In particular, calibration examines the correspondence between the NMR signal and model parameters, including magnetic fields and relaxation times ($T_1$, $T_2$, and $T_2^*$). 
 It allows one to verify the correctness and stability of the numerical implementation. 
 In this section, calibration simulations are presented along with theoretical predictions, demonstrating the methodology of calibration. 
 % A quantitative analysis is included at the end of the section. 
-For the examples in the section, an ethanol sample and an axial bias field $\boldsymbol{B_{0}} = B_0 \boldsymbol{\hat{e}}_z$ are used. 
+For the examples in the section, unless otherwise stated, a thermally polarized proton-NMR sample and an axial bias field $\boldsymbol{B_{0}} = B_0 \boldsymbol{\hat{e}}_z$ are used. 
+The Larmor frequencies of the examples are set to \SI{1}{\MHz}. 
 
+% \subsubsection{Quantitative evaluation}
 
-
-\subsubsection{Quantitative evaluation}
-
-The accuracy of the simulations is quantified by the relative $L^2$ error
-between the simulated and theoretically expected transverse magnetization:
+The accuracy of the simulations is quantified by the relative $L^2$ error $\epsilon_{L^2}$ between the simulated and theoretically expected magnetization:
 \begin{equation}
     \epsilon_{L^2}
     =
     \frac{
         \left[
         \sum_{i\in\mathcal{V}}
-        \left|\boldsymbol{M}_{\perp,i}^\mathrm{simu}-\boldsymbol{M}_{\perp,i}^\mathrm{theo}\right|^2
+        \left|\boldsymbol{M}_{i}^\mathrm{simu}-\boldsymbol{M}_{i}^\mathrm{theo}\right|^2
         \right]^{1/2}
     }{
         \left[
         \sum_{i\in\mathcal{V}}
-        \left|\boldsymbol{M}_{\perp,i}^\mathrm{theo}\right|^2
+        \left|\boldsymbol{M}_{i}^\mathrm{theo}\right|^2
         \right]^{1/2}
     },
     \label{eq:relative_l2_error}
 \end{equation}
-where $\boldsymbol{M}_{\perp,i}=(M_{x,i},M_{y,i})$ is the transverse
-magnetization at the $i$th sample, and $\mathcal{V}$ is the set of samples
-included in the comparison. For equally spaced samples, the time-step factors
-cancel in this ratio. Samples during finite-duration pulses are excluded when
-the theoretical model does not describe pulse evolution [REMINDER: specify the
-excluded pulse intervals used for each calibration].
+where $\boldsymbol{M}_{i}=(M_{x,i},\,M_{y,i},\,M_{z,i})$ is the magnetization at the $i$-th sample, and $\mathcal{V}$ is the set of samples included in the comparison. 
+Ideally, $\epsilon_{L^2}$ should be zero, indicating a perfect match between the simulated and theoretical results. 
+However, the simulation is done in discrete steps. 
+Due to the finite integration step size, simulations do not exactly follow the continuous-time evolution of the magnetization, leading to a nonzero $\epsilon_{L^2}$. 
+Using smaller integration step sizes, \textit{i.e.}, higher simulation rates, should reduce the error at the cost of increased computational time. 
+When the simulation rate is sufficiently high, the error should be dominated by other factors, such as the floating-point precision. 
+Convergence tests are performed to ensure that the accuracy of the simulation results improves with higher simulation rates.
+Complete calibration scripts are stored in the test suite of \axionbloch{}. 
+Below, individual calibrations are presented to illustrate the methodology.
 
 
-Calibration scripts are stored in the test suite of \axionbloch{}. 
-In each calibration, parameters such as Larmor frequency and relaxation times are varied over orders of magnitude to cover all possible cases in simulation.
-The results of the calibrations are summarized in \cref{tab:calibration_summary}. 
-The relative $L^2$ errors are [REMINDER: insert the recalculated values and
-summarize their range after applying \cref{eq:relative_l2_error}].
+\subsubsection{Excitation}
+\label{sec:calibration:excitation}
 
-\begin{paperwidetable}
-\small % Change table font size
-\caption{Summary of calibrations and their relative $L^2$ errors, defined in \cref{eq:relative_l2_error}. Here $\nu_\mathrm{L}$ stands for Larmor frequency, determined by the bias magnetic field. $\nu_\mathrm{RCF}$ is RCF frequency. $\nu_\mathrm{L}$ and $\nu_\mathrm{RCF}$ are varied from \SI{1}{\kHz} to \SI{1}{\GHz}. The bias field inhomogeneity is swept from \SI{.1}{\ppm} to \SI{20}{\ppm}. $T_1$ ranges from \SI{1}{\ms} to \SI{1}{\kilo\second}. The integration step size is chosen to be $T_2^* / 500$. Finer step sizes yield lower relative errors at increased computational cost. More technical details of the calibrations can be found in the test suite.\label{tab:calibration_summary}}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{llll}
-    \toprule
-    \textbf{Calibration} &
-    \textbf{Parameters calibrated} &
-    $\bm{\epsilon_{L^2}}$ &
-    \textbf{Dominant source of error} \\
-    \midrule
-    Pulsed NMR &
-    Pulse amplitude, $\nu_\mathrm{L}$, $T_2^*$, $T_2$ &
-    \textit{[fill in]} &
-    Finite number of steps for hard pulses. \\
-    CW-NMR &
-    $\nu_\mathrm{L}$ and $T_2^*$ &
-    \textit{[fill in]} &
-    Finite integration step size. \\
-    $T_1$ relaxation &
-    $T_1$ &
-    \textit{[fill in]} &
-    Finite integration step size. \\
-    \bottomrule
-\end{tabular}
-}%
-\end{paperwidetable}
+In NMR experiments, magnetic-field pulses are applied to tip the magnetization vector.
+Like in experiments, the pulses in simulations should be calibrated in the first place so that the magnetization is tipped by the expected angle. 
+In the calibration, pulses are applied in the x-y plane, and the magnetization is expected to tip by the angle 
+\begin{equation}
+    \theta = \gamma B_{xy} \Delta t_{xy}
+\end{equation}
+, where $B_{xy}$ is the pulse amplitude and $\Delta t_{xy}$ is the pulse duration.
+Theoretically, the corresponding transverse magnetization amplitude is 
+\begin{equation}
+    M_{xy}^\mathrm{theo} = M_\mathrm{eqb} \sin\theta\,
+\end{equation}
+after the pulse. 
+Here $M_\mathrm{eqb}$ is the equilibrium magnetization.
+The tip angle is swept from \SI{0}{\degree} to \SI{360}{\degree}, and $\epsilon_{L^2}$ between the simulated and theoretical transverse magnetization is calculated from the discrepancy between the simulated and theoretical transverse magnetization (residual) using \cref{eq:relative_l2_error}.
+An example of Rabi oscillation (transverse magnetization versus user-specified tip angle) is illustrated in \cref{fig:calibration-excitation}\,(a). 
 
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/calibration-excitation.pdf}
+    \caption{
+    Calibration of magnetic-field pulses. (a) Simulated transverse magnetization $M_{y}$ after a \SI{100}{\milli\second} magnetic-field pulse along x axis, as a function of the tip angle. The equilibrium magnetization $M_\mathrm{eqb}$ is used as the reference value. The tip angle is swept from \SI{0}{\degree} to \SI{360}{\degree}. Two different simulation rates (\SI{100}{\Hz} and \SI{1000}{\Hz}) are used to illustrate the effect of simulation rate on the accuracy of the simulation. The simulation results (scatters) are compared with the theoretical prediction (solid black line). Residuals, the differences between the simulated and theoretical values, are shown in the lower plot. (b) Relative $L^2$ error $\epsilon_{L^2}$ of simulations under different simulation rates. } 
+    \label{fig:calibration-excitation}  
+\end{figure}
 
+In \cref{fig:calibration-excitation}\,(b), $\epsilon_{L^2}$ is plotted as a function of the simulation rate, showing that the error decreases with increasing simulation rate until other factors dominate, causing it to plateau, as expected for a rational simulation. 
+The $\epsilon_{L^2}$ is in general below \SI{1}{\percent} for moderate simulation rates ($\sim \SI{100}{\Hz}$), indicating that the simulation is accurate and efficient enough for applications.
 
 
 
+\subsubsection{Relaxations}
+\label{sec:calibration:relaxation}
+
+For $T_1$ relaxation, the magnetization approaches its equilibrium value according to
+\begin{equation}
+    M_z^\mathrm{theo}(t)
+    = M_\mathrm{eqb}
+    + \left(M_z(0)-M_\mathrm{eqb}\right)e^{-t/T_1},
+\end{equation}
+where $T_1$ is the longitudinal relaxation time. 
+The simulations use two initial conditions, $M_z(0)=0$ and $M_z(0)=10M_\mathrm{eqb}$, and track the magnetization as it relaxes toward $M_\mathrm{eqb}$. 
+In \cref{fig:calibration-t1}\,(a), the simulated $M_z$ is compared with the theoretical prediction, and the residual is shown below. 
+In \cref{fig:calibration-t1}\,(b), the relative $L^2$ error $\epsilon_{L^2}$ between the simulated and theoretical magnetization is plotted against the simulation rate. 
+The error decreases as the simulation rate increases, until it plateaus at a level determined by floating-point precision.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/calibration-t1.pdf}
+    \caption{
+    Examples of $T_1$ relaxation and simulation-rate convergence. (a) Longitudinal magnetization $M_z$ as a function of time. The initial magnetization is either $0$ or $10M_\mathrm{eqb}$ and relaxes toward $M_\mathrm{eqb}$ with $T_1=\SI{2}{\second}$. Simulation results (scatters, simulation rate \SI{100}{\Hz}) are compared with the theoretical predictions (solid lines); residuals are shown below. (b) Relative $L^2$ error $\epsilon_{L^2}$ versus simulation rate for both initial conditions.}
+    \label{fig:calibration-t1}
+\end{figure}
+
+For $T_2$ relaxation, the magnetization starts along the $y$ axis with $M_y=M_\mathrm{eqb}$ and decays toward zero according to
+\begin{equation}
+    M_y^\mathrm{theo}(t) = M_\mathrm{eqb}e^{-t/T_2},
+\end{equation}
+where $T_2$ is the transverse relaxation time. 
+In \cref{fig:calibration-t2}\,(a), $M_y$ simulated at \SI{100}{\Hz} and \SI{1000}{\Hz} are compared with the theoretical prediction, with the residuals shown below. 
 
 
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/calibration-t2.pdf}
+    \caption{
+    Examples of $T_2$ relaxation and simulation-rate convergence. (a) Transverse magnetization $M_y$ as a function of time. The magnetization starts at $M_y=M_\mathrm{eqb}$ and decays toward zero with $T_2=\SI{1}{\second}$. Simulation results (scatters, \SI{100}{\Hz} and \SI{1000}{\Hz}) are compared with the theoretical prediction (solid black line); residuals are shown below. (b) Relative $L^2$ error $\epsilon_{L^2}$ versus simulation rate.}
+    \label{fig:calibration-t2}
+\end{figure}
 
+In both calibrations, $\epsilon_{L^2}$ is calculated from the discrepancy between the simulated and theoretical magnetization using \cref{eq:relative_l2_error}.
+The error decreases as the simulation rate increases, until it plateaus at a level determined by floating-point precision, as displayed in \cref{fig:calibration-t1}\,(b) and \cref{fig:calibration-t2}\,(b).
 
-\subsubsection{Pulse calibration}
-\label{sec:calibration_pulses}
+% \subsubsection{Bias-field inhomogeneity}
+% \label{sec:calibration:inhomogeneity}
 
+% In NMR experiments, the bias field is usually not perfectly homogeneous.
+% Inhomogeneity causes magnetization packets to precess at different Larmor frequencies, so the total transverse magnetization dephases over time. 
+% In the calibration, the initial magnetization is set to $M_y=M_\mathrm{eqb}$. 
+% For an ideal Lorentzian frequency distribution, the expected free-decay signal is
+% \begin{equation}
+%     M_y^\mathrm{theo}(t)
+%     = M_\mathrm{eqb}\exp\left(-\frac{t}{T_\delta}\right).
+% \end{equation}
+% Here, the field FWHM is \SI{1}{\ppm} at a \SI{1}{\MHz} resonance frequency, corresponding to an inhomogeneous dephasing time of $T_\delta\approx\SI{0.318}{\second}$. 
+% The observation duration is $5\times T_\delta\approx\SI{1.59}{\second}$. 
+% Since $T_1=T_2=\SI{1e6}{\second}$, intrinsic relaxation is negligible over this interval.
 
+% In \cref{fig:calibration-inhomogeneity}\,(a), the simulated transverse magnetization is shown for numPt values of 100 and 1000. The theoretical curve is calculated from the weighted field distribution at the reference value numPt = 100000. The lower plot shows the residual between each simulation and this reference prediction. The ideal Lorentzian exponential is not plotted: the simulated packet weights include an edge window, so the finite weighted distribution does not produce an exact exponential decay.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+% In \cref{fig:calibration-inhomogeneity}\,(b), the relative $L^2$ error $\epsilon_{L^2}$ is plotted against numPt for four geometrically spaced values from 100 to 100000. This shows how the simulated free-induction signal converges toward the high-resolution weighted-distribution prediction. All simulations use a rate of \SI{10000}{\Hz}.
 
 
 
 \subsection{NMR simulation}
 \label{sec:nmr_simulation}
-
-% TODO: Introduce the measurement data and explain how the corresponding
-% simulation reproduces each experimental sequence. State the phase and
-% amplitude normalization, fit parameters, and residual metric used.
-
-\subsubsection{Spin echo}
-\label{sec:nmr_spin_echo}
-\textit{[TODO: Describe the spin-echo measurement and pulse sequence, compare
-the measured echoes with the simulation, and report the residual or normalized
-error.]}
-
-\subsubsection{$T_1$ inversion recovery}
-\label{sec:nmr_t1_inversion_recovery}
-\textit{[TODO: Describe the inversion-recovery measurement, compare the data
-with the simulated recovery curve, and report the fitted $T_1$ and residual or
-normalized error.]}
 
 \subsubsection{Pulsed-NMR: free decay and spin echo}
 \label{sec:pNMR}
@@ -273,7 +288,6 @@ The magnetization is expected to\,\cite{CPMG, Abragam1961_NuclearMagnetism}:
     \item show decaying amplitude of echoes with relaxation time $T_2$.
 \end{itemize}
 The behaviors described above can be found in the calibration example illustrated in \cref{fig:calibration_T2_T2star}\,(a), indicating correct simulation behavior. 
-With such a benchmark, magnetic pulses, Larmor precession, and transverse relaxations ($T_2$ and $T_2^*$) can be calibrated. 
 
 \begin{paperwidefigure}[htb]
     \centering
@@ -290,7 +304,6 @@ In the continuous-wave (CW) NMR calibration, an oscillating magnetic field is ap
 When the magnetic field strength $B$ is weak ($\gamma B T_2^*\ll 1$) and on resonance, the transverse magnetization grows with $\gamma B T_2^* (1 - e^{-t/T_2^*})$\,\cite{Abragam1961_NuclearMagnetism}.
 One such example is illustrated in \cref{fig:calibration_T2_T2star}\,(b). 
 The simulation produces the expected results.
-With such a benchmark, the Larmor precession and $T_2^*$ relaxation can be calibrated. 
 
 \subsubsection{Hyperpolarized sample}
 \label{sec:hyperpol}
@@ -300,7 +313,6 @@ The \axionbloch{} package handles the polarization by the \texttt{Sample} class.
 A \SI{1}{\percent}-polarization ethanol sample is used as an example demonstrating the evolution of polarization due to the $T_1$ relaxation. 
 At first ($t\ll T_1$), the polarization should exponentially decay with time constant $T_1$, until it reaches equilibrium after many $T_1$. 
 As can be seen in \cref{fig:calibration_T1_HP}, the simulated $T_1$ relaxation agrees with the expected behavior. 
-More of such simulations can be applied in calibrating $T_1$ relaxation. 
 
 \begin{figure}
     \centering
@@ -310,10 +322,6 @@ More of such simulations can be applied in calibrating $T_1$ relaxation.
     }
     \label{fig:calibration_T1_HP}
 \end{figure}
-
-
-
-
 
 \subsection{Axion simulation}
 \label{sec:simulation}
@@ -335,7 +343,7 @@ where \texttt{Simulation.rate} and \texttt{Simulation.duration} are the simulati
 
 To accelerate the simulation, the independent realizations of the (pseudo)magnetic fields are parallelized using Open Multi-Processing (OpenMP)\,\cite{OpenMP2024} in \texttt{blochSimulation}.
 The number of OpenMP threads is controlled by the runtime environment and may therefore vary with the user's hardware and OpenMP settings.
-The spin-packet and time-stepping loops within each realization were evaluated serially. 
+The magnetization-packet and time-stepping loops within each realization were evaluated serially. 
 
 For the example in \cref{code:axion_example}, the total number of integration steps is \SI{7e8}{}, and the runtime is \SI{2.7}{\s} on a personal computer (CPU: Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} Ultra 7 155H; base speed: 1.40\,GHz). 
 Such moderate runtime allows users to explore different parameter regimes with many simulations. 
@@ -380,7 +388,7 @@ The test suite covers core functionalities such as:
 \begin{itemize}
     \item initialization and manipulation of classes; 
     \item numerical integration of the Bloch equations;
-    \item magnetic fields and relaxations;
+    \item calibrations;
     \item handling of each axion field configuration.
 \end{itemize}
 Tests can be executed locally. In the future, tools may be added for online testing considering the demand of testing. 
@@ -408,4 +416,3 @@ By providing an open-source, well-documented, and tested tool, \axionbloch{} aim
 
 Note that this package can be of interest to the NMR community for its applications in, for example, educational purposes. 
 For example, students can specify pulse sequences for the simulation and see the visualized simulation results. 
-

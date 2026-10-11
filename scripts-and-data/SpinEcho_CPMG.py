@@ -37,9 +37,9 @@ magnet = Magnet(
     name="detection magnet",
     B0=(RCF_Freq - signalFreqRot) / (sample.gamma / (2 * PI)),
     FWHM=FWHM,
-    nFWHM=20.0,
+    nFWHM=100.0,
 )
-magnet.setHomogeneity(numPt=500)
+magnet.setHomogeneity(numPt=1000)
 print(f"numPt for magnet homogeneity = {magnet.numPt}")
 
 excField = MagField(name="CPMG pulse train")
