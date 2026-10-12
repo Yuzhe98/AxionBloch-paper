@@ -107,7 +107,7 @@ Here,
 \boldsymbol{k}_4 &= \left.\frac{d\boldsymbol{M}}{dt}\right|_{\boldsymbol{M}=\boldsymbol{M}^n + \boldsymbol{k}_3\Delta t}\,,
 \end{align}
 where $d\boldsymbol{M}/dt$ can be found using the Bloch equations [Eqs.\,(\ref{eq:bloch_x}--\ref{eq:bloch_z})]. 
-This fourth-order method yields a local truncation error of $\mathcal{O}(\Delta t^5)$, while the accumulated error over $N = 1/\Delta t$ steps is of order $\mathcal{O}(\Delta t^4)$. 
+This fourth-order method yields a local truncation error of $\mathcal{O}(\Delta t^5)$. 
 The time step $\Delta t$ is usually set to be at least one order of magnitude smaller than the characteristic timescales of the system, such as relaxation times. 
 
 \subsubsection{Implementation}
