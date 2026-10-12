@@ -37,9 +37,9 @@ magnet = Magnet(
     name="detection magnet",
     B0=(RCF_Freq - signalFreqRot) / (sample.gamma / (2 * PI)),
     FWHM=FWHM,
-    nFWHM=100.0,
+    nFWHM=50.0,
 )
-magnet.setHomogeneity(numPt=1000)
+magnet.setHomogeneity(numPt=4000)
 print(f"numPt for magnet homogeneity = {magnet.numPt}")
 
 excField = MagField(name="CPMG pulse train")
@@ -56,7 +56,7 @@ simu = Simulation(
     verbose=False,
 )
 
-t90 = 1/50 * unit.s
+t90 = 1e-3 * unit.s
 tau = 4 * Tdelta
 numEcho = 2
 simu.excField.setCPMGPulseTrain(
@@ -100,5 +100,5 @@ if save_data:
     )
     print(f"Saved plotting data to {output_path}")
 
-simu.keepMeanStd()
-simu.displayTrjries(verbose=True)
+# simu.keepMeanStd()
+# simu.displayTrjries(verbose=True)

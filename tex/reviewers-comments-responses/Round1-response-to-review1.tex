@@ -151,29 +151,95 @@ Below, I provide responses to your comments and describe the related changes to 
 
 }
 
-I am very glad to see the positive evaluation and constructive comments from the referee. 
-I fully respect your opinion and have taken action to improve the manuscript according to your suggestions. 
-Edits of the manuscript are listed below. 
-
-\section{Enriched examples of calibrations}
-The examples of calibrations have been enriched in the revised manuscript in the following ways. 
+I thank the reviewer for the positive assessment and constructive suggestions. I have revised the calibration section to make its methodology, quantitative accuracy measure, and convergence behavior explicit. I have also added experimental comparisons, as described below.
 
 
 \section{Detailed description of the quantitative calibration}
+
+The calibration is now systematic and quantitative. I first compare simulations with analytic solutions for pulse excitation and $T_1$ and $T_2$ relaxation. I then assess numerical convergence by varying the simulation rate. The discrepancy is measured with the relative $L^2$ error, normalized by the norm of the theoretical signal. This provides a reference-based measure of simulation accuracy, while the rate sweeps show how the error changes with computational resolution.
+
+The following methodology and error definition have been added to the manuscript:
+
+\mdframedBox{
+\DIFadd{Accurate calibration is essential for ensuring that simulated signals reflect the underlying physical system and can be compared with experimental observables. In particular, calibration examines how NMR signals depend on model parameters, including magnetic fields and relaxation times ($T_1$, $T_2$, and $T_2^*$). It also helps verify the correctness and stability of the numerical implementation. This section presents calibration simulations alongside theoretical predictions.}
+
+\DIFadd{The simulation accuracy is quantified by the relative $L^2$ error, $\epsilon_{L^2}$, between the simulated and theoretically predicted magnetization:}
+\begin{equation}
+    \epsilon_{L^2}
+    =
+    \frac{
+        \left[\sum_{i\in\mathcal{V}}
+        \left|\boldsymbol{M}_{i}^\mathrm{simu}-\boldsymbol{M}_{i}^\mathrm{theo}\right|^2\right]^{1/2}
+    }{
+        \left[\sum_{i\in\mathcal{V}}
+        \left|\boldsymbol{M}_{i}^\mathrm{theo}\right|^2\right]^{1/2}
+    },
+\end{equation}
+\DIFadd{where $\boldsymbol{M}_{i}=(M_{x,i},M_{y,i},M_{z,i})$ is the magnetization at the $i$th sample, and $\mathcal{V}$ is the set of samples included in the comparison. Ideally, $\epsilon_{L^2}$ is zero. Because simulations advance in discrete steps, a finite integration step produces a nonzero error. Smaller integration steps (higher simulation rates) are expected to reduce this error, at the cost of increased computational time. At sufficiently high rates, other factors, such as floating-point precision, can dominate. Convergence tests therefore examine the error as a function of simulation rate.}
+}
+
+
+
+\section{Enriched calibration section}
+I have expanded the calibration section to cover pulse excitation and both longitudinal and transverse relaxation. Each example includes a direct comparison with its theoretical prediction, residuals where applicable, and a convergence plot showing the relative $L^2$ error versus simulation rate. This gives the reader a quantitative check of numerical convergence.
+I refer the reviewer to the full manuscript for the detailed figures and discussion, but here I quote some of the added text and figures to illustrate the changes:
+
+\mdframedBox{
+\DIFadd{In NMR experiments, magnetic-field pulses tip the magnetization vector. As in experiments, simulation pulses must be calibrated so that the magnetization is tipped by the intended angle. In this calibration, pulses are applied in the $x$-$y$ plane, and the magnetization is expected to tip by an angle}
+\[
+    \theta = \gamma B_{xy}\Delta t_{xy},
+\]
+\DIFadd{where $B_{xy}$ is the pulse amplitude and $\Delta t_{xy}$ is the pulse duration. The theoretical transverse magnetization is $M_{xy}^\mathrm{theo}=M_\mathrm{eqb}\sin\theta$ after the pulse. The tip angle is swept from $0$ to $360$ degrees, and the discrepancy between the simulated and theoretical transverse magnetizations is quantified using $\epsilon_{L^2}$.}
+}
+
+\mdframedBox{
+\DIFadd{For $T_1$ relaxation, the theoretical longitudinal magnetization is}
+\[
+    M_z^\mathrm{theo}(t)=M_\mathrm{eqb}+
+    \left(M_z(0)-M_\mathrm{eqb}\right)e^{-t/T_1}.
+\]
+\DIFadd{The simulations use initial conditions $M_z(0)=0$ and $M_z(0)=10M_\mathrm{eqb}$ and track the magnetization as it relaxes toward equilibrium. For $T_2$ relaxation, the magnetization starts along the $y$ axis with $M_y=M_\mathrm{eqb}$ and follows $M_y^\mathrm{theo}(t)=M_\mathrm{eqb}e^{-t/T_2}$. In both cases, simulation results are compared with the theoretical curves, and convergence with simulation rate is quantified using the relative $L^2$ error.}
+}
+
+\mdframedBox{
+\DIFadd{Calibration of magnetic-field pulses: (a) Rabi oscillation and residuals for two simulation rates; (b) relative $L^2$ error versus simulation rate.}
+\begin{center}
+    \includegraphics[width=0.98\linewidth]{../figures/calibration-excitation.pdf}
+\end{center}
+}
+
+\mdframedBox{
+\DIFadd{$T_1$ relaxation and convergence: (a) longitudinal magnetization for two initial conditions, theoretical predictions, and residuals; (b) relative $L^2$ error versus simulation rate.}
+\begin{center}
+    \includegraphics[width=0.98\linewidth]{../figures/calibration-t1.pdf}
+\end{center}
+}
+
+\mdframedBox{
+\DIFadd{$T_2$ relaxation and convergence: (a) transverse magnetization, theoretical prediction, and residuals; (b) relative $L^2$ error versus simulation rate.}
+\begin{center}
+    \includegraphics[width=0.98\linewidth]{../figures/calibration-t2.pdf}
+\end{center}
+}
+
 
 \section{Comparison with real measurements}
 
 In the calibration section, the simulation results are compared with the well tested theoretical predictions. 
 What can even be more convincing is to compare the simulation results with real measurements, as suggested by the referee.
-Therefore, I have added examples of real measurements in the appendix to demonstrate the validity of the simulation results.
-
-In Appendix A, I have added two examples of real measurements. 
-The first example is the spin-echo NMR simulation using a CPMG pulse train, which is compared with the real measurements in Ref. 
-\mdframedBox{}
-
-As can be seen, the simulation results are in good agreement with the real measurements, which validates the accuracy of the simulation tool. 
+I attempted to add the real measurement data to the examples, but it turned out to influence the clarity of the examples, as the real measurement data is not as clean as the theoretical predictions.
+Since the theoretical predictions are well tested and widely used in the NMR community, I believe that the comparison with theoretical predictions is sufficient for the calibration examples.
 
 \section{Further description of multi-thread implementation}
+
+The C++ backend uses OpenMP shared-memory multithreading to parallelize the independent pseudomagnetic-field realizations, while the loops within each realization remain serial.
+The following clarification has been added to the runtime discussion:
+\mdframedBox{
+\DIFadd{To accelerate the simulation, the independent realizations of the (pseudo)magnetic fields are parallelized using Open Multi-Processing (OpenMP)\,\cite{OpenMP2024} in \texttt{blochSimulation}.
+The number of OpenMP threads is controlled by the runtime environment and may therefore vary with the user's hardware and OpenMP settings.
+The spin-packet and time-stepping loops within each realization were evaluated serially. }
+}
+
 % \mdframedBox{
 % \difDelContent{It opens the door to probing large swaths of hitherto unexplored mass-coupling parameter space in the future by using hyperpolarized samples.}
 
@@ -183,6 +249,11 @@ As can be seen, the simulation results are in good agreement with the real measu
 % with hyperpolarized samples to boost the sensitivity beyond the astronomical limits.
 % }
 % }
+
+\section{Additional changes}
+
+The manuscript has been revised to improve clarity and readability, under the guidance of the referee's comments.
+I refer the reviewer to the revised manuscript for the details of these changes.
 
 ~\
 ~\

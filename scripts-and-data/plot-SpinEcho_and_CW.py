@@ -48,7 +48,10 @@ CW_signal_freq_Hz = float(CW_data["signalFreqRot_Hz"])
 CW_drive_phase_rad = float(CW_data["init_phase_rad"])
 CW_B1_rot_T = float(CW_data["B1_rot_T"])
 CW_gamma_rad_s_T = float(CW_data["gamma_rad_s_T"])
-CW_T2star = CW_T2
+CW_B_spread_T = CW_data["B_spread_T"]
+CW_homogeneity_weights = CW_data["homogeneity_weights"]
+CW_RCF_freq_Hz = float(CW_data["RCF_freq_Hz"])
+CW_T2star = (CW_T2 ** (-1) + CW_Tdelta ** (-1)) ** (-1)
 
 size = len(CW_data["timeStamp_s"]) - 1
 CW_plot_stride = max(1, size // 5000)
@@ -67,7 +70,7 @@ plt.rcParams["mathtext.fontset"] = "cm"
 plt.rcParams["mathtext.rm"] = "Times New Roman"
 cm = 1 / 2.54  # convert cm to inch
 fig = plt.figure(
-    figsize=(2 * 8.5 * cm, 9 * cm), dpi=300
+    figsize=(2 * 8.5 * cm, 7.5 * cm), dpi=300
 )  # initialize a figure following APS journal requirements
 # #############################################################################
 # to specify heights and widths of subfigures
@@ -132,14 +135,14 @@ echo_M_ax.plot(
     # markersize=0.9,
     # markevery=max(1, len(echo_timeStamp_s) // 250),
 )
-echo_M_ax.plot(
-    echo_timeStamp_s,
-    np.hypot(echo_M[:, 0], echo_M[:, 1]),
-    label="$(M_{x}^2 + M_{y}^2)^{1/2}$",
-    linestyle="-",
-    color=high_contrast_extended[4],
-    linewidth=linewidth,
-)
+# echo_M_ax.plot(
+#     echo_timeStamp_s,
+#     np.hypot(echo_M[:, 0], echo_M[:, 1]),
+#     label="$(M_{x}^2 + M_{y}^2)^{1/2}$",
+#     linestyle="-",
+#     color=high_contrast_extended[4],
+#     linewidth=linewidth,
+# )
 # T2star_envelope = np.exp(-(echo_timeStamp_s - echo_t90_s) / echo_T2star)
 # CPMG toggling-frame envelope. The static detuning phase accumulates forward
 # between refocusing pulses and is reversed after each pi pulse. Use the exact
@@ -174,7 +177,7 @@ else:
     echo_distribution_phase = np.zeros(echo_timeStamp_s.shape)
     echo_distribution_envelope = np.exp(-np.abs(echo_q_s) / echo_Tdelta)
 echo_envelope = (
-    np.exp(-(echo_timeStamp_s - 1 * echo_t90_s) / echo_T2) * echo_distribution_envelope
+    np.exp(-(echo_timeStamp_s) / echo_T2) * echo_distribution_envelope
 )
 # Include the finite 90-degree excitation ramp and the alternating phase
 # inversion produced by successive CPMG pi pulses.
@@ -208,6 +211,7 @@ echo_M_ax.plot(
     color=high_contrast_extended[4],
     linestyle="--",
     linewidth=linewidth,
+    zorder=8,
 )
 echo_M_ax.plot(
     echo_timeStamp_s,
@@ -216,6 +220,7 @@ echo_M_ax.plot(
     color=high_contrast_extended[5],
     linestyle="--",
     linewidth=linewidth,
+    zorder=8,
 )
 # echo_M_ax.plot(
 #     echo_timeStamp_s[: len(echo_timeStamp_s) // 4],
@@ -244,7 +249,7 @@ echo_M_ax.text(
     fontsize=10,
     ha="left",
 )
-T2_envelope = np.exp(-(echo_timeStamp_s - echo_t90_s) / echo_T2)
+T2_envelope = np.exp(-(echo_timeStamp_s) / echo_T2)
 echo_M_ax.plot(
     echo_timeStamp_s,
     T2_envelope,
@@ -293,41 +298,38 @@ CW_pulse_ax.plot(
     linewidth=linewidth,
 )
 
-CW_M_ax.plot(
-    CW_timeStamp_s,
-    CW_M[:, 0],
-    label="$M_x^\\mathrm{simu}$",
-    color=high_contrast_extended[2],
-    linewidth=linewidth,
-    linestyle="-",
-    # marker="o",
-    # markersize=0.2,
-    # markevery=max(1, len(CW_timeStamp_s) // 250),
-)
-CW_M_ax.plot(
-    CW_timeStamp_s,
-    CW_M[:, 1],
-    label="$M_y^\\mathrm{simu}$",
-    color=high_contrast_extended[3],
-    linestyle="-",
-    linewidth=linewidth,
-    # marker="o",
-    # markersize=0.2,
-    # markevery=max(1, len(CW_timeStamp_s) // 250),
-)
 
-# Build the theoretical CW signals from the relaxation envelope and carrier.
+# Build the CW theory by summing the linear-response signal from each field
+# packet, using the same B spread and packet weights as the simulation.
 print(f"CW_T2star = {CW_T2star:.3f} s")
 print(f"CW_B1_rot_T = {CW_B1_rot_T:.3e} T")
-CW_envelope = (1 - np.exp(-CW_timeStamp_s / CW_T2star)) * np.sin(
-    CW_gamma_rad_s_T * CW_B1_rot_T * CW_T2star
+CW_homogeneity_weights = CW_homogeneity_weights / np.sum(CW_homogeneity_weights)
+CW_detuning_rad_s = (
+    CW_gamma_rad_s_T * CW_B_spread_T
+    - 2 * np.pi * (CW_RCF_freq_Hz - CW_signal_freq_Hz)
 )
-CW_phase = (
-    2 * np.pi * CW_signal_freq_Hz * CW_timeStamp_s + CW_drive_phase_rad + np.pi / 2
-)
-CW_M_theory = np.column_stack(
-    (CW_envelope * np.cos(CW_phase), CW_envelope * np.sin(CW_phase))
-)
+CW_decay_rate = 1.0 / CW_T2
+CW_drive_rad_s = 2 * np.pi * CW_signal_freq_Hz
+CW_denominator = CW_decay_rate + 1j * CW_detuning_rad_s
+CW_M_theory = np.empty((len(CW_timeStamp_s), 2))
+CW_chunk_size = 1000
+for CW_start in range(0, len(CW_timeStamp_s), CW_chunk_size):
+    CW_stop = min(CW_start + CW_chunk_size, len(CW_timeStamp_s))
+    CW_chunk_time = CW_timeStamp_s[CW_start:CW_stop]
+    CW_response = (
+        1.0 - np.exp(-CW_chunk_time[:, None] * CW_denominator[None, :])
+    ) / CW_denominator[None, :]
+    CW_packet_sum = CW_response @ CW_homogeneity_weights
+    CW_coherence = (
+        1j
+        * CW_gamma_rad_s_T
+        * CW_B1_rot_T
+        * np.exp(1j * (CW_drive_rad_s * CW_chunk_time + CW_drive_phase_rad))
+        * CW_packet_sum
+    )
+    CW_M_theory[CW_start:CW_stop, 0] = CW_coherence.real
+    CW_M_theory[CW_start:CW_stop, 1] = CW_coherence.imag
+CW_envelope = np.hypot(CW_M_theory[:, 0], CW_M_theory[:, 1])
 
 
 # envelope
@@ -342,7 +344,7 @@ CW_M_ax.plot(
 # -----
 CW_M_ax.text(
     3.5,
-    0.0018,
+    0.00093,
     # "$\\gamma B T_2^* (1-e^{\\frac{-t}{T_2^*}})$",
     "$\\gamma B T_2^* (1-e^{-t/T_2^*})$",
     color="#393b79",
@@ -357,6 +359,7 @@ CW_M_ax.plot(
     color=high_contrast_extended[4],
     linestyle="--",
     linewidth=linewidth,
+    zorder=8,
 )
 CW_M_ax.plot(
     CW_timeStamp_s,
@@ -365,6 +368,7 @@ CW_M_ax.plot(
     color=high_contrast_extended[5],
     linestyle="--",
     linewidth=linewidth,
+    zorder=8,
 )
 # T2_envelope = np.exp(-(timeStamp_s + 0.02) / T2)
 # M_ax.plot(
@@ -390,6 +394,29 @@ CW_residual_ax.plot(
     linewidth=linewidth,
 )
 
+CW_M_ax.plot(
+    CW_timeStamp_s,
+    CW_M[:, 0],
+    label="$M_x^\\mathrm{simu}$",
+    color=high_contrast_extended[2],
+    linewidth=linewidth,
+    linestyle="-",
+    # marker="o",
+    # markersize=0.2,
+    # markevery=max(1, len(CW_timeStamp_s) // 250),
+)
+CW_M_ax.plot(
+    CW_timeStamp_s,
+    CW_M[:, 1],
+    label="$M_y^\\mathrm{simu}$",
+    color=high_contrast_extended[3],
+    linestyle="-",
+    linewidth=linewidth,
+    # marker="o",
+    # markersize=0.2,
+    # markevery=max(1, len(CW_timeStamp_s) // 250),
+)
+
 # Axis labels and limits are kept together here for easy figure-wide editing.
 echo_xlim = None
 CW_xlim = None
@@ -401,10 +428,10 @@ axis_settings = (
         "Time (s)",
         "Residual\n$(M_\\mathrm{eqb})$",
         echo_xlim,
-        (-1.2e-2, 1.2e-2),
+        (-1.2e-3, 1.2e-3),
     ),
     (CW_pulse_ax, "", "", CW_xlim, (-8e-3, 8e-3)),
-    (CW_M_ax, "", "", CW_xlim, (-0.00223, 0.00255)),
+    (CW_M_ax, "", "", CW_xlim, (-0.00113, 0.00127)),
     (CW_residual_ax, "Time (s)", "", CW_xlim, (-1.2e-6, 1.2e-6)),
 )
 for ax, xlabel, ylabel, xlim, ylim in axis_settings:
@@ -421,8 +448,8 @@ echo_M_ax.set_xticklabels([])
 CW_pulse_ax.set_xticklabels([])
 CW_M_ax.set_xticklabels([])
 
-echo_residual_ax.set_yticks([-1e-2, 0, 1e-2])
-echo_residual_ax.set_yticklabels(["$-10^{-2}$", "$0$", "$10^{-2}$"])
+echo_residual_ax.set_yticks([-1e-3, 0, 1e-3])
+echo_residual_ax.set_yticklabels(["$-10^{-3}$", "$0$", "$10^{-3}$"])
 
 CW_residual_ax.set_yticks([-1e-6, 0, 1e-6])
 CW_residual_ax.set_yticklabels(["$-10^{-6}$", "$0$", "$10^{-6}$"])

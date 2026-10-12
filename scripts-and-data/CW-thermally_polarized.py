@@ -15,7 +15,7 @@ RCF_Freq = 1 * unit.MHz
 signalFreqRot = .5 * unit.Hz
 T1 = 5 * unit.s
 
-Tdelta = 100 * unit.s
+Tdelta = 1 * unit.s
 T2 = 1.0 * unit.s
 
 simuRate = 10000 * unit.Hz
@@ -44,7 +44,7 @@ magnet = Magnet(
     name="detection magnet",
     B0=(RCF_Freq - signalFreqRot) / (sample.gamma / (2 * PI)),
     FWHM=FWHM,
-    nFWHM=10.0,
+    nFWHM=50.0,
 )
 magnet.setHomogeneity(numPt=2000, showPlot=False, verbose=True)
 print(f"numPt for magnet homogeneity = {magnet.numPt}")
@@ -87,15 +87,17 @@ np.savez_compressed(
     timeStamp_s=timeStamp_s,
     B_vec=simu.excField.B_vec.to_value(unit.T),
     trjry=simu.trjry,
+    B_spread_T=simu.magnet.B_spread.to_value(unit.T),
+    homogeneity_weights=simu.magnet.ratios,
     T2_s=simu.sample.T2.to_value(unit.s),
     Tdelta_s=simu.Tdelta.to_value(unit.s),
     signalFreqRot_Hz=signalFreqRot.to_value(unit.Hz),
     init_phase_rad=init_phase.to_value(unit.rad),
     B1_rot_T=(0.5 * B1).to_value(unit.T),
     gamma_rad_s_T=sample.gamma.to_value(unit.rad / unit.s / unit.T),
+    RCF_freq_Hz=simu.RCF_freq.to_value(unit.Hz),
 )
 print(f"Saved plotting data to {output_path}")
 
-simu.keepMeanStd()
-simu.displayTrjries(verbose=True)
-# simu.monitorTrajectories(verbose=True)
+# simu.keepMeanStd()
+# simu.displayTrjries(verbose=True)
