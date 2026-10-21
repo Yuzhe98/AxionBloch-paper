@@ -48,17 +48,17 @@
 % \usepackage{dblfloatfix}
 \usepackage{placeins}
 \newenvironment{paperwidefigure}
-  {\begin{figurewide}}
-  {\end{figurewide}}
+  {\begin{figure}}
+  {\end{figure}}
 \newenvironment{paperwidetable}
   {\begin{table}}
   {\end{table}}
 \AtBeginDocument{%
   \crefname{equation}{Equation}{Equations}%
   \Crefname{equation}{Equation}{Equations}%
-  \crefname{figurewide}{Figure}{Figures}%
-  \Crefname{figurewide}{Figure}{Figures}%
-  \crefalias{figurewide}{figure}%
+  \crefname{figure}{Figure}{Figures}%
+  \Crefname{figure}{Figure}{Figures}%
+  \crefalias{figure}{figure}%
 }
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
