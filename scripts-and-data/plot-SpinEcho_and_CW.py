@@ -448,6 +448,9 @@ echo_M_ax.set_xticklabels([])
 CW_pulse_ax.set_xticklabels([])
 CW_M_ax.set_xticklabels([])
 
+echo_pulse_ax.set_yticks([0, 1e4])
+echo_pulse_ax.set_yticklabels(["$0$", "$10^{4}$"])
+
 echo_residual_ax.set_yticks([-1e-3, 0, 1e-3])
 echo_residual_ax.set_yticklabels(["$-10^{-3}$", "$0$", "$10^{-3}$"])
 
